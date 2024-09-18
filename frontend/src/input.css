@@ -1,3 +1,46 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .heading-1 {
+    font-size: 32px;
+    font-weight: bold;
+  }
+  .heading-2 {
+    font-size: 24px;
+    font-weight: 600;
+  }
+  .heading-3 {
+    font-size: 20;
+    font-weight: medium;
+  }
+  .para-1 {
+    font-size: 16px;
+  }
+  .para-2 {
+    font-size: 14px;
+  }
+  .para-3 {
+    font-size: 12px;
+  }
+  .para-4 {
+    font-size: 8px;
+  }
+
+  .input input:invalid[focused='true'] {
+    @apply border-2 border-red;
+  }
+
+  .input input:invalid[focused='true'] ~ span {
+    @apply block;
+  }
+
+  .input {
+    @apply flex flex-col items-center w-full;
+  }
+
+  .input span {
+    @apply hidden p-1 para-2 text-red;
+  }
+}
