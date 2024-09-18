@@ -12,18 +12,21 @@ const { HOME, SIGNIN, SIGNUP } = paths
 function App() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { currentUser } = useSelector((state) => state.auth)
+  const { signin } = useSelector((state) => state.auth)
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('currentUser'))
     if (user) {
       dispatch(setCurrentUser(user))
     }
-    if (currentUser?.email === null && currentUser?.password === null) {
+    if (
+      signin.currentUser?.email === null &&
+      signin.currentUser?.password === null
+    ) {
       navigate('/signin')
     } else {
       navigate('/home')
     }
-  }, [currentUser])
+  }, [signin.currentUser])
   return (
     <div className="">
       <Routes>

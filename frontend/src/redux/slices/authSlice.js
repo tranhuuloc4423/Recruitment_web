@@ -3,13 +3,12 @@ import { createSlice } from '@reduxjs/toolkit'
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    currentUser: {
-      email: null,
-      password: null,
-      role: null
-    },
     signin: {
-      currentUser: null,
+      currentUser: {
+        email: null,
+        password: null,
+        role: null
+      },
       isFetching: false,
       error: false
     },
@@ -21,9 +20,9 @@ const authSlice = createSlice({
   },
   reducers: {
     setCurrentUser: (state, action) => {
-      state.currentUser.email = action.payload.email
-      state.currentUser.password = action.payload.password
-      state.currentUser.role = action.payload.role
+      state.signin.currentUser.email = action.payload.email
+      state.signin.currentUser.password = action.payload.password
+      state.signin.currentUser.role = action.payload.role
     },
     setSignOutUser: (state) => {
       localStorage.removeItem('currentUser')
@@ -38,11 +37,14 @@ const authSlice = createSlice({
       state.signin.isFetching = false
       state.signin.currentUser = action.payload
       state.signin.error = false
-      console.log(action.payload)
+      localStorage.setItem(
+        'currentUser',
+        JSON.stringify(state.signin.currentUser)
+      )
     },
     signinFailed: (state) => {
-      state.register.error = true
-      state.register.isFetching = false
+      state.signin.error = true
+      state.signin.isFetching = false
     },
     signupStart: (state) => {
       state.signup.isFetching = true
