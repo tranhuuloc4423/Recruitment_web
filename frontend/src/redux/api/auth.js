@@ -5,21 +5,24 @@ import {
   signinStart,
   signupFailed,
   signupSuccess,
-  signupStart
+  signupStart,
+  setCurrentUser
 } from '../slices/authSlice'
 import { toast } from 'react-toastify'
 
 export const signinUser = async (user, dispatch, navigate) => {
   dispatch(signinStart())
   try {
-    const res = await axios.post('/auth/signin', user)
+    const res = await axios.post('/user/signin', user)
     dispatch(signinSuccess(res.data))
     dispatch(signinSuccess(user))
+    // console.log(res.data.)
+    // dispatch(setCurrentUser(res.data.user))
     toast.success('Sign in Success!')
-    localStorage.setItem('currentUser', JSON.stringify(user))
-    navigate('/home/dashboard')
+    localStorage.setItem('currentUser', JSON.stringify(res.data))
+    navigate('/home/')
   } catch (error) {
-    toast.error('Sign in Failed!')
+    toast.error('Sign in Failed! ' + error)
     dispatch(signinFailed())
   }
 }
@@ -39,7 +42,7 @@ export const signupUser = async (user, dispatch, navigate) => {
 
 export const changePassword = async (id, newpass, navigate) => {
   try {
-    await axios.post(`/user/${id}/change-password`, newpass)
+    await axios.put(`/user/${id}/`, newpass)
     toast.success('Change Password Success!')
     navigate('/signin')
   } catch (error) {

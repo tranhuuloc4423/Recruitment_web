@@ -2,16 +2,18 @@ import React, { useState } from 'react'
 import Input from '../components/Input'
 import Button from '../components/Button'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import bg from '../assets/imgs/business-background-design_1200-57.png'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { signinUser } from '../redux/api/auth'
 const Signin = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [values, setValues] = useState({
     email: '',
     password: ''
   })
-  const [error, setError] = useState('')
 
   const inputs = [
     {
@@ -29,8 +31,8 @@ const Signin = () => {
       name: 'password',
       type: 'password',
       placeholder: 'Mật khẩu',
-      error: 'Mật khẩu chứa ít nhất 8 ký tự',
-      pattern: '.{8,}',
+      error: 'Mật khẩu chứa ít nhất 3 ký tự',
+      pattern: '.{3,}',
       label: 'Mật khẩu',
       required: true
     }
@@ -42,7 +44,7 @@ const Signin = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    alert({ ...values })
+    signinUser({ ...values }, dispatch, navigate)
   }
 
   return (

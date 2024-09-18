@@ -3,6 +3,11 @@ import { createSlice } from '@reduxjs/toolkit'
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
+    currentUser: {
+      email: null,
+      password: null,
+      role: null
+    },
     signin: {
       currentUser: null,
       isFetching: false,
@@ -15,6 +20,17 @@ const authSlice = createSlice({
     }
   },
   reducers: {
+    setCurrentUser: (state, action) => {
+      state.currentUser.email = action.payload.email
+      state.currentUser.password = action.payload.password
+      state.currentUser.role = action.payload.role
+    },
+    setSignOutUser: (state) => {
+      localStorage.removeItem('currentUser')
+      state.currentUser.email = null
+      state.currentUser.password = null
+      state.currentUser.role = null
+    },
     signinStart: (state) => {
       state.signin.isFetching = true
     },
@@ -45,6 +61,8 @@ const authSlice = createSlice({
 })
 
 export const {
+  setCurrentUser,
+  setSignOutUser,
   signinStart,
   signinSuccess,
   signinFailed,
