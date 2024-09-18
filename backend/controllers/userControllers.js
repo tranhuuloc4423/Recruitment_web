@@ -84,7 +84,16 @@ const userControllers = {
       }
 
       const token = sign({ userId: user._id }, 'your_secret_key')
-      res.json({ token })
+
+      const response = {
+        token,
+        user: {
+          email: user.email,
+          password: user.password,
+          role: user.role
+        }
+      }
+      res.json({ response })
     } catch (err) {
       res.status(400).json({ message: err.message })
     }
