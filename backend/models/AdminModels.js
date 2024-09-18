@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Recruiter = require('./RecruiterModels')
+const Recruiter = require('./recruiterModels')
 
 const adminSchema = new mongoose.Schema(
   {
