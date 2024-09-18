@@ -1,14 +1,18 @@
 const { hash, compare } = require('bcrypt')
 const { sign } = require('jsonwebtoken')
 
-const { find, findByIdAndUpdate, findByIdAndDelete, findOne } =
-  '../models/UserModels'
+const {
+  find,
+  findById,
+  findByIdAndDelete,
+  findOne
+} = require('../models/userModels')
 const User = require('../models/userModels')
 
 const userControllers = {
   getAllUsers: async (req, res) => {
     try {
-      const users = await find()
+      const users = await User.find()
       res.json(users)
     } catch (err) {
       res.status(500).json({ message: err.message })
@@ -69,7 +73,7 @@ const userControllers = {
     const { email, password } = req.body
 
     try {
-      const user = await findOne({ email })
+      const user = await User.findOne({ email })
       if (!user) {
         return res.status(400).json({ message: 'Invalid email or password' })
       }
@@ -87,11 +91,19 @@ const userControllers = {
   },
   logOut: async (req, res) => {
     try {
-      req.session.destroy()
-      res.status(200).json('Logout successful')
+      const authHeader = req.headers['authorization']
+      const token = authHeader && authHeader.split(' ')[1]
+
+      if (!token) {
+        return res.status(401).json({
+          message: 'Unauthorized'
+        })
+      }
+      await blacklistedTokens.create({ token })
+      res.status(200).json({ message: 'Logged out successfully' })
     } catch (error) {
-      console.log(error)
-      res.status(500).json(error)
+      console.error(error)
+      res.status(500).json({ message: 'Internal server error' })
     }
   }
 }
