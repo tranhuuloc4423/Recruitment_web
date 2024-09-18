@@ -1,5 +1,6 @@
 const { hash, compare } = require('bcrypt')
 const { sign } = require('jsonwebtoken')
+
 const { find, findByIdAndUpdate, findByIdAndDelete, findOne } =
   '../models/UserModels'
 const User = require('../models/userModels')
@@ -14,12 +15,31 @@ const userControllers = {
     }
   },
 
-  updateUser: async (req, res) => {
+  updateUserPassword: async (req, res) => {
+    const { id, currentPassword, newPassword } = req.body
+
     try {
-      await findByIdAndUpdate(req.params.id, req.body)
-      res.json({ message: 'User updated successfully' })
+      const user = await User.findById(id)
+      if (!user) {
+        return res.status(400).json({
+          message: 'User not found'
+        })
+      }
+
+      const validPassword = await compare(currentPassword, user.password)
+      if (!validPassword) {
+        return res.status(400).json({ message: 'Invalid current password' })
+      }
+
+      const hashedPassword = await hash(newPassword, 10)
+      user.password = hashedPassword
+      await user.save()
+
+      res.json({ message: 'Password changed successfully' })
     } catch (err) {
-      res.status(400).json({ message: err.message })
+      res.status(400).json({
+        message: err.message
+      })
     }
   },
 
@@ -63,6 +83,15 @@ const userControllers = {
       res.json({ token })
     } catch (err) {
       res.status(400).json({ message: err.message })
+    }
+  },
+  logOut: async (req, res) => {
+    try {
+      req.session.destroy()
+      res.status(200).json('Logout successful')
+    } catch (error) {
+      console.log(error)
+      res.status(500).json(error)
     }
   }
 }
