@@ -6,31 +6,31 @@ import bg from '../assets/imgs/business-background-design_1200-57.png'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Dropdown from '../components/Dropdown'
+import { signupUser } from '../redux/api/auth'
+import { useDispatch } from 'react-redux'
 const Signup = () => {
   const navigate = useNavigate()
-  const options = ['Ứng viên', 'Nhà tuyển dụng']
+  const dispatch = useDispatch()
+  const options = [
+    {
+      role: 'candidate',
+      label: 'Ứng viên'
+    },
+    {
+      role: 'recruiter',
+      label: 'Nhà tuyển dụng'
+    }
+  ]
   const [selectedOption, setSelectedOption] = useState(options[0])
   const [values, setValues] = useState({
-    name: '',
     email: '',
     password: '',
     confirmPassword: ''
   })
-  const [error, setError] = useState('')
 
   const inputs = [
     {
       id: 1,
-      name: 'name',
-      type: 'text',
-      placeholder: 'Họ tên',
-      error: 'Họ tên phải từ 4 - 16 ký tự',
-      pattern: '^[A-Za-z0-9]{4,16}$',
-      label: 'Họ tên',
-      required: true
-    },
-    {
-      id: 2,
       name: 'email',
       type: 'email',
       placeholder: 'Email',
@@ -40,7 +40,7 @@ const Signup = () => {
       required: true
     },
     {
-      id: 3,
+      id: 2,
       name: 'password',
       type: 'password',
       placeholder: 'Mật khẩu',
@@ -50,7 +50,7 @@ const Signup = () => {
       required: true
     },
     {
-      id: 4,
+      id: 3,
       name: 'confirmPassword',
       type: 'password',
       placeholder: 'Nhập lại mật khẩu',
@@ -67,6 +67,11 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    const user = {
+      ...values,
+      role: selectedOption.role
+    }
+    signupUser(user, dispatch, navigate)
   }
 
   return (
@@ -94,9 +99,9 @@ const Signup = () => {
               setSelectedOption={setSelectedOption}
             />
             <Button
-              label={'Đăng nhập'}
+              label={'Đăng ký'}
               className={'w-full'}
-              onClick={() => handleSubmit()}
+              onClick={(e) => handleSubmit(e)}
             />
           </form>
 
@@ -106,7 +111,7 @@ const Signup = () => {
               onClick={() => navigate('/signin')}
               className="text-blue-700 cursor-pointer"
             >
-              Đăng ký ngay
+              Đăng nhập ngay
             </span>
           </div>
         </div>

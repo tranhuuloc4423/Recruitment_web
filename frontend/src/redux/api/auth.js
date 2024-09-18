@@ -12,14 +12,12 @@ import { toast } from 'react-toastify'
 export const signinUser = async (user, dispatch, navigate) => {
   dispatch(signinStart())
   try {
-    const res = await axios.post('/auth/signin', user)
-    dispatch(signinSuccess(res.data))
-    dispatch(signinSuccess(user))
-    toast.success('Sign in Success!')
-    localStorage.setItem('currentUser', JSON.stringify(user))
-    navigate('/home/dashboard')
+    const res = await axios.post('/user/signin', user)
+    dispatch(signinSuccess(res.data?.user))
+    toast.success('Đăng nhập thành công')
+    navigate('/home/')
   } catch (error) {
-    toast.error('Sign in Failed!')
+    toast.error('Đăng nhập thất bại! Lỗi : ' + error)
     dispatch(signinFailed())
   }
 }
@@ -27,19 +25,19 @@ export const signinUser = async (user, dispatch, navigate) => {
 export const signupUser = async (user, dispatch, navigate) => {
   dispatch(signupStart())
   try {
-    await axios.post('/auth/signup', user)
+    await axios.post('/user/signup', user)
     dispatch(signupSuccess())
-    toast.success('Sign up Success!')
+    toast.success('Đăng ký tài khoản thành công!')
     navigate('/signin')
   } catch (error) {
-    toast.error('Sign up Failed!')
+    toast.error('Đăng ký tài khoản thất bại! Lỗi :' + error)
     dispatch(signupFailed())
   }
 }
 
 export const changePassword = async (id, newpass, navigate) => {
   try {
-    await axios.post(`/user/${id}/change-password`, newpass)
+    await axios.put(`/user/${id}/`, newpass)
     toast.success('Change Password Success!')
     navigate('/signin')
   } catch (error) {
