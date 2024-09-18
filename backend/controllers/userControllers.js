@@ -93,7 +93,7 @@ const userControllers = {
           role: user.role
         }
       }
-      res.json({ response })
+      res.json(response)
     } catch (err) {
       res.status(400).json({ message: err.message })
     }
