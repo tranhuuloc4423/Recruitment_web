@@ -129,7 +129,12 @@ const recruiterSchema = new mongoose.Schema(
           post_info: mongoose.Schema.Types.Mixed
         }
       ]
-    }
+    },
+    notifications: [
+      {
+        notification: mongoose.Schema.Types.Mixed
+      }
+    ]
   },
   { timestamps: true }
 )

@@ -155,7 +155,12 @@ const candidateSchema = new mongoose.Schema(
           company_info: mongoose.Schema.Types.Mixed
         }
       ]
-    }
+    },
+    notifications: [
+      {
+        notification: mongoose.Schema.Types.Mixed
+      }
+    ]
   },
   { timestamps: true }
 )

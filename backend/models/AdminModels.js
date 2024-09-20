@@ -38,7 +38,12 @@ const adminSchema = new mongoose.Schema(
       total_applies: {
         type: Number
       }
-    }
+    },
+    notifications: [
+      {
+        notification: mongoose.Schema.Types.Mixed
+      }
+    ]
   },
   { timestamps: true }
 )
