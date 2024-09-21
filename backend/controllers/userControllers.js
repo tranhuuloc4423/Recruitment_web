@@ -87,11 +87,7 @@ const userControllers = {
 
       const response = {
         token,
-        user: {
-          email: user.email,
-          password: user.password,
-          role: user.role
-        }
+        user
       }
       res.json(response)
     } catch (err) {
