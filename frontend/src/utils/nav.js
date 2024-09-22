@@ -1,19 +1,60 @@
-const nav = {
-  admin: [
-    { name: 'Tin tuyển dụng', path: '/' },
-    { name: 'Thông tin', path: '/users' },
-    { name: 'Quản lý tin', path: '/settings' },
-    { name: 'Thống kê', path: '/settings' }
-  ],
-  employer: [
-    { name: 'Job Listings', path: '/jobs' },
-    { name: 'Profile', path: '/profile' }
-  ],
-  candidate: [
-    { name: 'Tin tuyển dụng', path: '/' },
-    { name: 'Hồ sơ cá nhân', path: '/about' },
-    { name: 'Việc làm', path: '/about' }
-  ]
-}
+const nav = [
+  {
+    name: 'admin',
+    nav: [
+      {
+        name: 'Tin tuyển dụng',
+        path: 'post'
+      },
+      {
+        name: 'Thông tin',
+        path: 'info'
+      },
+      {
+        name: 'Quản lý tin',
+        path: 'admin/manage'
+      },
+      {
+        name: 'Thống kê',
+        path: 'chart'
+      }
+    ],
+    basic_info: {}
+  },
+  {
+    name: 'recruiter',
+    nav: [
+      {
+        name: 'Tin tuyển dụng',
+        path: 'post'
+      },
+      {
+        name: 'Thông tin',
+        path: 'info'
+      },
+      {
+        name: 'Quản lý tin',
+        path: 'recruiter/manage'
+      }
+    ]
+  },
+  {
+    name: 'candidate',
+    nav: [
+      {
+        name: 'Tin tuyển dụng',
+        path: 'post'
+      },
+      {
+        name: 'Thông tin',
+        path: 'cvinfo'
+      },
+      {
+        name: 'Quản lý tin',
+        path: 'candidate/manage'
+      }
+    ]
+  }
+]
 
 export default nav

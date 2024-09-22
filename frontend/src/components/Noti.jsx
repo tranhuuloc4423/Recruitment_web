@@ -8,11 +8,11 @@ const Noti = () => {
         <GoBell size={24} color="white" />
       </div>
       <div
-        className={`w-72 bg-white shadow-md rounded overflow-hidden absolute bottom-10 right-0 transition-all ${
+        className={`w-72 bg-white shadow-md rounded overflow-hidden absolute top-[100%] right-[-8px] transition-all ${
           active ? 'translate-y-0' : '-translate-y-10 opacity-0'
         }`}
       >
-        <div className="bg-second text-white heading-3 p-4 flex justify-between items-center">
+        <div className="bg-second text-white heading-3 px-4 py-2 flex justify-between items-center">
           <span>Notifications</span>
           <button className="focus:outline-none">
             <span className="material-icons">settings</span>

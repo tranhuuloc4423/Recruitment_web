@@ -23,6 +23,7 @@ const Signup = () => {
   ]
   const [selectedOption, setSelectedOption] = useState(options[0])
   const [values, setValues] = useState({
+    name: '',
     email: '',
     password: '',
     confirmPassword: ''
@@ -31,6 +32,16 @@ const Signup = () => {
   const inputs = [
     {
       id: 1,
+      name: 'name',
+      type: 'text',
+      placeholder: 'Họ và tên',
+      error: 'Tên chứa ít nhất 6 ký tự',
+      // pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
+      label: 'Họ và tên',
+      required: true
+    },
+    {
+      id: 2,
       name: 'email',
       type: 'email',
       placeholder: 'Email',
@@ -40,7 +51,7 @@ const Signup = () => {
       required: true
     },
     {
-      id: 2,
+      id: 3,
       name: 'password',
       type: 'password',
       placeholder: 'Mật khẩu',
@@ -50,7 +61,7 @@ const Signup = () => {
       required: true
     },
     {
-      id: 3,
+      id: 4,
       name: 'confirmPassword',
       type: 'password',
       placeholder: 'Nhập lại mật khẩu',

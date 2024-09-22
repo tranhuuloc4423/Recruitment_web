@@ -5,6 +5,7 @@ const authSlice = createSlice({
   initialState: {
     signin: {
       currentUser: {
+        name: null,
         email: null,
         password: null,
         role: null
@@ -20,6 +21,7 @@ const authSlice = createSlice({
   },
   reducers: {
     setCurrentUser: (state, action) => {
+      state.signin.currentUser.name = action.payload.name
       state.signin.currentUser.email = action.payload.email
       state.signin.currentUser.password = action.payload.password
       state.signin.currentUser.role = action.payload.role
@@ -35,7 +37,10 @@ const authSlice = createSlice({
     },
     signinSuccess: (state, action) => {
       state.signin.isFetching = false
-      state.signin.currentUser = action.payload
+      state.signin.currentUser.name = action.payload.name
+      state.signin.currentUser.email = action.payload.email
+      state.signin.currentUser.password = action.payload.password
+      state.signin.currentUser.role = action.payload.role
       state.signin.error = false
       localStorage.setItem(
         'currentUser',
