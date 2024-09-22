@@ -6,71 +6,56 @@ const recruiterSchema = new mongoose.Schema(
       type: Number,
       unique: true
     },
-    id_user: {
-      type: Number,
-      required: true
-    },
-    company_info: {
-      basic_info: {
-        name: {
-          type: String,
-          required: true
-        },
-        image: {
-          type: String,
-          required: true
-        },
-        model: {
-          type: String,
-          required: true
-        },
-        field: {
-          type: String,
-          required: true
-        },
-        scale: {
-          type: String,
-          required: true
-        },
-        tax_id: {
-          type: Number,
-          required: true
-        },
-        time: {
-          type: String,
-          required: true
-        }
+    basic_info: {
+      name: {
+        type: String,
+        required: true
       },
-      other_info: {
+      image: {
+        type: String
+      },
+      model: {
+        type: String
+      },
+      field: {
+        type: String
+      },
+      email: {
+        type: String,
+        required: true,
+        unique: true
+      },
+      tax_id: {
+        type: Number
+      },
+      time: {
+        type: String
+      }
+    },
+    other_info: {
+      desc: {
+        type: String
+      },
+      speciality: [
+        {
+          type: String
+        }
+      ],
+      reason: {
         desc: {
-          type: String,
-          required: true
+          type: String
         },
-        speciality: [
+        image: [
           {
-            type: String,
-            required: true
-          }
-        ],
-        reason: {
-          desc: {
-            type: String,
-            required: true
-          },
-          image: [
-            {
-              type: String,
-              required: true
-            }
-          ]
-        },
-        location: [
-          {
-            type: String,
-            required: true
+            type: String
           }
         ]
-      }
+      },
+      location: [
+        {
+          type: String
+        }
+      ]
     },
     posts: [
       {
