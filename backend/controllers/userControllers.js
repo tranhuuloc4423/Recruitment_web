@@ -8,6 +8,8 @@ const {
   findOne
 } = require('../models/userModels')
 const User = require('../models/userModels')
+const Candidate = require('../models/candidateModels')
+const Recruiter = require('../models/recruiterModels')
 
 const userControllers = {
   getAllUsers: async (req, res) => {
@@ -62,8 +64,25 @@ const userControllers = {
     try {
       const hashedPassword = await hash(password, 10)
       const newUser = new User({ email, name, password: hashedPassword, role })
-      const savedUser = await newUser.save()
-      res.status(201).json(savedUser)
+
+      if (newUser.role === 'candidate') {
+        const newCandidate = new Candidate({
+          basic_info: { name, email }
+        })
+        const savedUser = await newUser.save()
+        const savedCandidate = await newCandidate.save()
+        res.status(201).json(savedCandidate)
+      } else if (newUser.role === 'recruiter') {
+        const newRecruiter = new Recruiter({ basic_info: { name, email } })
+        const savedUser = await newUser.save()
+        const savedRecruiter = await newRecruiter.save()
+        res.status(201).json(savedRecruiter)
+      } else if (newUser.role === 'admin') {
+        const savedUser = await newUser.save()
+        res.status(201).json(savedUser)
+      } else {
+        res.status(400).json({ message: 'Invalid role' })
+      }
     } catch (err) {
       res.status(400).json({ message: err.message })
     }
@@ -87,11 +106,7 @@ const userControllers = {
 
       const response = {
         token,
-        user: {
-          email: user.email,
-          password: user.password,
-          role: user.role
-        }
+        user
       }
       res.json(response)
     } catch (err) {

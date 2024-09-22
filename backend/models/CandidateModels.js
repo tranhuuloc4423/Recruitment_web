@@ -6,131 +6,103 @@ const candidateSchema = new mongoose.Schema(
       type: Number,
       unique: true
     },
-    id_user: {
-      type: String,
-      required: true
-    },
-    personal_info: {
-      basic_info: {
-        name: {
-          type: String,
-          required: true
-        },
-        phone: {
-          type: String,
-          required: true
-        },
-        email: {
-          type: String,
-          required: true
-        },
-        address: {
-          type: String,
-          required: true
-        },
-        gender: {
-          type: String,
-          required: true
-        },
-        social: [
-          {
-            type: String,
-            required: true
-          }
-        ]
+    basic_info: {
+      image: {
+        type: String
       },
-      cv_info: {
-        desc: {
-          type: String,
-          required: true
-        },
-        education: {
-          school: {
-            type: String,
-            required: true
-          },
-          faculty: {
-            type: String,
-            required: true
-          },
-          rank: {
-            type: String,
-            required: true
-          }
-        },
-        exps: {
-          type: String,
-          required: true
-        },
-        skills: [
-          {
-            type: String,
-            required: true
-          }
-        ],
-        projects: [
-          {
-            name: {
-              type: String,
-              required: true
-            },
-            desc: {
-              type: String,
-              required: true
-            },
-            link: {
-              type: String,
-              required: true
-            }
-          }
-        ],
-        certificates: [
-          {
-            name: {
-              type: String,
-              required: true
-            },
-            desc: {
-              type: String,
-              required: true
-            },
-            image: {
-              type: String,
-              required: true
-            }
-          }
-        ]
+      name: {
+        type: String
+      },
+      dob: {
+        type: String
+      },
+      phone: {
+        type: String
+      },
+      email: {
+        type: String
+      },
+      address: {
+        type: String
+      },
+      gender: {
+        type: String
       }
+    },
+    other_info: {
+      desc: {
+        type: String
+      },
+      education: {
+        school: {
+          type: String
+        },
+        faculty: {
+          type: String
+        },
+        rank: {
+          type: String
+        }
+      },
+      exps: {
+        type: String
+      },
+      skills: [
+        {
+          type: String
+        }
+      ],
+      projects: [
+        {
+          name: {
+            type: String
+          },
+          desc: {
+            type: String
+          },
+          link: {
+            type: String
+          }
+        }
+      ],
+      certificates: [
+        {
+          name: {
+            type: String
+          },
+          desc: {
+            type: String
+          },
+          image: {
+            type: String
+          }
+        }
+      ]
     },
     target: {
       skills: [
         {
-          type: String,
-          required: true
+          type: String
         }
       ],
       target_money: [
         {
           min_money: {
-            type: Number,
-            required: true
+            type: Number
           },
           max_money: {
-            type: String,
-            required: true
+            type: String
           }
         }
       ],
       type: [
         {
-          type: String,
-          required: true
+          type: String
         }
       ],
       location: [
         {
-          type: String,
-          required: true
+          type: String
         }
       ]
     },
@@ -175,5 +147,5 @@ candidateSchema.pre('save', async function (next) {
   next()
 })
 
-const Condidate = mongoose.model('Condidate', condidateSchema)
-module.exports = Condidate
+const Candidate = mongoose.model('Candidate', candidateSchema)
+module.exports = Candidate
