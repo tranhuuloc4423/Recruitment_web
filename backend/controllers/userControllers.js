@@ -10,6 +10,7 @@ const {
 const User = require('../models/userModels')
 const Candidate = require('../models/candidateModels')
 const Recruiter = require('../models/recruiterModels')
+const Admin = require('../models/adminModels')
 
 const userControllers = {
   getAllUsers: async (req, res) => {
@@ -66,20 +67,29 @@ const userControllers = {
       const newUser = new User({ email, name, password: hashedPassword, role })
 
       if (newUser.role === 'candidate') {
+        const savedUser = await newUser.save()
         const newCandidate = new Candidate({
+          id: newUser.id,
           basic_info: { name, email }
         })
-        const savedUser = await newUser.save()
         const savedCandidate = await newCandidate.save()
         res.status(201).json(savedCandidate)
       } else if (newUser.role === 'recruiter') {
-        const newRecruiter = new Recruiter({ basic_info: { name, email } })
         const savedUser = await newUser.save()
+        const newRecruiter = new Recruiter({
+          id: newUser.id,
+          basic_info: { name, email }
+        })
         const savedRecruiter = await newRecruiter.save()
         res.status(201).json(savedRecruiter)
       } else if (newUser.role === 'admin') {
         const savedUser = await newUser.save()
-        res.status(201).json(savedUser)
+        const newAdmin = new Admin({
+          id: newUser.id,
+          basic_info: { name, email }
+        })
+        const savedRecruiter = await newAdmin.save()
+        res.status(201).json(savedRecruiter)
       } else {
         res.status(400).json({ message: 'Invalid role' })
       }

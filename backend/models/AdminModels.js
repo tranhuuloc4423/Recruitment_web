@@ -48,15 +48,5 @@ const adminSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
-adminSchema.pre('save', async function (next) {
-  const admin = this
-  const Admin = mongoose.model('Admin')
-  if (!admin.id) {
-    const lastAdmin = await Admin.findOne({}, {}, { sort: { id: -1 } })
-    admin.id = lastAdmin ? lastAdmin.id + 1 : 1
-  }
-  next()
-})
-
 const Admin = mongoose.model('Admin', adminSchema)
 module.exports = Admin

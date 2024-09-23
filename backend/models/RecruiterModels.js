@@ -124,15 +124,5 @@ const recruiterSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
-recruiterSchema.pre('save', async function (next) {
-  const recruiter = this
-  const Recruiter = mongoose.model('Recruiter')
-  if (!recruiter.id) {
-    const lastRecruiter = await Recruiter.findOne({}, {}, { sort: { id: -1 } })
-    recruiter.id = lastRecruiter ? lastRecruiter.id + 1 : 1
-  }
-  next()
-})
-
 const Recruiter = mongoose.model('Recruiter', recruiterSchema)
 module.exports = Recruiter

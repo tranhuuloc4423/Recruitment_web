@@ -137,15 +137,5 @@ const candidateSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
-candidateSchema.pre('save', async function (next) {
-  const candidate = this
-  const Candidate = mongoose.model('Candidate')
-  if (!candidate.id) {
-    const lastCondidate = await Candidate.findOne({}, {}, { sort: { id: -1 } })
-    candidate.id = lastCondidate ? lastCondidate.id + 1 : 1
-  }
-  next()
-})
-
 const Candidate = mongoose.model('Candidate', candidateSchema)
 module.exports = Candidate
