@@ -8,13 +8,9 @@ const recruiterSchema = new mongoose.Schema(
     },
     basic_info: {
       name: {
-        type: String,
-        required: true
-      },
-      image: {
         type: String
       },
-      model: {
+      image: {
         type: String
       },
       field: {
@@ -22,13 +18,12 @@ const recruiterSchema = new mongoose.Schema(
       },
       email: {
         type: String,
-        required: true,
         unique: true
       },
       tax_id: {
-        type: Number
+        type: String
       },
-      time: {
+      address: {
         type: String
       }
     },
@@ -41,17 +36,7 @@ const recruiterSchema = new mongoose.Schema(
           type: String
         }
       ],
-      reason: {
-        desc: {
-          type: String
-        },
-        image: [
-          {
-            type: String
-          }
-        ]
-      },
-      location: [
+      images: [
         {
           type: String
         }

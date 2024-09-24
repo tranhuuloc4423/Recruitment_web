@@ -8,6 +8,28 @@ const {
 const Admin = require('../models/adminModels')
 
 const adminControllers = {
+  updateBasicInfo: async (req, res) => {
+    try {
+      const id = parseInt(req.params.id)
+      const basic_info = await Admin.findOneAndUpdate({ id: id }, req.body, {
+        new: true
+      })
+      res.status(200).json(basic_info)
+    } catch (error) {
+      res.status(500).json(error)
+    }
+  },
+  updateOtherInfo: async (req, res) => {
+    try {
+      const id = parseInt(req.params.id)
+      const other_info = await Admin.findOneAndUpdate({ id: id }, req.body, {
+        new: true
+      })
+      res.status(200).json(other_info)
+    } catch (error) {
+      res.status(500).json(error)
+    }
+  },
   getDataById: async (req, res) => {
     try {
       const id = parseInt(req.params.id)
