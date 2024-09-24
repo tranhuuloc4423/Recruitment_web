@@ -76,20 +76,14 @@ const info = [
             label: 'Nữ'
           }
         ]
-      },
-      {
-        id: 8,
-        name: 'link',
-        type: 'text',
-        placeholder: 'Link',
-        label: 'Link'
       }
     ],
     otherInfo: [
       {
         id: 1,
         title: 'Giới thiệu bản thân',
-        desc: 'Giới thiệu các thông tin của bản thân, điểm mạnh,...'
+        desc: 'Giới thiệu các thông tin của bản thân, điểm mạnh,...',
+        form: [{ type: 'richText' }]
       }
     ]
   }

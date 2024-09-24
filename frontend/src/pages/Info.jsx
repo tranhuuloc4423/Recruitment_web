@@ -6,12 +6,14 @@ import Button from '../components/Button'
 import InfoCard from '../components/InfoCard'
 import BasicInfoForm from './BasicInfoForm'
 import { useSelector } from 'react-redux'
+import RichText from '../components/RichText'
+import OtherInfo from '../components/OtherInfo'
 const Info = () => {
   const [open, setOpen] = useState(false)
-  const { signin } = useSelector((state) => state.auth)
+  const { currentUser } = useSelector((state) => state.auth)
   return (
     <div className="flex flex-row gap-4">
-      <div className="w-[40%] flex flex-col bg-white rounded p-4 gap-2 h-fit">
+      <div className="w-[30%] flex flex-col bg-white rounded p-4 gap-2 h-fit">
         <div className="flex flex-col items-center">
           <img
             src={avatar}
@@ -48,18 +50,15 @@ const Info = () => {
           />
           {open && (
             <BasicInfoForm
-              role={signin?.currentUser.role}
+              role={currentUser.role}
               open={open}
               setOpen={setOpen}
             />
           )}
         </div>
       </div>
-      <div className="w-[60%] flex flex-col gap-2">
-        <InfoCard
-          title="Giới thiệu bản thân"
-          desc="Giới thiệu thông tin bản thân, điểm mạnh, ..."
-        />
+      <div className="w-[70%] flex flex-col gap-2">
+        <OtherInfo />
       </div>
     </div>
   )

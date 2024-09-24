@@ -43,11 +43,11 @@ const nav = [
     nav: [
       {
         name: 'Tin tuyển dụng',
-        path: 'post'
+        path: 'candidate/posts'
       },
       {
         name: 'Thông tin',
-        path: 'cvinfo'
+        path: 'candidate/info'
       },
       {
         name: 'Quản lý tin',

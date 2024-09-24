@@ -1,0 +1,47 @@
+/* Custom editor styling */
+.ql-container {
+  border: 2px solid #4a90e2;
+  min-height: 200px;
+  padding: 8px;
+  font-family: 'Lexend';
+}
+
+.ql-toolbar {
+  background-color: #f4f4f9;
+  border: 1px solid #dfe2e6;
+  border-radius: 8px 8px 0 0;
+}
+
+.ql-toolbar button {
+  border: 1px solid transparent;
+  transition: background-color 0.2s ease;
+}
+
+.ql-toolbar button:hover {
+  background-color: #dfe2e6;
+  border-radius: 4px;
+}
+
+.ql-toolbar button .ql-active {
+  background-color: #4a90e2;
+  /* color: white; */
+}
+
+/* Active button styles */
+.ql-toolbar .ql-active {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.ql-editor {
+  /* background-color: #fff; */
+  color: #333;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Custom placeholder text */
+.ql-editor.ql-blank::before {
+  color: #a9a9a9;
+  font-style: italic;
+}

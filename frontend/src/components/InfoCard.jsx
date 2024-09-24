@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { GoPlusCircle } from 'react-icons/go'
 import { IoClose } from 'react-icons/io5'
+import Line from './Line'
+import Button from './Button'
 
 const InfoCard = (props) => {
-  const { title, desc, children, childTitle } = props
+  const { title, desc, children, childTitle, onClick } = props
   const [open, setOpen] = useState(false)
   return (
     <>
@@ -31,7 +33,12 @@ const InfoCard = (props) => {
                 <IoClose size={24} color="black" />
               </span>
             </div>
+            <Line />
             {children}
+            <Line />
+            <div>
+              <Button label={'Lưu'} onClick={onClick} />
+            </div>
           </div>
         </div>
       )}

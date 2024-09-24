@@ -1,4 +1,5 @@
 import axios from '../../axios'
+import { setAdmin } from '../slices/adminSlice'
 import {
   signinFailed,
   signinSuccess,
@@ -13,9 +14,10 @@ export const signinUser = async (user, dispatch, navigate) => {
   dispatch(signinStart())
   try {
     const res = await axios.post('/user/signin', user)
-    dispatch(signinSuccess(res.data?.user))
+    console.log(res.data)
+    dispatch(signinSuccess(res.data))
     toast.success('Đăng nhập thành công')
-    navigate('/home/')
+    navigate('/home')
   } catch (error) {
     toast.error('Đăng nhập thất bại! Lỗi : ' + error)
     dispatch(signinFailed())
