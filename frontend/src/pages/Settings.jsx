@@ -4,7 +4,7 @@ import Input from '../components/Input'
 import Button from '../components/Button'
 
 const Settings = () => {
-  const { signin } = useSelector((state) => state.auth)
+  const { currentUser } = useSelector((state) => state.auth)
   const [values, setValues] = useState({
     old: '',
     new: '',
@@ -50,12 +50,12 @@ const Settings = () => {
           <div className="heading-3 ">Thông tin</div>
           <div className="flex items-center gap-4">
             <div className="flex-1">Email: </div>
-            <div className="flex-1">{signin.currentUser?.email} </div>
+            <div className="flex-1">{currentUser?.email} </div>
             <div className="flex-1"></div>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex-1">Họ và tên: </div>
-            <div className="flex-1">{signin.currentUser?.name}</div>
+            <div className="flex-1">{currentUser?.name}</div>
             <div className="flex-1"></div>
           </div>
         </div>

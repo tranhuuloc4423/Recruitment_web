@@ -6,9 +6,13 @@ import { IoClose } from 'react-icons/io5'
 import Button from '../components/Button'
 import Avatar from '../components/Avatar'
 import { convertToBase64 } from '../utils/functions'
+import { getCandidate, updateBasicInfo } from '../redux/api/candidate'
+import { useSelector, useDispatch } from 'react-redux'
 
 const BasicInfoForm = ({ role, open, setOpen }) => {
   const { basicInfo } = info.find((info) => info.name === role)
+  const { currentUser } = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
   const [image, setImage] = useState(null)
   const [values, setValues] = useState({
     name: '',
@@ -16,8 +20,7 @@ const BasicInfoForm = ({ role, open, setOpen }) => {
     phone: '',
     address: '',
     gender: '',
-    dob: '',
-    link: ''
+    dob: ''
   })
 
   const handleChange = (event) => {
@@ -27,8 +30,11 @@ const BasicInfoForm = ({ role, open, setOpen }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log(values)
-    console.log(image)
+    const imagebs64 = convertToBase64(image)
+    const basic_info = {...values, image: imagebs64}
+
+    updateBasicInfo(currentUser.id, {basic_info}, dispatch)
+    getCandidate(currentUser.id, dispatch)
   }
 
   return (

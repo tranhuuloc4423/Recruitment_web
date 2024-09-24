@@ -76,20 +76,77 @@ const info = [
             label: 'Nữ'
           }
         ]
-      },
-      {
-        id: 8,
-        name: 'link',
-        type: 'text',
-        placeholder: 'Link',
-        label: 'Link'
       }
     ],
     otherInfo: [
       {
-        id: 1,
         title: 'Giới thiệu bản thân',
-        desc: 'Giới thiệu các thông tin của bản thân, điểm mạnh,...'
+        desc: 'Thông tin cá nhân của bạn.',
+        type: 'richText',
+        id: 1,
+        name: 'introduce'
+      },
+      {
+        title: 'Kinh nghiệm',
+        desc: 'Thông tin về kinh nghiệm làm việc.',
+        type: 'richText',
+        id: 2,
+        name: 'exp'
+      },
+      {
+        title: 'Kỹ năng',
+        desc: 'Thông tin về kinh nghiệm làm việc.',
+        type: 'dropdown',
+        id: 3,
+        name: 'skills',
+        placeholder: 'Tìm kiếm kỹ năng',
+        options: [
+          {
+            value: 'Reactjs',
+            label: 'Reactjs'
+          },
+          {
+            value: 'MongoDB',
+            label: 'Reactjs'
+          },
+          {
+            value: 'Reactjs',
+            label: 'Reactjs'
+          },
+          {
+            value: 'Reactjs',
+            label: 'Reactjs'
+          },
+          {
+            value: 'Reactjs',
+            label: 'Reactjs'
+          },
+          {
+            value: 'Reactjs',
+            label: 'Reactjs'
+          }
+        ]
+      },
+      {
+        title: 'Học vấn',
+        desc: 'Thông tin học vấn và bằng cấp.',
+        type: 'richText',
+        id: 4,
+        name: 'education'
+      },
+      {
+        title: 'Dự án cá nhân',
+        desc: 'Dự án bạn đã thực hiện.',
+        type: 'richText',
+        id: 5,
+        name: 'projects'
+      },
+      {
+        title: 'Chứng chỉ',
+        desc: 'Thông tin về chứng chỉ đã đạt được.',
+        type: 'richText',
+        id: 6,
+        name: 'certificates'
       }
     ]
   }

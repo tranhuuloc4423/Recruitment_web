@@ -3,13 +3,9 @@ import { createSlice } from '@reduxjs/toolkit'
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
+    currentUser: {},
+    token: null,
     signin: {
-      currentUser: {
-        name: null,
-        email: null,
-        password: null,
-        role: null
-      },
       isFetching: false,
       error: false
     },
@@ -21,31 +17,21 @@ const authSlice = createSlice({
   },
   reducers: {
     setCurrentUser: (state, action) => {
-      state.signin.currentUser.name = action.payload.name
-      state.signin.currentUser.email = action.payload.email
-      state.signin.currentUser.password = action.payload.password
-      state.signin.currentUser.role = action.payload.role
+      state.currentUser = action.payload
     },
     setSignOutUser: (state) => {
       localStorage.removeItem('currentUser')
-      state.currentUser.email = null
-      state.currentUser.password = null
-      state.currentUser.role = null
+      state.currentUser = null
     },
     signinStart: (state) => {
       state.signin.isFetching = true
     },
     signinSuccess: (state, action) => {
       state.signin.isFetching = false
-      state.signin.currentUser.name = action.payload.name
-      state.signin.currentUser.email = action.payload.email
-      state.signin.currentUser.password = action.payload.password
-      state.signin.currentUser.role = action.payload.role
+      state.currentUser = action.payload?.user
+      state.token = action.payload?.token
       state.signin.error = false
-      localStorage.setItem(
-        'currentUser',
-        JSON.stringify(state.signin.currentUser)
-      )
+      localStorage.setItem('currentUser', JSON.stringify(state.currentUser))
     },
     signinFailed: (state) => {
       state.signin.error = true
