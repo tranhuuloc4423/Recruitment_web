@@ -31,8 +31,9 @@ const BasicInfoForm = ({ role, open, setOpen }) => {
   const handleSubmit = (event) => {
     event.preventDefault()
     const imagebs64 = convertToBase64(image)
+    const basic_info = {...values, image: imagebs64}
 
-    updateBasicInfo(currentUser.id, { ...values, image: imagebs64 }, dispatch)
+    updateBasicInfo(currentUser.id, {basic_info}, dispatch)
     getCandidate(currentUser.id, dispatch)
   }
 

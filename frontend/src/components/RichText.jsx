@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import ReactQuill from 'react-quill'
 import '../customQuill.css'
-const RichText = ({ value, onChange, label }) => {
+const RichText = ({ value, onChange, label, name }) => {
   const [charCount, setCharCount] = useState(0)
 
   const handleChange = (newValue) => {
-    onChange(newValue)
+    onChange({ target: { name, value: newValue } })
     const plainText = newValue.replace(/<[^>]+>/g, '')
     setCharCount(plainText.length)
   }

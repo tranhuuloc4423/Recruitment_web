@@ -5,6 +5,7 @@ import { IoIosArrowDown } from 'react-icons/io'
 import { IoSettingsOutline } from 'react-icons/io5'
 import { LuLogOut } from 'react-icons/lu'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 const Account = () => {
   const [active, setActive] = useState(false)
   const { currentUser } = useSelector((state) => state.auth)
@@ -52,10 +53,10 @@ const Account = () => {
           active ? 'translate-y-0' : '-translate-y-10 opacity-0'
         } ${active ? 'duration-200' : 'duration-200'}`}
       >
-        <div className="flex items-center gap-2 px-4 py-2">
+        <Link className="flex items-center gap-2 px-4 py-2">
           <IoSettingsOutline />
           Cài đặt
-        </div>
+        </Link>
         <div
           className="flex items-center gap-2 px-4 py-2"
           onClick={() => console.log(1)}
