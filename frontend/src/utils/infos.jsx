@@ -1,3 +1,6 @@
+import { IoMailOutline, IoLocationOutline } from 'react-icons/io5'
+import { LuUser2, LuGift } from 'react-icons/lu'
+import { FiPhone } from 'react-icons/fi'
 const info = [
   {
     name: 'admin',
@@ -28,7 +31,8 @@ const info = [
         error: 'Địa chỉ email không hợp lệ',
         pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
         label: 'Email',
-        required: true
+        required: true,
+        icon: <IoMailOutline size={24} />
       },
       {
         id: 4,
@@ -38,7 +42,8 @@ const info = [
         error: 'Ngày sinh không hợp lệ',
         pattern: '',
         label: 'Ngày sinh',
-        required: true
+        required: true,
+        icon: <LuGift size={24} />
       },
       {
         id: 5,
@@ -48,7 +53,8 @@ const info = [
         error: 'Địa chỉ không hợp lệ',
         // pattern: '',
         label: 'Địa chỉ',
-        required: true
+        required: true,
+        icon: <IoLocationOutline size={24} />
       },
       {
         id: 6,
@@ -58,7 +64,8 @@ const info = [
         error: 'Số điện thoại không hợp lệ',
         // pattern: '^d{10}$',
         label: 'Số điện thoại',
-        required: true
+        required: true,
+        icon: <FiPhone size={24} />
       },
       {
         id: 7,
@@ -68,23 +75,22 @@ const info = [
         label: 'Giới tính',
         options: [
           {
-            value: 'male',
-            label: 'Nam'
+            value: 'Nam'
           },
           {
-            value: 'female',
-            label: 'Nữ'
+            value: 'Nữ'
           }
-        ]
+        ],
+        icon: <LuUser2 size={24} />
       }
     ],
     otherInfo: [
       {
-        title: 'Giới thiệu bản thân',
+        title: 'Giới thiệu',
         desc: 'Thông tin cá nhân của bạn.',
         type: 'richText',
         id: 1,
-        name: 'introduce'
+        name: 'desc'
       },
       {
         title: 'Kinh nghiệm',
@@ -135,7 +141,7 @@ const info = [
         name: 'education'
       },
       {
-        title: 'Dự án cá nhân',
+        title: 'Dự án',
         desc: 'Dự án bạn đã thực hiện.',
         type: 'richText',
         id: 5,

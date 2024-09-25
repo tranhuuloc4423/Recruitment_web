@@ -5,13 +5,13 @@ import Line from '../components/Line'
 import { IoClose } from 'react-icons/io5'
 import Button from '../components/Button'
 import Avatar from '../components/Avatar'
-import { convertToBase64 } from '../utils/functions'
-import { getCandidate, updateBasicInfo } from '../redux/api/candidate'
+import { convertFileToURL, convertToBase64 } from '../utils/functions'
 import { useSelector, useDispatch } from 'react-redux'
+import { getById, updateBasicInfo } from '../redux/api/app'
 
-const BasicInfoForm = ({ role, open, setOpen }) => {
-  const { basicInfo } = info.find((info) => info.name === role)
+const BasicInfoForm = ({ open, setOpen, onUpdate }) => {
   const { currentUser } = useSelector((state) => state.auth)
+  const { basicInfo } = info.find((info) => info.name === currentUser?.role)
   const dispatch = useDispatch()
   const [image, setImage] = useState(null)
   const [values, setValues] = useState({
@@ -28,13 +28,28 @@ const BasicInfoForm = ({ role, open, setOpen }) => {
     setValues({ ...values, [name]: value })
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    const imagebs64 = convertToBase64(image)
-    const basic_info = {...values, image: imagebs64}
+    if (!image) {
+      return
+    }
+    // kiểm tra xem có dữ liệu nào còn thiếu nếu thiếu return
+    const valuesCheck = Object.values(values).find(
+      (value) => value.trim() === ''
+    )
+    if (valuesCheck) {
+      return
+    }
 
-    updateBasicInfo(currentUser.id, {basic_info}, dispatch)
-    getCandidate(currentUser.id, dispatch)
+    // covert ảnh
+    // const imagebs64 = await convertToBase64(image)
+    const imgUrl = await convertFileToURL(image)
+    // const basic_info = { ...values, image: imagebs64 }
+    // updateBasicInfo(currentUser.id, { basic_info }, dispatch, currentUser.role)
+    // getById(currentUser.id, dispatch, currentUser.role)
+    // onUpdate(values)
+    console.log(URL.createObjectURL(image))
+    setOpen(false)
   }
 
   return (
