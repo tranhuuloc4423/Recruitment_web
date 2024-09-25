@@ -23,6 +23,32 @@ const candidateControllers = {
       res.status(500).json(error)
     }
   },
+  updateOtherInfo: async (req, res) => {
+    try {
+      const id = parseInt(req.params.id)
+      const other_info = await Candidate.findOneAndUpdate(
+        { id: id },
+        req.body,
+        {
+          new: true
+        }
+      )
+      res.status(200).json(other_info)
+    } catch (error) {
+      res.status(500).json(error)
+    }
+  },
+  updateTarget: async (req, res) => {
+    try {
+      const id = parseInt(req.params.id)
+      const target = await Candidate.findOneAndUpdate({ id: id }, req.body, {
+        new: true
+      })
+      res.status(200).json(target)
+    } catch (error) {
+      res.status(500).json(error)
+    }
+  },
   getDataById: async (req, res) => {
     try {
       const id = parseInt(req.params.id)

@@ -7,7 +7,7 @@ const adminSchema = new mongoose.Schema(
       type: Number,
       unique: true
     },
-    recruiter: { type: mongoose.Schema.Types.ObjectId, ref: 'Recruiter' },
+    recruiter: { type: mongoose.Schema.Types.ObjectId, ref: Recruiter },
     report: {
       recruiter: [
         {

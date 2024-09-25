@@ -34,15 +34,7 @@ const candidateSchema = new mongoose.Schema(
         type: String
       },
       education: {
-        school: {
-          type: String
-        },
-        faculty: {
-          type: String
-        },
-        rank: {
-          type: String
-        }
+        type: String
       },
       exps: {
         type: String
@@ -52,32 +44,12 @@ const candidateSchema = new mongoose.Schema(
           type: String
         }
       ],
-      projects: [
-        {
-          name: {
-            type: String
-          },
-          desc: {
-            type: String
-          },
-          link: {
-            type: String
-          }
-        }
-      ],
-      certificates: [
-        {
-          name: {
-            type: String
-          },
-          desc: {
-            type: String
-          },
-          image: {
-            type: String
-          }
-        }
-      ]
+      projects: {
+        type: String
+      },
+      certificates: {
+        type: String
+      }
     },
     target: {
       skills: [
