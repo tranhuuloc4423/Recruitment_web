@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import ReactQuill from 'react-quill'
 import '../customQuill.css'
 const RichText = ({ value, onChange, label, name }) => {
   const [charCount, setCharCount] = useState(0)
-
+  const richRef = useRef(null)
   const handleChange = (newValue) => {
     onChange({ target: { name, value: newValue } })
     const plainText = newValue.replace(/<[^>]+>/g, '')
@@ -28,6 +28,7 @@ const RichText = ({ value, onChange, label, name }) => {
     <div className="w-full">
       <div className="heading-3 text-left">{label}</div>
       <ReactQuill
+        ref={richRef}
         theme="snow"
         value={value}
         onChange={handleChange}

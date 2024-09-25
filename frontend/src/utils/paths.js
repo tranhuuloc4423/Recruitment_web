@@ -1,14 +1,13 @@
 const paths = {
   APP: 'app',
-  HOME: 'home',
-  ADMIN: 'admin',
-  RECRUITER: 'recruiter',
-  CANDIDATE: 'candidate',
+  HOME: '',
   SIGNIN: 'signin',
   SIGNUP: 'signup',
   SETTINGS: 'settings',
   INFO: 'info',
-  POSTS: 'posts'
+  POSTS: 'posts',
+  CV: 'cv',
+  TARGETS: 'targets'
 }
 
 export default paths

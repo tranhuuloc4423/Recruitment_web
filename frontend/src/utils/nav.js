@@ -4,19 +4,19 @@ const nav = [
     nav: [
       {
         name: 'Tin tuyển dụng',
-        path: 'post'
+        path: '/posts'
       },
       {
         name: 'Thông tin',
-        path: 'info'
+        path: '/info'
       },
       {
         name: 'Quản lý tin',
-        path: 'admin/manage'
+        path: '/manage'
       },
       {
         name: 'Thống kê',
-        path: 'chart'
+        path: '/chart'
       }
     ],
     basic_info: {}
@@ -26,15 +26,15 @@ const nav = [
     nav: [
       {
         name: 'Tin tuyển dụng',
-        path: 'post'
+        path: '/posts'
       },
       {
         name: 'Thông tin',
-        path: 'info'
+        path: '/info'
       },
       {
         name: 'Quản lý tin',
-        path: 'recruiter/manage'
+        path: '/manage'
       }
     ]
   },
@@ -43,15 +43,15 @@ const nav = [
     nav: [
       {
         name: 'Tin tuyển dụng',
-        path: 'candidate/posts'
+        path: '/posts'
       },
       {
         name: 'Thông tin',
-        path: 'candidate/info'
+        path: '/info'
       },
       {
         name: 'Quản lý tin',
-        path: 'candidate/manage'
+        path: '/manage'
       }
     ]
   }

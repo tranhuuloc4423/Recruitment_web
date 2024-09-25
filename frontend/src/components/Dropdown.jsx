@@ -14,9 +14,9 @@ const Dropdown = ({ options, label, setSelectedOption, selectedOption }) => {
   return (
     <div
       onClick={toggleDropdown}
-      className="relative w-full border-2 p-2 rounded flex flex-row items-center justify-between select-none"
+      className="relative w-full border-2 p-2 rounded flex flex-row items-center justify-between select-none bg-white"
     >
-      <div>{selectedOption.label}</div>
+      <div className="w-full">{selectedOption?.label}</div>
       <IoIosArrowDown />
       <ul
         className={`rounded bg-white absolute shadow-md top-[100%] left-0 w-full transition-all ${
@@ -27,7 +27,7 @@ const Dropdown = ({ options, label, setSelectedOption, selectedOption }) => {
           <li
             key={index}
             onClick={() => handleOptionClick(option)}
-            className="p-2 cursor-pointer hover:bg-slate-300"
+            className="p-2 cursor-pointer hover:bg-gray-200"
           >
             {option.label}
           </li>

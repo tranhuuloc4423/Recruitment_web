@@ -4,6 +4,7 @@ import RichText from './RichText'
 
 const Input = (props) => {
   const [focused, setFocused] = useState(false)
+
   const {
     label,
     onChange,
@@ -15,8 +16,16 @@ const Input = (props) => {
     ...inputProps
   } = props
 
+  const [selectedValue, setSelectedValue] = useState(
+    props.inputProps?.options[0].value
+  )
+
   const handleFocus = (e) => {
     setFocused(true)
+  }
+  const handleSelectChange = (e) => {
+    setSelectedValue(e.target.value)
+    onChange(e)
   }
   const renderInput = () => {
     switch (type) {
@@ -25,13 +34,16 @@ const Input = (props) => {
           <select
             {...inputProps}
             className="outline-none border-2 w-full p-2 rounded-md"
-            onChange={onChange}
+            onChange={handleSelectChange}
             onBlur={handleFocus}
             onFocus={() => setFocused(true)}
             focused={focused.toString()}
+            value={selectedValue}
           >
             {inputProps.options.map((option) => (
-              <option value={option.value}>{option.label}</option>
+              <option key={option.value} value={option.value}>
+                {option.value}
+              </option>
             ))}
           </select>
         )

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import InfoCard from './InfoCard'
 import RichText from './RichText'
@@ -8,11 +8,9 @@ import DropdownSearchAdd from './DropdownSearchAdd'
 import info from '../utils/infos'
 const OtherInfo = () => {
   const { currentUser } = useSelector((state) => state.auth)
-  const { recruiter } = useSelector((state) => state.recruiter)
-  const { admin } = useSelector((state) => state.admin)
-  const { candidate } = useSelector((state) => state.candidate)
+  const { currentRole } = useSelector((state) => state.app)
   const [values, setValues] = useState({
-    introduce: '',
+    desc: '',
     exp: '',
     education: '',
     certificates: '',
@@ -24,8 +22,14 @@ const OtherInfo = () => {
     setValues({ ...values, [e.target.name]: e.target.value })
   }
 
+  useEffect(() => {
+    if (currentUser) {
+      console.log(currentRole)
+    }
+  }, [currentUser, currentRole?.other_info])
+
   return (
-    <div className="w-full flex flex-col gap-4">
+    <div className="gap-4 w-[70%] flex flex-col">
       {info
         .find((item) => item?.name === currentUser?.role)
         ?.otherInfo.map((item) => (
@@ -49,7 +53,7 @@ const OtherInfo = () => {
                 </>
               )
             }
-            onClick={() => console.log(values[item.name])}
+            onClick={() => console.log({ [item.name]: values[item.name] })}
           />
         ))}
     </div>
