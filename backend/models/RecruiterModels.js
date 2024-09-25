@@ -44,7 +44,7 @@ const recruiterSchema = new mongoose.Schema(
     },
     posts: [
       {
-        id: {
+        postId: {
           type: Number,
           unique: true
         },

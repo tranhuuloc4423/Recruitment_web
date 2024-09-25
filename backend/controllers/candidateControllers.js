@@ -13,7 +13,7 @@ const candidateControllers = {
     const { image, dob, phone, address, gender } = req.body
 
     try {
-      const candidate = await Candidate.findByIdAndUpdate(
+      const basic_info = await Candidate.findByIdAndUpdate(
         { id: id },
         {
           $set: {
@@ -27,10 +27,10 @@ const candidateControllers = {
         { new: true }
       )
 
-      if (!candidate) {
+      if (!basic_info) {
         return res.status(404).json({ message: 'Candidate not found' })
       }
-      res.json(candidate)
+      res.json(basic_info)
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
@@ -40,7 +40,7 @@ const candidateControllers = {
     const { desc, education, exps, skills, projects, certificates } = req.body
 
     try {
-      const candidate = await Candidate.findByIdAndUpdate(
+      const other_info = await Candidate.findByIdAndUpdate(
         { id: id },
         {
           $set: {
@@ -55,10 +55,10 @@ const candidateControllers = {
         { new: true }
       )
 
-      if (!candidate) {
+      if (!other_info) {
         return res.status(404).json({ message: 'Candidate not found' })
       }
-      res.json(candidate)
+      res.json(other_info)
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
