@@ -10,18 +10,18 @@ const candidateSchema = new mongoose.Schema(
       image: {
         type: String
       },
-      name: {
-        type: String
-      },
+      // name: {
+      //   type: String
+      // },
       dob: {
         type: String
       },
       phone: {
         type: String
       },
-      email: {
-        type: String
-      },
+      // email: {
+      //   type: String
+      // },
       address: {
         type: String
       },
