@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import logo from '../assets/imgs/LogoLHU_Daf.png'
+import logo from '../assets/imgs/Logo_Dai_Hoc_Lac_Hong.png'
 
 import Account from './Account'
 import Button from './Button'
@@ -14,7 +14,7 @@ const Header = () => {
   return (
     <div className="w-full flex justify-between items-center bg-primary px-8 h-[80px]">
       <div className="flex gap-4 items-center h-full">
-        <img src={logo} alt="Logo Lac Hong" className="w-[70px] h-[70px]" />
+        <img src={logo} alt="Logo Lac Hong" className="w-[100px]" />
         <div className="flex text-white h-full">
           {currentUser &&
             nav

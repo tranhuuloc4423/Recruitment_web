@@ -1,52 +1,27 @@
 import React, { useState } from 'react'
+import ReactSlider from 'react-slider'
 
-const RangeSlider = ({ min, max, step, onChange }) => {
-  const [range, setRange] = useState([min, max])
-
-  const handleMinChange = (e) => {
-    const value = Math.min(Number(e.target.value), range[1] - step)
-    setRange([value, range[1]])
-    onChange([value, range[1]])
-  }
-
-  const handleMaxChange = (e) => {
-    const value = Math.max(Number(e.target.value), range[0] + step)
-    setRange([range[0], value])
-    onChange([range[0], value])
-  }
-
+const RangeSlider = ({ values, setValues }) => {
   return (
-    <div className="relative w-full">
-      <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={range[0]}
-        onChange={handleMinChange}
-        className="absolute w-full h-0 pointer-events-none appearance-none"
+    <div className="w-full">
+      <ReactSlider
+        className="slider"
+        thumbClassName="thumb"
+        trackClassName="example-track"
+        defaultValue={values}
+        ariaLabel={['Lower thumb', 'Upper thumb']}
+        ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
+        pearling
+        onChange={setValues}
+        minDistance={5}
+        step={5}
       />
-      <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={range[1]}
-        onChange={handleMaxChange}
-        className="absolute w-full h-0 pointer-events-none appearance-none"
-      />
-      <div className="relative w-full h-2 bg-gray-300 rounded-md my-6">
-        <div
-          className="absolute h-2 bg-green-500 rounded-md"
-          style={{
-            left: `${((range[0] - min) / (max - min)) * 100}%`,
-            right: `${100 - ((range[1] - min) / (max - min)) * 100}%`
-          }}
-        ></div>
-      </div>
-      <div className="flex justify-between text-sm">
-        <span>Min: {range[0]}</span>
-        <span>Max: {range[1]}</span>
+      <div className="mt-4">
+        <span>
+          Mức lương:{' '}
+          {values[0] === 0 ? `${values[0]} vnđ` : `${values[0]}.000.000 vnđ`} -{' '}
+          {values[1]}.000.000 vnđ
+        </span>
       </div>
     </div>
   )
