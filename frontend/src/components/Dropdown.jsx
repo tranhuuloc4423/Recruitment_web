@@ -16,20 +16,25 @@ const Dropdown = ({ options, label, setSelectedOption, selectedOption }) => {
       onClick={toggleDropdown}
       className="relative w-full border-2 p-2 rounded flex flex-row items-center justify-between select-none bg-white"
     >
-      <div className="w-full">{selectedOption?.label}</div>
+      <div className="w-full">{selectedOption?.value || label}</div>
       <IoIosArrowDown />
       <ul
-        className={`rounded bg-white absolute shadow-md top-[100%] left-0 w-full transition-all ${
-          isOpen ? 'translate-y-0' : '-translate-y-10 opacity-0'
+        className={`rounded bg-white absolute border border-black shadow-md max-h-40 overflow-y-scroll top-[100%] z-[1000] left-0 w-full transition-all ${
+          isOpen ? 'cursor-pointer' : 'hidden'
         }`}
       >
-        {options.map((option, index) => (
+        {options?.map((option, index) => (
           <li
             key={index}
-            onClick={() => handleOptionClick(option)}
-            className="p-2 cursor-pointer hover:bg-gray-200"
+            onClick={(e) => {
+              if (isOpen) {
+                handleOptionClick(option)
+              }
+              e.stopPropagation()
+            }}
+            className="p-2 hover:bg-gray-200"
           >
-            {option.label}
+            {option.value}
           </li>
         ))}
       </ul>

@@ -9,7 +9,7 @@ const Button = ({
     <div
       onClick={onClick}
       className={
-        `py-3 px-4 bg-primary active:bg-[rgba(40,79,158,0.85)] transition-all rounded flex justify-center cursor-pointer ` +
+        `py-2 px-4 bg-primary active:bg-[rgba(40,79,158,0.85)] transition-all gap-2 rounded flex justify-center items-center cursor-pointer ` +
         className
       }
     >

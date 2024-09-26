@@ -1,6 +1,7 @@
 import { IoMailOutline, IoLocationOutline } from 'react-icons/io5'
-import { LuUser2, LuGift } from 'react-icons/lu'
+import { LuUser2, LuGift, LuCake } from 'react-icons/lu'
 import { FiPhone } from 'react-icons/fi'
+import { BsGenderAmbiguous } from 'react-icons/bs'
 const info = [
   {
     name: 'admin',
@@ -43,7 +44,7 @@ const info = [
         pattern: '',
         label: 'Ngày sinh',
         required: true,
-        icon: <LuGift size={24} />
+        icon: <LuCake size={24} />
       },
       {
         id: 5,
@@ -81,7 +82,7 @@ const info = [
             value: 'Nữ'
           }
         ],
-        icon: <LuUser2 size={24} />
+        icon: <BsGenderAmbiguous size={24} />
       }
     ],
     otherInfo: [

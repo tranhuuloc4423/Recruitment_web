@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
 import Line from '../components/Line'
 import Button from '../components/Button'
+import Tag from '../components/Tag'
 import Dropdown from '../components/Dropdown'
 import RangeSlider from '../components/RangeSlider'
 
 const Target = () => {
   const [selectedOption, setSelectedOption] = useState(null)
-  const [range, setRange] = useState([20, 80])
+  const [values, setValues] = useState({
+    skills: ''
+  })
+  const [salarys, setSalarys] = useState([0, 100])
 
-  const handleRangeChange = (newRange) => {
-    setRange(newRange)
-  }
   return (
     <div className="w-full flex justify-center">
       <div className="flex flex-col p-4 rounded gap-2 w-2/3">
@@ -25,16 +26,21 @@ const Target = () => {
           <div className="flex flex-col">
             <div className="flex flex-row justify-between">
               <span className="flex-1 heading-3">Kỹ năng</span>
-              <div className="flex-1">
+              <div className="flex-1 flex flex-row gap-4">
                 <Dropdown
                   label={'Kỹ năng'}
                   options={[
-                    { value: 'Reactjs', label: 'Reactjs' },
-                    { value: 'MongoDB', label: 'MongoDB' }
+                    { value: 'Reactjs' },
+                    { value: 'MongoDB' },
+                    { value: 'HTML' },
+                    { value: 'CSS' },
+                    { value: 'VueJS' },
+                    { value: 'Angular' }
                   ]}
                   selectedOption={selectedOption}
                   setSelectedOption={setSelectedOption}
                 />
+                <Button label={'Thêm'} onClick={() => {}} />
               </div>
             </div>
             <div className="flex flex-row gap-4 items-center">
@@ -44,25 +50,39 @@ const Target = () => {
           </div>
           <Line />
           <div className="flex flex-row justify-between items-center">
-            <span className="heading-3">Mức lương</span>
-            <div>
-              {/* <RangeSlider
-                min={0}
-                max={100}
-                step={1}
-                onChange={handleRangeChange}
-              /> */}
+            <span className="flex-1 heading-3">Mức lương</span>
+            <div className="flex-1">
+              <RangeSlider values={salarys} setValues={setSalarys} />
             </div>
           </div>
           <Line />
           <div className="flex flex-row justify-between items-center">
             <span className="heading-3">Hình thức</span>
-            <div>Tags</div>
+            <div className="flex items-center gap-4">
+              <Tag label={'Toàn thời gian'} plus />
+              <Tag label={'Bán thời gian'} plus />
+            </div>
           </div>
           <Line />
           <div className="flex flex-row justify-between items-center">
-            <span className="heading-3">Địa điểm</span>
-            <div>Dropdown</div>
+            <span className="heading-3">Loại hình</span>
+            <div className="flex items-center gap-4">
+              <Tag label={'Tại văn phòng'} plus />
+              <Tag label={'Từ xa'} plus />
+              <Tag label={'Linh hoạt'} plus />
+            </div>
+          </div>
+          <Line />
+          <div className="flex flex-row justify-between items-center">
+            <span className="flex-1 heading-3">Địa điểm</span>
+            <div className="flex-1">
+              <Dropdown
+                label={'Địa điểm'}
+                options={[{ value: 'Reactjs' }, { value: 'MongoDB' }]}
+                selectedOption={selectedOption}
+                setSelectedOption={setSelectedOption}
+              />
+            </div>
           </div>
         </div>
         <div className="w-full">

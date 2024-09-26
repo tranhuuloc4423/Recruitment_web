@@ -43,4 +43,11 @@
   .input span {
     @apply hidden p-1 para-2 text-red;
   }
+
+  .slider {
+    @apply w-full h-1.5 bg-gray-200 rounded-full flex items-center my-6;
+  }
+  .slider .thumb {
+    @apply w-6 h-6 rounded-full bg-primary cursor-pointer;
+  }
 }
