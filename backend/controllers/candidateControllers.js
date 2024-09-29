@@ -9,12 +9,12 @@ const Candidate = require('../models/candidateModels')
 
 const candidateControllers = {
   updateBasicInfo: async (req, res) => {
-    const id = parseInt(req.params.id)
+    const { candidateId } = req.params
     const { image, dob, phone, address, gender } = req.body
 
     try {
       const basic_info = await Candidate.findByIdAndUpdate(
-        { id: id },
+        { id: candidateId },
         {
           $set: {
             'basic_info.image': image,
@@ -36,39 +36,51 @@ const candidateControllers = {
     }
   },
   updateOtherInfo: async (req, res) => {
-    const id = parseInt(req.params.id)
+    const { candidateId } = req.params
     const { desc, education, exps, skills, projects, certificates } = req.body
 
     try {
+      let updateFields = {}
+
+      if (desc !== undefined) updateFields['other_info.desc'] = desc
+      if (education !== undefined)
+        updateFields['other_info.education'] = education
+      if (exps !== undefined) updateFields['other_info.exps'] = exps
+      if (skills !== undefined) updateFields['other_info.skills'] = skills
+      if (projects !== undefined) updateFields['other_info.projects'] = projects
+      if (certificates !== undefined)
+        updateFields['other_info.certificates'] = certificates
+
+      if (Object.keys(updateFields).length === 0) {
+        return res.status(400).json({ message: 'No fields to update' })
+      }
+
       const other_info = await Candidate.findByIdAndUpdate(
-        { id: id },
-        {
-          $set: {
-            'other_info.desc': desc,
-            'other_info.education': education,
-            'other_info.exps': exps,
-            'other_info.skills': skills,
-            'other_info.projects': projects,
-            'other_info.certificates': certificates
-          }
-        },
+        { id: candidateId },
+        { $set: updateFields },
         { new: true }
       )
 
       if (!other_info) {
         return res.status(404).json({ message: 'Candidate not found' })
       }
+
       res.json(other_info)
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
   },
+
   updateTarget: async (req, res) => {
     try {
-      const id = parseInt(req.params.id)
-      const target = await Candidate.findOneAndUpdate({ id: id }, req.body, {
-        new: true
-      })
+      const { candidateId } = req.params
+      const target = await Candidate.findOneAndUpdate(
+        { id: candidateId },
+        req.body,
+        {
+          new: true
+        }
+      )
       res.status(200).json(target)
     } catch (error) {
       res.status(500).json(error)
@@ -76,8 +88,8 @@ const candidateControllers = {
   },
   getDataById: async (req, res) => {
     try {
-      const id = parseInt(req.params.id)
-      const candidate = await Candidate.findOne({ id: id })
+      const { candidateId } = req.params
+      const candidate = await Candidate.findOne({ id: candidateId })
       res.status(200).json(candidate)
     } catch (error) {
       res.status(500).json(error)
@@ -92,12 +104,12 @@ const candidateControllers = {
     }
   },
   updateSavedJobs: async (req, res) => {
-    const id = parseInt(req.params.id)
+    const { candidateId } = req.params
     const { post_info } = req.body
 
     try {
       const candidate = await Candidate.findByIdAndUpdate(
-        { id: id },
+        { id: candidateId },
         { $push: { 'jobs.saved': { post_info } } },
         { new: true }
       )
@@ -110,12 +122,12 @@ const candidateControllers = {
     }
   },
   updateAppliedJobs: async (req, res) => {
-    const id = parseInt(req.params.id)
+    const { candidateId } = req.params
     const { post_info } = req.body
 
     try {
       const candidate = await Candidate.findByIdAndUpdate(
-        { id: id },
+        { id: candidateId },
         { $push: { 'jobs.applied': { post_info } } },
         { new: true }
       )
@@ -128,12 +140,12 @@ const candidateControllers = {
     }
   },
   updateFollowedCompanies: async (req, res) => {
-    const id = parseInt(req.params.id)
+    const { candidateId } = req.params
     const { company_info } = req.body
 
     try {
       const candidate = await Candidate.findByIdAndUpdate(
-        { id: id },
+        { id: candidateId },
         { $push: { 'jobs.followed': { company_info } } },
         { new: true }
       )
@@ -146,12 +158,12 @@ const candidateControllers = {
     }
   },
   updateNotifications: async (req, res) => {
-    const id = parseInt(req.params.id)
+    const { candidateId } = req.params
     const { notification } = req.body
 
     try {
       const candidate = await Candidate.findByIdAndUpdate(
-        { id: id },
+        { id: candidateId },
         { $push: { notifications: { notification } } },
         { new: true }
       )

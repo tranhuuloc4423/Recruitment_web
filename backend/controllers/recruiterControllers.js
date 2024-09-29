@@ -9,11 +9,11 @@ const Recruiter = require('../models/recruiterModels')
 
 const recruiterControllers = {
   updateBasicInfo: async (req, res) => {
-    const id = parseInt(req.params.id)
+    const { recruiterId } = req.params
     const { image, field, tax_id, address } = req.body
     try {
       const basic_info = await Recruiter.findOneAndUpdate(
-        { id: id },
+        { id: recruiterId },
         {
           $set: {
             'basic_info.image': image,
@@ -32,31 +32,41 @@ const recruiterControllers = {
     }
   },
   updateOtherInfo: async (req, res) => {
-    const id = parseInt(req.params.id)
+    const { recruiterId } = req.params
     const { desc, speciality, images } = req.body
+
     try {
+      let updateFields = {}
+
+      if (desc !== undefined) updateFields['other_info.desc'] = desc
+      if (speciality !== undefined)
+        updateFields['other_info.speciality'] = speciality
+      if (images !== undefined) updateFields['other_info.images'] = images
+
+      if (Object.keys(updateFields).length === 0) {
+        return res.status(400).json({ message: 'No fields to update' })
+      }
+
       const other_info = await Recruiter.findOneAndUpdate(
-        { id: id },
-        {
-          $set: {
-            'other_info.desc': desc,
-            'other_info.speciality': speciality,
-            'other_info.images': images
-          }
-        },
-        {
-          new: true
-        }
+        { id: recruiterId },
+        { $set: updateFields },
+        { new: true }
       )
+
+      if (!other_info) {
+        return res.status(404).json({ message: 'Recruiter not found' })
+      }
+
       res.status(200).json(other_info)
     } catch (error) {
-      res.status(500).json(error)
+      res.status(500).json({ message: error.message })
     }
   },
+
   getDataById: async (req, res) => {
     try {
-      const id = parseInt(req.params.id)
-      const recruiter = await Recruiter.findOne({ id: id })
+      const { recruiterId } = req.params
+      const recruiter = await Recruiter.findOne({ id: recruiterId })
       res.status(200).json(recruiter)
     } catch (error) {
       res.status(500).json(error)
