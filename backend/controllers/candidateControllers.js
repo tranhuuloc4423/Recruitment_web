@@ -10,10 +10,10 @@ const Candidate = require('../models/candidateModels')
 const candidateControllers = {
   updateBasicInfo: async (req, res) => {
     const { candidateId } = req.params
-    const { image, dob, phone, address, gender } = req.body
+    const { image, dob, phone, address, gender, email, name } = req.body
 
     try {
-      const basic_info = await Candidate.findByIdAndUpdate(
+      const basic_info = await Candidate.findOneAndUpdate(
         { id: candidateId },
         {
           $set: {
@@ -21,7 +21,9 @@ const candidateControllers = {
             'basic_info.dob': dob,
             'basic_info.phone': phone,
             'basic_info.address': address,
-            'basic_info.gender': gender
+            'basic_info.gender': gender,
+            'basic_info.email': email,
+            'basic_info.name': name
           }
         },
         { new: true }
@@ -30,11 +32,28 @@ const candidateControllers = {
       if (!basic_info) {
         return res.status(404).json({ message: 'Candidate not found' })
       }
-      res.json(basic_info)
+
+      const updatedUser = await User.findOneAndUpdate(
+        { id: candidateId },
+        {
+          $set: {
+            email: email,
+            name: name
+          }
+        },
+        { new: true }
+      )
+
+      if (!updatedUser) {
+        return res.status(404).json({ message: 'User not found' })
+      }
+
+      res.json({ candidate: basic_info, user: updatedUser })
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
   },
+
   updateOtherInfo: async (req, res) => {
     const { candidateId } = req.params
     const { desc, education, exps, skills, projects, certificates } = req.body
