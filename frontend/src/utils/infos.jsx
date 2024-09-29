@@ -5,11 +5,93 @@ import { BsGenderAmbiguous } from 'react-icons/bs'
 const info = [
   {
     name: 'admin',
-    basicInfo: {},
-    otherInfo: {}
+    basicInfo: [],
+    otherInfo: []
   },
   {
-    name: 'recruiter'
+    name: 'recruiter',
+    basicInfo: [
+      {
+        id: 1,
+        name: 'field',
+        type: 'text',
+        placeholder: 'Họ và Tên',
+        error: 'Họ và Tên ít nhất 6 ký tự',
+        pattern: '.{6,}',
+        label: 'Chuyên môn',
+        required: true
+      },
+      {
+        id: 2,
+        name: 'address',
+        type: 'text',
+        placeholder: 'Địa chỉ',
+        error: 'Địa chỉ ít nhất 6 ký tự',
+        pattern: '.{6,}',
+        label: 'Địa chỉ',
+        required: true
+      },
+      {
+        id: 3,
+        name: 'tax_id',
+        type: 'text',
+        placeholder: 'Mã số thuế',
+        error: 'Mã số thuế ít nhất 10 ký tự',
+        pattern: '.{10,}',
+        label: 'Mã số thuế',
+        required: true
+      }
+    ],
+    otherInfo: [
+      {
+        title: 'Giới thiệu',
+        desc: 'Giới thiệu về thông tin của công ty',
+        type: 'richText',
+        id: 1,
+        name: 'desc'
+      },
+      {
+        title: 'Hình ảnh',
+        desc: 'Các hình ảnh của công ty',
+        type: 'richText',
+        id: 2,
+        name: 'images'
+      },
+      {
+        title: 'Chuyên môn',
+        desc: 'Các kỹ năng chuyên môn chính của công ty',
+        type: 'dropdown',
+        id: 3,
+        name: 'skills',
+        placeholder: 'Tìm kiếm kỹ năng',
+        options: [
+          {
+            value: 'Reactjs',
+            label: 'Reactjs'
+          },
+          {
+            value: 'MongoDB',
+            label: 'Reactjs'
+          },
+          {
+            value: 'Reactjs',
+            label: 'Reactjs'
+          },
+          {
+            value: 'Reactjs',
+            label: 'Reactjs'
+          },
+          {
+            value: 'Reactjs',
+            label: 'Reactjs'
+          },
+          {
+            value: 'Reactjs',
+            label: 'Reactjs'
+          }
+        ]
+      }
+    ]
   },
   {
     name: 'candidate',

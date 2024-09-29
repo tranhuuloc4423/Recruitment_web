@@ -42,12 +42,16 @@ const BasicInfoForm = ({ open, setOpen, onUpdate }) => {
     }
 
     // covert ảnh
-    // const imagebs64 = await convertToBase64(image)
-    const imgUrl = await convertFileToURL(image)
-    // const basic_info = { ...values, image: imagebs64 }
-    // updateBasicInfo(currentUser.id, { basic_info }, dispatch, currentUser.role)
-    // getById(currentUser.id, dispatch, currentUser.role)
-    // onUpdate(values)
+    const imagebs64 = await convertToBase64(image)
+    // const imgUrl = await convertFileToURL(image)
+    updateBasicInfo(
+      currentUser.id,
+      { ...values, image: imagebs64 },
+      dispatch,
+      currentUser.role
+    )
+    getById(currentUser.id, dispatch, currentUser.role)
+    onUpdate(values)
     console.log(URL.createObjectURL(image))
     setOpen(false)
   }

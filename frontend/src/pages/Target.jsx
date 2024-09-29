@@ -7,9 +7,7 @@ import RangeSlider from '../components/RangeSlider'
 
 const Target = () => {
   const [selectedOption, setSelectedOption] = useState(null)
-  const [values, setValues] = useState({
-    skills: ''
-  })
+  const [address, setAddress] = useState(null)
   const [salarys, setSalarys] = useState([0, 100])
 
   return (
@@ -78,9 +76,14 @@ const Target = () => {
             <div className="flex-1">
               <Dropdown
                 label={'Địa điểm'}
-                options={[{ value: 'Reactjs' }, { value: 'MongoDB' }]}
-                selectedOption={selectedOption}
-                setSelectedOption={setSelectedOption}
+                options={[
+                  { value: 'Tp Hồ Chí Minh' },
+                  { value: 'Hà nội' },
+                  { value: 'Bình Dương' },
+                  { value: 'Đồng Nai' }
+                ]}
+                selectedOption={address}
+                setSelectedOption={setAddress}
               />
             </div>
           </div>
