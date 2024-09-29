@@ -13,11 +13,11 @@ const Signup = () => {
   const dispatch = useDispatch()
   const options = [
     {
-      role: 'candidate',
+      value: 'candidate',
       label: 'Ứng viên'
     },
     {
-      role: 'recruiter',
+      value: 'recruiter',
       label: 'Nhà tuyển dụng'
     }
   ]
