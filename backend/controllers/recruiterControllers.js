@@ -9,28 +9,36 @@ const Recruiter = require('../models/recruiterModels')
 
 const recruiterControllers = {
   updateBasicInfo: async (req, res) => {
-    const { recruiterId } = req.params
-    const { image, field, tax_id, address } = req.body
+    const { recruiterId } = req.params // recruiterId là _id của User, kiểu String
+    const { image, field, tax_id, address, name, email } = req.body
+
     try {
+      // Tìm và cập nhật Recruiter bằng _id (được lưu trong trường `id` của Recruiter)
       const basic_info = await Recruiter.findOneAndUpdate(
-        { id: recruiterId },
+        { id: recruiterId }, // Sử dụng `id` vì `id` của Recruiter là `User._id` dạng chuỗi
         {
           $set: {
             'basic_info.image': image,
             'basic_info.field': field,
             'basic_info.tax_id': tax_id,
-            'basic_info.address': address
+            'basic_info.address': address,
+            'basic_info.name': name,
+            'basic_info.email': email
           }
         },
-        {
-          new: true
-        }
+        { new: true }
       )
+
+      if (!basic_info) {
+        return res.status(404).json({ message: 'Recruiter not found' })
+      }
+
       res.status(200).json(basic_info)
     } catch (error) {
-      res.status(500).json(error)
+      res.status(500).json({ message: error.message })
     }
   },
+
   updateOtherInfo: async (req, res) => {
     const { recruiterId } = req.params
     const { desc, speciality, images } = req.body

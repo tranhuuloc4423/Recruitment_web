@@ -9,19 +9,22 @@ const Admin = require('../models/adminModels')
 
 const adminControllers = {
   updateBasicInfo: async (req, res) => {
-    const { adminId } = req.params
-    const { image, dob, phone, address, gender } = req.body
+    const { adminId } = req.params // adminId là _id của User, kiểu String
+    const { image, dob, phone, address, gender, name, email } = req.body
 
     try {
-      const basic_info = await Admin.findByIdAndUpdate(
-        { id: adminId },
+      // Tìm kiếm và cập nhật Admin bằng `id`, vì `id` được lưu là `User._id.toString()`
+      const basic_info = await Admin.findOneAndUpdate(
+        { id: adminId }, // Sử dụng `id` thay vì `_id`
         {
           $set: {
             'basic_info.image': image,
             'basic_info.dob': dob,
             'basic_info.phone': phone,
             'basic_info.address': address,
-            'basic_info.gender': gender
+            'basic_info.gender': gender,
+            'basic_info.name': name,
+            'basic_info.email': email
           }
         },
         { new: true }
@@ -30,11 +33,13 @@ const adminControllers = {
       if (!basic_info) {
         return res.status(404).json({ message: 'Admin not found' })
       }
+
       res.json(basic_info)
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
   },
+
   updateOtherInfo: async (req, res) => {
     const { adminId } = req.params
     const { desc, education, exps, skills, projects, certificates } = req.body

@@ -3,25 +3,25 @@ const mongoose = require('mongoose')
 const candidateSchema = new mongoose.Schema(
   {
     id: {
-      type: Number,
+      type: String,
       unique: true
     },
     basic_info: {
       image: {
         type: String
       },
-      // name: {
-      //   type: String
-      // },
+      name: {
+        type: String
+      },
       dob: {
         type: String
       },
       phone: {
         type: String
       },
-      // email: {
-      //   type: String
-      // },
+      email: {
+        type: String
+      },
       address: {
         type: String
       },

@@ -64,34 +64,36 @@ const userControllers = {
 
     try {
       const hashedPassword = await hash(password, 10)
+
       const newUser = new User({ email, name, password: hashedPassword, role })
 
-      if (newUser.role === 'candidate') {
+      const savedUser = await newUser.save()
+      if (savedUser.role === 'candidate') {
         const newCandidate = new Candidate({
-          id: newUser.id,
+          id: savedUser._id.toString(),
           basic_info: { name, email }
         })
-        const savedUser = await newUser.save()
+
         const savedCandidate = await newCandidate.save()
         res.status(201).json(savedCandidate)
-      } else if (newUser.role === 'recruiter') {
+      } else if (savedUser.role === 'recruiter') {
         const newRecruiter = new Recruiter({
-          id: newUser.id,
+          id: savedUser._id.toString(),
           basic_info: { name, email }
         })
-        const savedUser = await newUser.save()
+
         const savedRecruiter = await newRecruiter.save()
         res.status(201).json(savedRecruiter)
-      } else if (newUser.role === 'admin') {
+      } else if (savedUser.role === 'admin') {
         const newAdmin = new Admin({
-          id: newUser.id,
+          id: savedUser._id.toString(),
           basic_info: { name, email }
         })
-        const savedUser = await newUser.save()
-        const savedRecruiter = await newAdmin.save()
-        res.status(201).json(savedRecruiter)
+
+        const savedAdmin = await newAdmin.save()
+        res.status(201).json(savedAdmin)
       } else {
-        res.status(400).json({ message: 'Invalid role' })
+        res.status(201).json(savedUser)
       }
     } catch (err) {
       res.status(400).json({ message: err.message })

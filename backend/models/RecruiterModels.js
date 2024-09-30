@@ -3,23 +3,23 @@ const mongoose = require('mongoose')
 const recruiterSchema = new mongoose.Schema(
   {
     id: {
-      type: Number,
+      type: String,
       unique: true
     },
     basic_info: {
-      // name: {
-      //   type: String
-      // },
+      name: {
+        type: String
+      },
       image: {
         type: String
       },
       field: {
         type: String
       },
-      // email: {
-      //   type: String,
-      //   unique: true
-      // },
+      email: {
+        type: String,
+        unique: true
+      },
       tax_id: {
         type: String
       },

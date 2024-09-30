@@ -6,15 +6,17 @@ const {
   findOne
 } = require('../models/candidateModels')
 const Candidate = require('../models/candidateModels')
+const User = require('../models/userModels')
 
 const candidateControllers = {
   updateBasicInfo: async (req, res) => {
-    const { candidateId } = req.params
+    const { candidateId } = req.params // candidateId là _id của User, kiểu String
     const { image, dob, phone, address, gender, email, name } = req.body
 
     try {
+      // Tìm kiếm và cập nhật Candidate bằng _id
       const basic_info = await Candidate.findOneAndUpdate(
-        { id: candidateId },
+        { id: candidateId }, // `id` của Candidate là chuỗi từ `User._id`
         {
           $set: {
             'basic_info.image': image,
@@ -33,8 +35,9 @@ const candidateControllers = {
         return res.status(404).json({ message: 'Candidate not found' })
       }
 
-      const updatedUser = await User.findOneAndUpdate(
-        { id: candidateId },
+      // Tìm kiếm và cập nhật User bằng _id (chuyển từ candidateId sang ObjectId)
+      const updatedUser = await User.findByIdAndUpdate(
+        candidateId, // Sử dụng `_id` của User để tìm kiếm
         {
           $set: {
             email: email,
