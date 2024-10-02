@@ -9,8 +9,8 @@ const {
 } = require('../models/userModels')
 const User = require('../models/userModels')
 const Candidate = require('../models/candidateModels')
-const Recruiter = require('../models/recruiterModels')
-const Admin = require('../models/adminModels')
+const Recruiter = require('../models/RecruiterModels')
+const Admin = require('../models/AdminModels')
 
 const userControllers = {
   getAllUsers: async (req, res) => {
@@ -21,44 +21,45 @@ const userControllers = {
       res.status(500).json({ message: err.message })
     }
   },
-
-  updateUserPassword: async (req, res) => {
-    const { id, currentPassword, newPassword } = req.body
+  updatePassword: async (req, res) => {
+    const { id } = req.params // id là _id
+    const { oldPassword, newPassword } = req.body
 
     try {
       const user = await User.findById(id)
+      console.log('User:', user)
+      console.log('User Password:', user ? user.password : 'User not found')
       if (!user) {
-        return res.status(400).json({
-          message: 'User not found'
-        })
+        return res.status(404).json({ message: 'User not found' })
       }
 
-      const validPassword = await compare(currentPassword, user.password)
-      if (!validPassword) {
-        return res.status(400).json({ message: 'Invalid current password' })
+      const isMatch = await compare(oldPassword, user.password)
+      if (!isMatch) {
+        return res.status(400).json({ message: 'Old password is incorrect' })
       }
 
-      const hashedPassword = await hash(newPassword, 10)
-      user.password = hashedPassword
+      const hashedNewPassword = await hash(newPassword, 10)
+
+      user.password = hashedNewPassword
       await user.save()
 
-      res.json({ message: 'Password changed successfully' })
+      res.json({ message: 'Password updated successfully' })
     } catch (err) {
-      res.status(400).json({
-        message: err.message
-      })
+      res.status(500).json({ message: err.message })
     }
   },
-
   deleteUser: async (req, res) => {
+    const { id } = req.params
     try {
-      await findByIdAndDelete(req.params.id)
+      await User.findOneAndDelete(id)
+      await Admin.findOneAndDelete(id)
+      await Recruiter.findOneAndDelete(id)
+
       res.json({ message: 'User deleted successfully' })
     } catch (err) {
       res.status(400).json({ message: err.message })
     }
   },
-
   signUp: async (req, res) => {
     const { email, name, password, role } = req.body
 
@@ -99,7 +100,6 @@ const userControllers = {
       res.status(400).json({ message: err.message })
     }
   },
-
   signIn: async (req, res) => {
     const { email, password } = req.body
 
@@ -123,23 +123,6 @@ const userControllers = {
       res.json(response)
     } catch (err) {
       res.status(400).json({ message: err.message })
-    }
-  },
-  logOut: async (req, res) => {
-    try {
-      const authHeader = req.headers['authorization']
-      const token = authHeader && authHeader.split(' ')[1]
-
-      if (!token) {
-        return res.status(401).json({
-          message: 'Unauthorized'
-        })
-      }
-      await blacklistedTokens.create({ token })
-      res.status(200).json({ message: 'Logged out successfully' })
-    } catch (error) {
-      console.error(error)
-      res.status(500).json({ message: 'Internal server error' })
     }
   }
 }

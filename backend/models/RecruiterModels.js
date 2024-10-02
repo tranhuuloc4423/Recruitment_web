@@ -44,48 +44,8 @@ const recruiterSchema = new mongoose.Schema(
     },
     posts: [
       {
-        postId: {
-          type: Number,
-          unique: true
-        },
-        title: {
-          type: String
-        },
-        company_info: [],
-        salary: {
-          type: Number
-        },
-        quantity: {
-          type: Number
-        },
-        date_upload: {
-          type: Date
-        },
-        date_expiration: {
-          type: Date
-        },
-        skills: [
-          {
-            type: String
-          }
-        ],
-        reason: {
-          type: String
-        },
-        desc: {
-          type: String
-        },
-        request: {
-          type: String
-        },
-        views: {
-          type: Number
-        },
-        applied: [
-          {
-            candidate_info: mongoose.Schema.Types.Mixed
-          }
-        ]
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post' // Liên kết với model Post
       }
     ],
     manage_post: {

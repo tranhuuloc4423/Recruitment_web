@@ -36,7 +36,7 @@ const candidateControllers = {
       }
 
       // Tìm kiếm và cập nhật User bằng _id (chuyển từ candidateId sang ObjectId)
-      const updatedUser = await User.findByIdAndUpdate(
+      const updatedUser = await User.findOneAndUpdate(
         candidateId, // Sử dụng `_id` của User để tìm kiếm
         {
           $set: {
@@ -77,7 +77,7 @@ const candidateControllers = {
         return res.status(400).json({ message: 'No fields to update' })
       }
 
-      const other_info = await Candidate.findByIdAndUpdate(
+      const other_info = await Candidate.findOneAndUpdate(
         { id: candidateId },
         { $set: updateFields },
         { new: true }
