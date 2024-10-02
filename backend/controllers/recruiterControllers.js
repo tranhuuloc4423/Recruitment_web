@@ -1,11 +1,5 @@
-const {
-  find,
-  findById,
-  findByIdAndUpdate,
-  findByIdAndDelete,
-  findOne
-} = require('../models/RecruiterModels')
-const Recruiter = require('../models/RecruiterModels')
+const Recruiter = require('../models/recruiterModel')
+const User = require('../models/userModel')
 
 const recruiterControllers = {
   updateBasicInfo: async (req, res) => {
@@ -29,6 +23,20 @@ const recruiterControllers = {
         { new: true }
       )
 
+      // Tìm kiếm và cập nhật User bằng _id (chuyển từ candidateId sang ObjectId)
+      const updatedUser = await User.findOneAndUpdate(
+        recruiterId, // Sử dụng `_id` của User để tìm kiếm
+        {
+          $set: {
+            email: email,
+            name: name
+          }
+        },
+        { new: true }
+      )
+
+      await updatedUser.save()
+
       if (!basic_info) {
         return res.status(404).json({ message: 'Recruiter not found' })
       }
@@ -38,7 +46,6 @@ const recruiterControllers = {
       res.status(500).json({ message: error.message })
     }
   },
-
   updateOtherInfo: async (req, res) => {
     const { recruiterId } = req.params
     const { desc, speciality, images } = req.body
@@ -70,7 +77,6 @@ const recruiterControllers = {
       res.status(500).json({ message: error.message })
     }
   },
-
   getDataById: async (req, res) => {
     try {
       const { recruiterId } = req.params

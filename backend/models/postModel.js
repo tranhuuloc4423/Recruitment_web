@@ -47,14 +47,17 @@ const postSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['normal', 'hot', 'superhot']
+      enum: ['normal', 'hot', 'superhot'],
+      default: 'normal'
     },
     views: {
-      type: Number
+      type: Number,
+      default: 0
     },
     applied: [
       {
-        candidate_info: Schema.Types.Mixed
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Candidate' // Liên kết với model Candidate
       }
     ]
   },

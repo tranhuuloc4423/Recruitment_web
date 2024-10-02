@@ -1,12 +1,5 @@
-const {
-  find,
-  findById,
-  findByIdAndUpdate,
-  findByIdAndDelete,
-  findOne
-} = require('../models/candidateModels')
-const Candidate = require('../models/candidateModels')
-const User = require('../models/userModels')
+const Candidate = require('../models/candidateModel')
+const User = require('../models/userModel')
 
 const candidateControllers = {
   updateBasicInfo: async (req, res) => {
@@ -47,6 +40,8 @@ const candidateControllers = {
         { new: true }
       )
 
+      await updatedUser.save()
+
       if (!updatedUser) {
         return res.status(404).json({ message: 'User not found' })
       }
@@ -56,7 +51,6 @@ const candidateControllers = {
       res.status(500).json({ message: error.message })
     }
   },
-
   updateOtherInfo: async (req, res) => {
     const { candidateId } = req.params
     const { desc, education, exps, skills, projects, certificates } = req.body
@@ -92,7 +86,6 @@ const candidateControllers = {
       res.status(500).json({ message: error.message })
     }
   },
-
   updateTarget: async (req, res) => {
     try {
       const { candidateId } = req.params
