@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import Line from '../components/Line'
+import avatar from '../assets/imgs/blank-profile-picture-973460_960_720.png'
 
 import info from '../utils/infos'
 
@@ -34,7 +35,7 @@ const CVTheme_1 = ({ color }) => {
 
         <div className="bg-cover w-[150px] h-[150px] rounded-full overflow-hidden border-2 border-white">
           <img
-            src={currentRole?.basic_info.image}
+            src={currentRole?.basic_info.image || avatar}
             className={`w-full h-full bg-cover bg-center`}
           />
         </div>

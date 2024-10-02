@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Line from './Line'
 import Button from './Button'
-import { IoClose } from 'react-icons/io5'
 import BasicInfoForm from '../pages/BasicInfoForm'
 import { useSelector } from 'react-redux'
 import info from '../utils/infos'
@@ -17,11 +16,11 @@ const BasicInfo = () => {
 
   useEffect(() => {
     if (currentUser) {
-      if (currentRole.basic_info) {
+      if (currentRole?.basic_info) {
         let userImage = defaultAvatar
-        userImage = currentRole.basic_info?.image || defaultAvatar
+        userImage = currentRole?.basic_info?.image || defaultAvatar
         setAvatar(userImage)
-        console.log(currentRole.basic_info)
+        console.log(currentRole?.basic_info)
       }
 
       const infoToUpdate = info.find(
@@ -29,7 +28,7 @@ const BasicInfo = () => {
       )?.basicInfo
       setBasicInfo(infoToUpdate || [])
     }
-  }, [currentUser, currentRole.basic_info])
+  }, [currentUser, currentRole])
 
   const handleUpdateBasicInfo = (updatedInfo) => {
     setBasicInfo((prevInfo) => {
