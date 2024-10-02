@@ -1,11 +1,5 @@
-const {
-  find,
-  findById,
-  findByIdAndUpdate,
-  findByIdAndDelete,
-  findOne
-} = require('../models/AdminModels')
-const Admin = require('../models/AdminModels')
+const Admin = require('../models/adminModel')
+const User = require('../models/userModel')
 
 const adminControllers = {
   updateBasicInfo: async (req, res) => {
@@ -28,6 +22,20 @@ const adminControllers = {
         },
         { new: true }
       )
+
+      // Tìm kiếm và cập nhật User bằng _id (chuyển từ candidateId sang ObjectId)
+      const updatedUser = await User.findOneAndUpdate(
+        adminId, // Sử dụng `_id` của User để tìm kiếm
+        {
+          $set: {
+            email: email,
+            name: name
+          }
+        },
+        { new: true }
+      )
+
+      await updatedUser.save()
 
       if (!basic_info) {
         return res.status(404).json({ message: 'Admin not found' })
@@ -84,6 +92,22 @@ const adminControllers = {
       res.status(200).json(admin)
     } catch (error) {
       res.status(500).json(error)
+    }
+  },
+  getAdminWithPosts: async (req, res) => {
+    const { adminId } = req.params
+
+    try {
+      // Sử dụng `populate` để lấy chi tiết thông tin bài post từ `posts`
+      const post = await Admin.findById(adminId).populate('posts')
+
+      if (!post) {
+        return res.status(404).json({ message: 'Admin not found' })
+      }
+
+      res.json(post)
+    } catch (error) {
+      res.status(500).json({ message: error.message })
     }
   }
 }

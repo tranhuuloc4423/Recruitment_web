@@ -1,16 +1,9 @@
 const { hash, compare } = require('bcrypt')
 const { sign } = require('jsonwebtoken')
-
-const {
-  find,
-  findById,
-  findByIdAndDelete,
-  findOne
-} = require('../models/userModels')
-const User = require('../models/userModels')
-const Candidate = require('../models/candidateModels')
-const Recruiter = require('../models/RecruiterModels')
-const Admin = require('../models/AdminModels')
+const User = require('../models/userModel')
+const Candidate = require('../models/candidateModel')
+const Recruiter = require('../models/recruiterModel')
+const Admin = require('../models/adminModel')
 
 const userControllers = {
   getAllUsers: async (req, res) => {

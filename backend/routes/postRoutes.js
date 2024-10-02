@@ -1,11 +1,23 @@
 const express = require('express')
 const router = express.Router()
-const postControllers = require('../controllers/postControllers')
+const {
+  createPost,
+  updatePost,
+  deletePost,
+  getAllPosts,
+  getPostById,
+  updateViews,
+  updateApplied,
+  getPostWithApplicants
+} = require('../controllers/postControllers')
 
-router.post('/:userType/:userId', postControllers.createPost)
-router.put('/:authorType/:userId/:postId', postControllers.updatePost)
-router.delete('/:authorType/:userId/:postId', postControllers.deletePost)
-router.get('/:authorType/:userId/', postControllers.getAllPosts)
-router.get('/:authorType/:userId/:postId', postControllers.getPostById)
+router.post('/:userType/:userId', createPost)
+router.put('/:authorType/:userId/:postId', updatePost)
+router.delete('/:authorType/:userId/:postId', deletePost)
+router.get('/:authorType/:userId/', getAllPosts)
+router.get('/:authorType/:userId/:postId', getPostById)
+router.put('/:postId/views', updateViews)
+router.put('/:postId/applied', updateApplied)
+router.get('/:postId/applicants', getPostWithApplicants)
 
 module.exports = router

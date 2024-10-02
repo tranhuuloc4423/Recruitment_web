@@ -1,6 +1,7 @@
-const Post = require('../models/PostModels')
-const Admin = require('../models/AdminModels')
-const Recruiter = require('../models/RecruiterModels')
+const Post = require('../models/postModel')
+const Admin = require('../models/adminModel')
+const Recruiter = require('../models/recruiterModel')
+const Candidate = require('../models/candidateModel')
 
 const postController = {
   // Tạo bài đăng mới cho Admin hoặc Recruiter
@@ -137,6 +138,73 @@ const postController = {
         return res
           .status(404)
           .json({ message: 'Post not found or you do not have access' })
+      }
+
+      res.json(post)
+    } catch (error) {
+      res.status(500).json({ message: error.message })
+    }
+  },
+
+  updateViews: async (req, res) => {
+    const { postId } = req.params // Lấy `postId` từ params
+
+    try {
+      // Tìm bài đăng và cập nhật trường `views`
+      const post = await Post.findByIdAndUpdate(
+        postId,
+        { $inc: { views: 1 } }, // Tăng `views` thêm 1 mỗi khi có request đến
+        { new: true }
+      )
+
+      if (!post) {
+        return res.status(404).json({ message: 'Post not found' })
+      }
+
+      res.json({ message: 'Views updated successfully', post })
+    } catch (error) {
+      res.status(500).json({ message: error.message })
+    }
+  },
+
+  updateApplied: async (req, res) => {
+    const { postId } = req.params // Lấy `postId` từ params
+    const { candidateId } = req.body // Nhận `candidateId` từ body
+
+    try {
+      // Kiểm tra xem `candidateId` có hợp lệ không
+      const candidate = await Candidate.findById(candidateId)
+      if (!candidate) {
+        return res.status(404).json({ message: 'Candidate not found' })
+      }
+
+      // Thêm `_id` của `candidate` vào mảng `applied` trong bài đăng
+      const post = await Post.findByIdAndUpdate(
+        postId,
+        { $push: { applied: candidateId } }, // Thêm `candidateId` vào mảng `applied`
+        { new: true }
+      )
+
+      if (!post) {
+        return res.status(404).json({ message: 'Post not found' })
+      }
+
+      res.json({ message: 'Applied updated successfully', post })
+    } catch (error) {
+      res.status(500).json({ message: error.message })
+    }
+  },
+
+  // Hàm lấy bài đăng và sử dụng `populate` để lấy chi tiết thông tin của các ứng viên đã nộp đơn
+  getPostWithApplicants: async (req, res) => {
+    const { postId } = req.params
+
+    try {
+      // Sử dụng `populate` để lấy chi tiết thông tin ứng viên từ `applied`
+      const post = await Post.findById(postId).populate('applied')
+
+      if (!post) {
+        return res.status(404).json({ message: 'Post not found' })
       }
 
       res.json(post)
