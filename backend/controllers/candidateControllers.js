@@ -118,76 +118,38 @@ const candidateControllers = {
       res.status(500).json(error)
     }
   },
-  updateSavedJobs: async (req, res) => {
-    const { candidateId } = req.params
-    const { post_info } = req.body
-
+  updateAppliedJobs: async (candidateId, postId) => {
     try {
-      const candidate = await Candidate.findByIdAndUpdate(
-        { id: candidateId },
-        { $push: { 'jobs.saved': { post_info } } },
+      const updatedCandidate = await Candidate.findOneAndUpdate(
+        { _id: candidateId },
+        { $push: { 'jobs.applied': postId } },
         { new: true }
       )
-      if (!candidate) {
-        return res.status(404).json({ message: 'Candidate not found' })
+
+      if (!updatedCandidate) {
+        throw new Error('Candidate not found or update failed')
       }
-      res.json(candidate)
+
+      return updatedCandidate
     } catch (error) {
-      res.status(500).json({ message: error.message })
+      throw new Error(error.message)
     }
   },
-  updateAppliedJobs: async (req, res) => {
-    const { candidateId } = req.params
-    const { post_info } = req.body
-
+  updateSavedJobs: async (candidateId, postId) => {
     try {
-      const candidate = await Candidate.findByIdAndUpdate(
-        { id: candidateId },
-        { $push: { 'jobs.applied': { post_info } } },
+      const updatedCandidate = await Candidate.findOneAndUpdate(
+        { _id: candidateId },
+        { $push: { 'jobs.saved': postId } },
         { new: true }
       )
-      if (!candidate) {
-        return res.status(404).json({ message: 'Candidate not found' })
-      }
-      res.json(candidate)
-    } catch (error) {
-      res.status(500).json({ message: error.message })
-    }
-  },
-  updateFollowedCompanies: async (req, res) => {
-    const { candidateId } = req.params
-    const { company_info } = req.body
 
-    try {
-      const candidate = await Candidate.findByIdAndUpdate(
-        { id: candidateId },
-        { $push: { 'jobs.followed': { company_info } } },
-        { new: true }
-      )
-      if (!candidate) {
-        return res.status(404).json({ message: 'Candidate not found' })
+      if (!updatedCandidate) {
+        throw new Error('Candidate not found or update failed')
       }
-      res.json(candidate)
-    } catch (error) {
-      res.status(500).json({ message: error.message })
-    }
-  },
-  updateNotifications: async (req, res) => {
-    const { candidateId } = req.params
-    const { notification } = req.body
 
-    try {
-      const candidate = await Candidate.findByIdAndUpdate(
-        { id: candidateId },
-        { $push: { notifications: { notification } } },
-        { new: true }
-      )
-      if (!candidate) {
-        return res.status(404).json({ message: 'Candidate not found' })
-      }
-      res.json(candidate)
+      return updatedCandidate
     } catch (error) {
-      res.status(500).json({ message: error.message })
+      throw new Error(error.message)
     }
   }
 }

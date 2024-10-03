@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 
 const recruiterSchema = new mongoose.Schema(
   {
-    id: {
-      type: String,
-      unique: true
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User' // Liên kết với model User
     },
     basic_info: {
       name: {
@@ -51,18 +51,21 @@ const recruiterSchema = new mongoose.Schema(
     manage_post: {
       confirmed: [
         {
-          post_info: mongoose.Schema.Types.Mixed
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Post' // Liên kết với model Post
         }
       ],
       posted: [
         {
-          post_info: mongoose.Schema.Types.Mixed
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Post' // Liên kết với model Post
         }
       ]
     },
     notifications: [
       {
-        notification: mongoose.Schema.Types.Mixed
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Notification' // Liên kết với model Notification
       }
     ]
   },

@@ -8,7 +8,9 @@ const {
   getPostById,
   updateViews,
   updateApplied,
-  getPostWithApplicants
+  getPostWithApplicants,
+  updateStatus,
+  updateSaved
 } = require('../controllers/postControllers')
 
 router.post('/:userType/:userId', createPost)
@@ -17,7 +19,9 @@ router.delete('/:authorType/:userId/:postId', deletePost)
 router.get('/:authorType/:userId/', getAllPosts)
 router.get('/:authorType/:userId/:postId', getPostById)
 router.put('/:postId/views', updateViews)
-router.put('/:postId/applied', updateApplied)
-router.get('/:postId/applicants', getPostWithApplicants)
+router.put('/applied', updateApplied)
+router.put('/saved', updateSaved)
+router.get('/applicants', getPostWithApplicants)
+router.put('/status', updateStatus)
 
 module.exports = router

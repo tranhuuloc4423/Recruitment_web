@@ -93,6 +93,22 @@ const recruiterControllers = {
     } catch (error) {
       res.status(500).json(error)
     }
+  },
+  getRecruiterWithPosts: async (req, res) => {
+    const { recruiterId } = req.params
+
+    try {
+      // Sử dụng `populate` để lấy chi tiết thông tin bài post từ `posts`
+      const post = await Recruiter.findById(recruiterId).populate('posts')
+
+      if (!post) {
+        return res.status(404).json({ message: 'Recruiter not found' })
+      }
+
+      res.json(post)
+    } catch (error) {
+      res.status(500).json({ message: error.message })
+    }
   }
 }
 

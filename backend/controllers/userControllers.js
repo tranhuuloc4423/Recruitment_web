@@ -62,28 +62,24 @@ const userControllers = {
       const newUser = new User({ email, name, password: hashedPassword, role })
 
       const savedUser = await newUser.save()
-      if (savedUser.role === 'candidate') {
-        const newCandidate = new Candidate({
-          id: savedUser._id.toString(),
-          basic_info: { name, email }
-        })
 
+      let newData = {
+        basic_info: { name, email }
+      }
+
+      if (savedUser.role === 'candidate') {
+        newData.userId = savedUser._id
+        const newCandidate = new Candidate(newData)
         const savedCandidate = await newCandidate.save()
         res.status(201).json(savedCandidate)
       } else if (savedUser.role === 'recruiter') {
-        const newRecruiter = new Recruiter({
-          id: savedUser._id.toString(),
-          basic_info: { name, email }
-        })
-
+        newData.userId = savedUser._id
+        const newRecruiter = new Recruiter(newData)
         const savedRecruiter = await newRecruiter.save()
         res.status(201).json(savedRecruiter)
       } else if (savedUser.role === 'admin') {
-        const newAdmin = new Admin({
-          id: savedUser._id.toString(),
-          basic_info: { name, email }
-        })
-
+        newData.userId = savedUser._id
+        const newAdmin = new Admin(newData)
         const savedAdmin = await newAdmin.save()
         res.status(201).json(savedAdmin)
       } else {

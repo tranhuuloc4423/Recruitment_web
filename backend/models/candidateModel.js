@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 
 const candidateSchema = new mongoose.Schema(
   {
-    id: {
-      type: String,
-      unique: true
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User' // Liên kết với model User
     },
     basic_info: {
       image: {
@@ -26,7 +26,8 @@ const candidateSchema = new mongoose.Schema(
         type: String
       },
       gender: {
-        type: String
+        type: String,
+        enum: ['male', 'female']
       }
     },
     other_info: {
@@ -81,17 +82,20 @@ const candidateSchema = new mongoose.Schema(
     jobs: {
       saved: [
         {
-          post_info: mongoose.Schema.Types.Mixed
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Post' // Liên kết với model User
         }
       ],
       recent: [
         {
-          post_info: mongoose.Schema.Types.Mixed
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Post' // Liên kết với model User
         }
       ],
       applied: [
         {
-          post_info: mongoose.Schema.Types.Mixed
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Post' // Liên kết với model User
         }
       ],
       followed: [
@@ -102,7 +106,8 @@ const candidateSchema = new mongoose.Schema(
     },
     notifications: [
       {
-        notification: mongoose.Schema.Types.Mixed
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Notification' // Liên kết với model Notification
       }
     ]
   },

@@ -47,6 +47,11 @@ const postSchema = new mongoose.Schema(
     },
     status: {
       type: String,
+      enum: ['posted', 'confirmed'],
+      default: 'posted'
+    },
+    type: {
+      type: String,
       enum: ['normal', 'hot', 'superhot'],
       default: 'normal'
     },
