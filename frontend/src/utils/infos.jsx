@@ -1,44 +1,174 @@
 import { IoMailOutline, IoLocationOutline } from 'react-icons/io5'
-import { LuUser2, LuGift, LuCake } from 'react-icons/lu'
+import { LuCake } from 'react-icons/lu'
 import { FiPhone } from 'react-icons/fi'
 import { BsGenderAmbiguous } from 'react-icons/bs'
+import { HiOutlineReceiptTax } from 'react-icons/hi'
+import { FaCompass } from 'react-icons/fa'
 const info = [
   {
     name: 'admin',
-    basicInfo: [],
-    otherInfo: []
-  },
-  {
-    name: 'recruiter',
     basicInfo: [
       {
-        id: 1,
-        name: 'field',
+        id: 0,
+        name: 'name',
         type: 'text',
         placeholder: 'Họ và Tên',
         error: 'Họ và Tên ít nhất 6 ký tự',
         pattern: '.{6,}',
-        label: 'Chuyên môn',
+        label: 'Họ và Tên',
         required: true
       },
       {
+        id: 1,
+        name: 'email',
+        type: 'email',
+        placeholder: 'Email',
+        error: 'Địa chỉ email không hợp lệ',
+        pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
+        label: 'Email',
+        required: true,
+        icon: <IoMailOutline size={24} />
+      },
+      {
         id: 2,
+        name: 'field',
+        type: 'text',
+        placeholder: 'Chuyên môn',
+        error: 'Họ và Tên ít nhất 6 ký tự',
+        pattern: '.{6,}',
+        label: 'Chuyên môn',
+        icon: <FaCompass size={24} />,
+        required: true
+      },
+      {
+        id: 3,
         name: 'address',
         type: 'text',
         placeholder: 'Địa chỉ',
         error: 'Địa chỉ ít nhất 6 ký tự',
         pattern: '.{6,}',
         label: 'Địa chỉ',
+        icon: <IoLocationOutline size={24} />,
         required: true
       },
       {
-        id: 3,
+        id: 4,
         name: 'tax_id',
         type: 'text',
         placeholder: 'Mã số thuế',
         error: 'Mã số thuế ít nhất 10 ký tự',
         pattern: '.{10,}',
         label: 'Mã số thuế',
+        icon: <HiOutlineReceiptTax size={24} />,
+        required: true
+      }
+    ],
+    otherInfo: [
+      {
+        title: 'Giới thiệu',
+        desc: 'Giới thiệu về thông tin của công ty',
+        type: 'richText',
+        id: 1,
+        name: 'desc'
+      },
+      {
+        title: 'Hình ảnh',
+        desc: 'Các hình ảnh của công ty',
+        type: 'richText',
+        id: 2,
+        name: 'images'
+      },
+      {
+        title: 'Chuyên môn',
+        desc: 'Các kỹ năng chuyên môn chính của công ty',
+        type: 'dropdown',
+        id: 3,
+        name: 'skills',
+        placeholder: 'Tìm kiếm kỹ năng',
+        options: [
+          {
+            value: 'Reactjs',
+            label: 'Reactjs'
+          },
+          {
+            value: 'MongoDB',
+            label: 'Reactjs'
+          },
+          {
+            value: 'Reactjs',
+            label: 'Reactjs'
+          },
+          {
+            value: 'Reactjs',
+            label: 'Reactjs'
+          },
+          {
+            value: 'Reactjs',
+            label: 'Reactjs'
+          },
+          {
+            value: 'Reactjs',
+            label: 'Reactjs'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    name: 'recruiter',
+    basicInfo: [
+      {
+        id: 0,
+        name: 'name',
+        type: 'text',
+        placeholder: 'Họ và Tên',
+        error: 'Họ và Tên ít nhất 6 ký tự',
+        pattern: '.{6,}',
+        label: 'Họ và Tên',
+        required: true
+      },
+      {
+        id: 1,
+        name: 'email',
+        type: 'email',
+        placeholder: 'Email',
+        error: 'Địa chỉ email không hợp lệ',
+        pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
+        label: 'Email',
+        required: true,
+        icon: <IoMailOutline size={24} />
+      },
+      {
+        id: 2,
+        name: 'field',
+        type: 'text',
+        placeholder: 'Lĩnh vực',
+        error: 'Họ và Tên ít nhất 6 ký tự',
+        pattern: '.{6,}',
+        label: 'Lĩnh vực',
+        icon: <FaCompass size={24} />,
+        required: true
+      },
+      {
+        id: 3,
+        name: 'address',
+        type: 'text',
+        placeholder: 'Địa chỉ',
+        error: 'Địa chỉ ít nhất 6 ký tự',
+        pattern: '.{6,}',
+        label: 'Địa chỉ',
+        icon: <IoLocationOutline size={24} />,
+        required: true
+      },
+      {
+        id: 4,
+        name: 'tax_id',
+        type: 'text',
+        placeholder: 'Mã số thuế',
+        error: 'Mã số thuế ít nhất 10 ký tự',
+        pattern: '.{10,}',
+        label: 'Mã số thuế',
+        icon: <HiOutlineReceiptTax size={24} />,
         required: true
       }
     ],
@@ -158,10 +288,12 @@ const info = [
         label: 'Giới tính',
         options: [
           {
-            value: 'Nam'
+            value: 'male',
+            label: 'Nam'
           },
           {
-            value: 'Nữ'
+            value: 'female',
+            label: 'Nữ'
           }
         ],
         icon: <BsGenderAmbiguous size={24} />

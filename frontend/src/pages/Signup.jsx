@@ -80,7 +80,7 @@ const Signup = () => {
     e.preventDefault()
     const user = {
       ...values,
-      role: selectedOption.role
+      role: selectedOption.value
     }
     signupUser(user, dispatch, navigate)
   }

@@ -28,12 +28,10 @@ const Target = () => {
                 <Dropdown
                   label={'Kỹ năng'}
                   options={[
-                    { value: 'Reactjs' },
-                    { value: 'MongoDB' },
-                    { value: 'HTML' },
-                    { value: 'CSS' },
-                    { value: 'VueJS' },
-                    { value: 'Angular' }
+                    { value: 'reactjs', label: 'ReactJS' },
+                    { value: 'vuejs', label: 'VueJS' },
+                    { value: 'mongodb', label: 'MongoDB' },
+                    { value: 'angular', label: 'Angular' }
                   ]}
                   selectedOption={selectedOption}
                   setSelectedOption={setSelectedOption}
@@ -77,10 +75,10 @@ const Target = () => {
               <Dropdown
                 label={'Địa điểm'}
                 options={[
-                  { value: 'Tp Hồ Chí Minh' },
-                  { value: 'Hà nội' },
-                  { value: 'Bình Dương' },
-                  { value: 'Đồng Nai' }
+                  { value: 'hochiminh', label: 'Tp Hồ Chí Minh' },
+                  { value: 'hanoi', label: 'Hà Nội' },
+                  { value: 'binhduong', label: 'Bình Dương' },
+                  { value: 'dongnai', label: 'Đồng Nai' }
                 ]}
                 selectedOption={address}
                 setSelectedOption={setAddress}

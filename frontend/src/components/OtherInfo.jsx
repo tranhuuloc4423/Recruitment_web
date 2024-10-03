@@ -2,21 +2,27 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import InfoCard from './InfoCard'
 import RichText from './RichText'
-import Input from './Input'
-import Button from './Button'
 import DropdownSearchAdd from './DropdownSearchAdd'
 import info from '../utils/infos'
 const OtherInfo = () => {
   const { currentUser } = useSelector((state) => state.auth)
   const { currentRole } = useSelector((state) => state.app)
-  const [values, setValues] = useState({
-    desc: '',
-    exp: '',
-    education: '',
-    certificates: '',
-    skills: '',
-    projects: ''
-  })
+  const [values, setValues] = useState(
+    currentUser.role === 'candidate'
+      ? {
+          desc: '',
+          exp: '',
+          education: '',
+          certificates: '',
+          skills: '',
+          projects: ''
+        }
+      : {
+          desc: '',
+          speciality: '',
+          images: ''
+        }
+  )
 
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value })
@@ -26,7 +32,7 @@ const OtherInfo = () => {
     if (currentUser) {
       console.log(currentRole)
     }
-  }, [currentUser, currentRole?.other_info])
+  }, [currentUser, currentRole])
 
   return (
     <div className="gap-4 w-[70%] flex flex-col">

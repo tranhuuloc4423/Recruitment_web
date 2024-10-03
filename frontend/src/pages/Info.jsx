@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from 'react'
-
 import { useSelector } from 'react-redux'
 import Nav from '../components/Nav'
 import paths from '../utils/paths'
@@ -16,13 +14,13 @@ const candidateNavInfo = [
   },
   {
     name: 'CV',
-    path: '/' + INFO + '/' + 'cv',
+    path: '/' + INFO + '/cv',
     active: false,
     id: 1
   },
   {
     name: 'Tiêu chí',
-    path: '/' + INFO + '/' + 'targets',
+    path: '/' + INFO + '/targets',
     active: false,
     id: 2
   }
