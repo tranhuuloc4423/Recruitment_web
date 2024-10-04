@@ -3,13 +3,12 @@ const User = require('../models/userModel')
 
 const adminControllers = {
   updateBasicInfo: async (req, res) => {
-    const { adminId } = req.params // adminId là _id của User, kiểu String
+    const { adminId } = req.params
     const { image, field, tax_id, address, name, email } = req.body
 
     try {
-      // Tìm kiếm và cập nhật Admin bằng `id`, vì `id` được lưu là `User._id.toString()`
       const basic_info = await Admin.findOneAndUpdate(
-        { id: adminId }, // Sử dụng `id` thay vì `_id`
+        { _id: adminId },
         {
           $set: {
             'basic_info.image': image,
@@ -23,9 +22,8 @@ const adminControllers = {
         { new: true }
       )
 
-      // Tìm kiếm và cập nhật User bằng _id (chuyển từ candidateId sang ObjectId)
       const updatedUser = await User.findOneAndUpdate(
-        adminId, // Sử dụng `_id` của User để tìm kiếm
+        { _id: basic_info.userId },
         {
           $set: {
             email: email,
@@ -47,7 +45,7 @@ const adminControllers = {
     }
   },
   updateOtherInfo: async (req, res) => {
-    const { adminId } = req.params // adminId là _id của User, kiểu String
+    const { adminId } = req.params
     const { desc, speciality, images } = req.body
 
     try {
@@ -63,7 +61,7 @@ const adminControllers = {
       }
 
       const other_info = await Admin.findOneAndUpdate(
-        { id: adminId },
+        { _id: adminId },
         { $set: updateFields },
         { new: true }
       )
@@ -92,22 +90,6 @@ const adminControllers = {
       res.status(200).json(admin)
     } catch (error) {
       res.status(500).json(error)
-    }
-  },
-  getAdminWithPosts: async (req, res) => {
-    const { adminId } = req.params
-
-    try {
-      // Sử dụng `populate` để lấy chi tiết thông tin bài post từ `posts`
-      const post = await Admin.findById(adminId).populate('posts')
-
-      if (!post) {
-        return res.status(404).json({ message: 'Admin not found' })
-      }
-
-      res.json(post)
-    } catch (error) {
-      res.status(500).json({ message: error.message })
     }
   }
 }

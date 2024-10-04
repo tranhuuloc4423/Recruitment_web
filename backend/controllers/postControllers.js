@@ -9,8 +9,7 @@ const {
 
 const postController = {
   createPost: async (req, res) => {
-    const { userId, userType } = req.params // Lấy _id admin hoặc recruiter
-    const postData = req.body
+    const { userId, userType, postData } = req.body
 
     try {
       postData.author = userId
@@ -53,8 +52,8 @@ const postController = {
     }
   },
   updatePost: async (req, res) => {
-    const { userId, postId, authorType } = req.params
-    const updatedPost = req.body
+    const { postId } = req.params
+    const { userId, authorType, updatedPost } = req.body
 
     try {
       // Kiểm tra quyền sở hữu bài đăng
@@ -104,7 +103,8 @@ const postController = {
     }
   },
   deletePost: async (req, res) => {
-    const { userId, postId, authorType } = req.params
+    const { postId } = req.params
+    const { userId, authorType } = req.body
 
     try {
       // Kiểm tra quyền sở hữu bài đăng
@@ -143,7 +143,8 @@ const postController = {
     }
   },
   getAllPosts: async (req, res) => {
-    const { userId, authorType } = req.params
+    const { userId } = req.params
+    const { authorType } = req.body
 
     try {
       const posts = await Post.find({ author: userId, authorType })
@@ -160,7 +161,8 @@ const postController = {
     }
   },
   getPostById: async (req, res) => {
-    const { userId, postId, authorType } = req.params
+    const { userId, postId } = req.params
+    const { authorType } = req.body
 
     try {
       const post = await Post.findOne({
@@ -201,7 +203,8 @@ const postController = {
     }
   },
   updateApplied: async (req, res) => {
-    const { postId, candidateId } = req.body // Nhận `candidateId` và `postId` từ body
+    const { postId } = req.params
+    const { candidateId } = req.body
 
     try {
       const candidate = await Candidate.findById(candidateId)
@@ -220,7 +223,7 @@ const postController = {
       }
 
       // Gọi hàm updateCandidate để cập nhật thông tin ứng viên
-      await updateCandidate(candidateId, postId)
+      await updateAppliedJobs(candidateId, postId)
 
       res.json({ message: 'Applied updated successfully', post })
     } catch (error) {
@@ -228,7 +231,8 @@ const postController = {
     }
   },
   updateSaved: async (req, res) => {
-    const { postId, candidateId } = req.body // Nhận `candidateId` và `postId` từ body
+    const { postId } = req.params
+    const { candidateId } = req.body // Nhận `candidateId` và `postId` từ body
 
     try {
       const candidate = await Candidate.findById(candidateId)
@@ -254,24 +258,9 @@ const postController = {
       res.status(500).json({ message: error.message })
     }
   },
-  getPostWithApplicants: async (req, res) => {
-    const { postId } = req.params
-
-    try {
-      // Sử dụng `populate` để lấy chi tiết thông tin ứng viên từ `applied`
-      const post = await Post.findById(postId).populate('applied')
-
-      if (!post) {
-        return res.status(404).json({ message: 'Post not found' })
-      }
-
-      res.json(post)
-    } catch (error) {
-      res.status(500).json({ message: error.message })
-    }
-  },
   updateStatus: async (req, res) => {
-    const { postId, userId, authorId } = req.body // Lấy `userId`, `authorId`, và `postId` từ body
+    const { postId } = req.body
+    const { userId, authorId } = req.body
 
     try {
       // Kiểm tra quyền của userId có phải admin không

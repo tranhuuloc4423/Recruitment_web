@@ -3,13 +3,12 @@ const User = require('../models/userModel')
 
 const candidateControllers = {
   updateBasicInfo: async (req, res) => {
-    const { candidateId } = req.params // candidateId là _id của User, kiểu String
+    const { candidateId } = req.params
     const { image, dob, phone, address, gender, email, name } = req.body
 
     try {
-      // Tìm kiếm và cập nhật Candidate bằng _id
       const basic_info = await Candidate.findOneAndUpdate(
-        { id: candidateId }, // `id` của Candidate là chuỗi từ `User._id`
+        { _id: candidateId },
         {
           $set: {
             'basic_info.image': image,
@@ -28,9 +27,8 @@ const candidateControllers = {
         return res.status(404).json({ message: 'Candidate not found' })
       }
 
-      // Tìm kiếm và cập nhật User bằng _id (chuyển từ candidateId sang ObjectId)
       const updatedUser = await User.findOneAndUpdate(
-        candidateId, // Sử dụng `_id` của User để tìm kiếm
+        { _id: basic_info.userId },
         {
           $set: {
             email: email,
@@ -72,7 +70,7 @@ const candidateControllers = {
       }
 
       const other_info = await Candidate.findOneAndUpdate(
-        { id: candidateId },
+        { _id: candidateId },
         { $set: updateFields },
         { new: true }
       )
@@ -90,7 +88,7 @@ const candidateControllers = {
     try {
       const { candidateId } = req.params
       const target = await Candidate.findOneAndUpdate(
-        { id: candidateId },
+        { _id: candidateId },
         req.body,
         {
           new: true
@@ -104,7 +102,7 @@ const candidateControllers = {
   getDataById: async (req, res) => {
     try {
       const { candidateId } = req.params
-      const candidate = await Candidate.findOne({ id: candidateId })
+      const candidate = await Candidate.findById(candidateId)
       res.status(200).json(candidate)
     } catch (error) {
       res.status(500).json(error)
@@ -150,6 +148,91 @@ const candidateControllers = {
       return updatedCandidate
     } catch (error) {
       throw new Error(error.message)
+    }
+  },
+  getSavedJobs: async (req, res) => {
+    try {
+      const candidateId = req.params.candidateId
+      const candidate = await Candidate.findById(candidateId).populate(
+        'jobs.saved'
+      )
+      if (!candidate) {
+        return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
+      }
+      res.status(200).json(candidate.jobs.saved)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: 'Lỗi khi lấy công việc đã lưu' })
+    }
+  },
+  getRecentJobs: async (req, res) => {
+    try {
+      const candidateId = req.params.candidateId
+      const candidate = await Candidate.findById(candidateId).populate(
+        'jobs.recent'
+      )
+      if (!candidate) {
+        return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
+      }
+      res.status(200).json(candidate.jobs.recent)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: 'Lỗi khi lấy công việc gần đây' })
+    }
+  },
+  getAppliedJobs: async (req, res) => {
+    try {
+      const candidateId = req.params.candidateId
+      const candidate = await Candidate.findById(candidateId).populate(
+        'jobs.applied'
+      )
+      if (!candidate) {
+        return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
+      }
+      res.status(200).json(candidate.jobs.applied)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: 'Lỗi khi lấy công việc đã ứng tuyển' })
+    }
+  },
+  getFollowedJobs: async (req, res) => {
+    try {
+      const candidateId = req.params.candidateId
+      const candidate = await Candidate.findById(candidateId)
+      if (!candidate) {
+        return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
+      }
+      res.status(200).json(candidate.jobs.followed)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: 'Lỗi khi lấy công việc đang theo dõi' })
+    }
+  },
+  followUser: async (req, res) => {
+    try {
+      const { candidateId } = req.params
+      const { userIdToFollow } = req.body
+      const candidate = await Candidate.findById(candidateId)
+      if (!candidate) {
+        return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
+      }
+
+      if (candidate.jobs.followed.includes(userIdToFollow)) {
+        return res
+          .status(400)
+          .json({ message: 'Bạn đã theo dõi người dùng này' })
+      }
+
+      candidate.jobs.followed.push(userIdToFollow)
+      await candidate.save()
+
+      res.status(200).json({
+        message: 'Theo dõi thành công',
+        followed: candidate.jobs.followed
+      })
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: 'Lỗi khi theo dõi người dùng' })
     }
   }
 }

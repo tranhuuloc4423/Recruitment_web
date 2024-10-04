@@ -8,20 +8,18 @@ const {
   getPostById,
   updateViews,
   updateApplied,
-  getPostWithApplicants,
-  updateStatus,
-  updateSaved
+  updateSaved,
+  updateStatus
 } = require('../controllers/postControllers')
 
-router.post('/:userType/:userId', createPost)
-router.put('/:authorType/:userId/:postId', updatePost)
-router.delete('/:authorType/:userId/:postId', deletePost)
-router.get('/:authorType/:userId/', getAllPosts)
-router.get('/:authorType/:userId/:postId', getPostById)
+router.post('/create', createPost)
+router.put('/:postId', updatePost)
+router.delete('/:postId', deletePost)
+router.get('/:userId/', getAllPosts)
+router.get('/:userId/:postId', getPostById)
 router.put('/:postId/views', updateViews)
-router.put('/applied', updateApplied)
-router.put('/saved', updateSaved)
-router.get('/applicants', getPostWithApplicants)
-router.put('/status', updateStatus)
+router.put('/:postId/applied', updateApplied)
+router.put('/:postId/saved', updateSaved)
+router.put('/:postId/status', updateStatus)
 
 module.exports = router
