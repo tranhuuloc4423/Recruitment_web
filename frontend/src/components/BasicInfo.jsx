@@ -28,18 +28,7 @@ const BasicInfo = () => {
       )?.basicInfo
       setBasicInfo(infoToUpdate || [])
     }
-  }, [currentUser, currentRole])
-
-  const handleUpdateBasicInfo = (updatedInfo) => {
-    setBasicInfo((prevInfo) => {
-      return prevInfo.map((item) => {
-        if (updatedInfo[item.name]) {
-          return { ...item, value: updatedInfo[item.name] }
-        }
-        return item
-      })
-    })
-  }
+  }, [currentRole])
 
   return (
     <div className="w-[30%] flex flex-col bg-white rounded p-4 gap-2 h-fit">
@@ -74,13 +63,7 @@ const BasicInfo = () => {
           className="w-fit"
           onClick={() => setOpen(true)}
         />
-        {open && (
-          <BasicInfoForm
-            open={open}
-            setOpen={setOpen}
-            onUpdate={handleUpdateBasicInfo}
-          />
-        )}
+        {open && <BasicInfoForm open={open} setOpen={setOpen} />}
       </div>
     </div>
   )

@@ -26,7 +26,7 @@ function App() {
   const { currentUser } = useSelector((state) => state.auth)
 
   const fetchRoleData = async (user) => {
-    await getById(user.id, dispatch, user.role)
+    await getById(user._id, dispatch, user.role)
   }
 
   useEffect(() => {
