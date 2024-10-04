@@ -10,7 +10,7 @@ import { IoClose } from 'react-icons/io5'
 import Dropdown from '../components/Dropdown'
 import info from '../utils/infos'
 
-const BasicInfoForm = ({ open, setOpen, onUpdate }) => {
+const BasicInfoForm = ({ open, setOpen }) => {
   const { currentUser } = useSelector((state) => state.auth)
   const { basicInfo } = info.find((info) => info.name === currentUser?.role)
   const dispatch = useDispatch()
@@ -33,12 +33,11 @@ const BasicInfoForm = ({ open, setOpen, onUpdate }) => {
     const imagebs64 = await convertToBase64(image)
     updateBasicInfo(
       currentUser._id,
-      { ...values, image: imagebs64 },
+      { ...values, image: imagebs64, gender: gender?.value },
       dispatch,
       currentUser.role
     )
     getById(currentUser._id, dispatch, currentUser.role)
-    onUpdate(values)
     setOpen(false)
   }
 
