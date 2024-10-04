@@ -102,7 +102,7 @@ const candidateControllers = {
   getDataById: async (req, res) => {
     try {
       const { candidateId } = req.params
-      const candidate = await Candidate.findById(candidateId)
+      const candidate = await Candidate.findOne({ userId: candidateId })
       res.status(200).json(candidate)
     } catch (error) {
       res.status(500).json(error)

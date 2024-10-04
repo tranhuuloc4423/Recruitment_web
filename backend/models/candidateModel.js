@@ -58,26 +58,23 @@ const candidateSchema = new mongoose.Schema(
           type: String
         }
       ],
-      target_money: [
-        {
-          min_money: {
-            type: Number
-          },
-          max_money: {
-            type: String
-          }
+      target_money: {
+        min_money: {
+          type: Number
+        },
+        max_money: {
+          type: Number
         }
-      ],
+      },
       type: [
         {
           type: String
         }
       ],
-      location: [
-        {
-          type: String
-        }
-      ]
+      location: {
+        type: String
+      },
+      wform: [{ type: String }]
     },
     jobs: {
       saved: [

@@ -78,7 +78,7 @@ const adminControllers = {
   getDataById: async (req, res) => {
     try {
       const { adminId } = req.params
-      const admin = await Admin.findOne({ id: adminId })
+      const admin = await Admin.findOne({ userId: adminId })
       res.status(200).json(admin)
     } catch (error) {
       res.status(500).json(error)

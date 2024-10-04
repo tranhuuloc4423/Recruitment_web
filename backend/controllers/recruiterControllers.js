@@ -78,7 +78,7 @@ const recruiterControllers = {
   getDataById: async (req, res) => {
     try {
       const { recruiterId } = req.params
-      const recruiter = await Recruiter.findOne({ id: recruiterId })
+      const recruiter = await Recruiter.findOne({ userId: recruiterId })
       res.status(200).json(recruiter)
     } catch (error) {
       res.status(500).json(error)
