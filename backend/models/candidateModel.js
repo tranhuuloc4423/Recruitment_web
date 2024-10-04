@@ -100,7 +100,7 @@ const candidateSchema = new mongoose.Schema(
       ],
       followed: [
         {
-          company_info: mongoose.Schema.Types.Mixed
+          type: mongoose.Schema.Types.ObjectId
         }
       ]
     },

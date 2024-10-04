@@ -3,13 +3,12 @@ const User = require('../models/userModel')
 
 const recruiterControllers = {
   updateBasicInfo: async (req, res) => {
-    const { recruiterId } = req.params // recruiterId là _id của User, kiểu String
+    const { recruiterId } = req.params
     const { image, field, tax_id, address, name, email } = req.body
 
     try {
-      // Tìm và cập nhật Recruiter bằng _id (được lưu trong trường `id` của Recruiter)
       const basic_info = await Recruiter.findOneAndUpdate(
-        { id: recruiterId }, // Sử dụng `id` vì `id` của Recruiter là `User._id` dạng chuỗi
+        { _id: recruiterId },
         {
           $set: {
             'basic_info.image': image,
@@ -23,9 +22,8 @@ const recruiterControllers = {
         { new: true }
       )
 
-      // Tìm kiếm và cập nhật User bằng _id (chuyển từ candidateId sang ObjectId)
       const updatedUser = await User.findOneAndUpdate(
-        recruiterId, // Sử dụng `_id` của User để tìm kiếm
+        { _id: basic_info.userId },
         {
           $set: {
             email: email,
@@ -63,7 +61,7 @@ const recruiterControllers = {
       }
 
       const other_info = await Recruiter.findOneAndUpdate(
-        { id: recruiterId },
+        { _id: candidateId },
         { $set: updateFields },
         { new: true }
       )
@@ -92,22 +90,6 @@ const recruiterControllers = {
       res.status(200).json(recruiter)
     } catch (error) {
       res.status(500).json(error)
-    }
-  },
-  getRecruiterWithPosts: async (req, res) => {
-    const { recruiterId } = req.params
-
-    try {
-      // Sử dụng `populate` để lấy chi tiết thông tin bài post từ `posts`
-      const post = await Recruiter.findById(recruiterId).populate('posts')
-
-      if (!post) {
-        return res.status(404).json({ message: 'Recruiter not found' })
-      }
-
-      res.json(post)
-    } catch (error) {
-      res.status(500).json({ message: error.message })
     }
   }
 }
