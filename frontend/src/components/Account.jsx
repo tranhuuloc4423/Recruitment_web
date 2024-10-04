@@ -25,7 +25,9 @@ const Account = () => {
       onClick={() => setActive(!active)}
     >
       <img src={avatar} alt="avatar" className="rounded-full w-10 h-10" />
-      <div className="text-white select-none">{currentUser?.name}</div>
+      <div className="text-white select-none">
+        {currentRole?.basic_info?.name}
+      </div>
       <IoIosArrowDown
         size={24}
         color="white"

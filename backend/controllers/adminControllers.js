@@ -46,7 +46,7 @@ const adminControllers = {
   },
   updateOtherInfo: async (req, res) => {
     const { adminId } = req.params
-    const { desc, speciality, images } = req.body
+    const { desc, speciality, images, types, wforms } = req.body
 
     try {
       let updateFields = {}
@@ -54,6 +54,8 @@ const adminControllers = {
       if (desc !== undefined) updateFields['other_info.desc'] = desc
       if (speciality !== undefined)
         updateFields['other_info.speciality'] = speciality
+      if (types !== undefined) updateFields['other_info.types'] = types
+      if (wforms !== undefined) updateFields['other_info.wforms'] = wforms
       if (images !== undefined) updateFields['other_info.images'] = images
 
       if (Object.keys(updateFields).length === 0) {

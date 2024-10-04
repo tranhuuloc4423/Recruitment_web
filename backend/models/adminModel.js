@@ -40,6 +40,16 @@ const adminSchema = new mongoose.Schema(
         {
           type: String
         }
+      ],
+      types: [
+        {
+          type: String
+        }
+      ],
+      wforms: [
+        {
+          type: String
+        }
       ]
     },
     posts: [

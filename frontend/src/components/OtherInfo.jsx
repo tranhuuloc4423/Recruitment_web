@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import InfoCard from './InfoCard'
 import RichText from './RichText'
 import DropdownSearchAdd from './DropdownSearchAdd'
 import info from '../utils/infos'
+import { updateOtherInfo } from '../redux/api/app'
 const OtherInfo = () => {
   const { currentUser } = useSelector((state) => state.auth)
   const { currentRole } = useSelector((state) => state.app)
+  const dispatch = useDispatch()
+  const [skills, setSkills] = useState([])
   const [values, setValues] = useState(
     currentUser.role === 'candidate'
       ? {
@@ -26,6 +29,24 @@ const OtherInfo = () => {
 
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value })
+  }
+
+  const handleOtherInfo = (item) => {
+    if (item.type === 'richText') {
+      updateOtherInfo(
+        currentRole?._id,
+        { [item.name]: values[item.name] },
+        dispatch,
+        currentUser.role
+      )
+    } else if (item.type === 'dropdown') {
+      updateOtherInfo(
+        currentRole?._id,
+        { [item.name]: skills },
+        dispatch,
+        currentUser.role
+      )
+    }
   }
 
   useEffect(() => {
@@ -54,12 +75,12 @@ const OtherInfo = () => {
               ) : (
                 <>
                   <div className="flex flex-row gap-4">
-                    <DropdownSearchAdd />
+                    <DropdownSearchAdd tags={skills} setTags={setSkills} />
                   </div>
                 </>
               )
             }
-            onClick={() => console.log({ [item.name]: values[item.name] })}
+            onClick={() => handleOtherInfo(item)}
           />
         ))}
     </div>

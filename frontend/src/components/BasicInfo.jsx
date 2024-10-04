@@ -9,26 +9,28 @@ import defaultAvatar from '../assets/imgs/blank-profile-picture-973460_960_720.p
 const BasicInfo = () => {
   const [open, setOpen] = useState(false)
   const [avatar, setAvatar] = useState(defaultAvatar)
-  const [basicInfo, setBasicInfo] = useState()
+  const [basicInfo, setBasicInfo] = useState([])
+  const [roleInfo, setRoleInfo] = useState({}) // State riêng cho basic_info
 
   const { currentUser } = useSelector((state) => state.auth)
   const { currentRole } = useSelector((state) => state.app)
 
   useEffect(() => {
-    if (currentUser) {
-      if (currentRole?.basic_info) {
-        let userImage = defaultAvatar
-        userImage = currentRole?.basic_info?.image || defaultAvatar
-        setAvatar(userImage)
-        console.log(currentRole?.basic_info)
-      }
+    console.log('currentRole has changed:', currentRole) // Kiểm tra giá trị currentRole
+
+    if (currentUser && currentRole?.basic_info) {
+      let userImage = currentRole?.basic_info?.image || defaultAvatar
+      setAvatar(userImage)
+
+      setRoleInfo(currentRole.basic_info)
 
       const infoToUpdate = info.find(
         (item) => item?.name === currentUser?.role
       )?.basicInfo
+
       setBasicInfo(infoToUpdate || [])
     }
-  }, [currentRole])
+  }, [currentUser, currentRole])
 
   return (
     <div className="w-[30%] flex flex-col bg-white rounded p-4 gap-2 h-fit">
@@ -38,7 +40,7 @@ const BasicInfo = () => {
           alt="avatar"
           className="w-[100px] h-[100px] rounded-full"
         />
-        <span className="heading-3">{currentUser.name}</span>
+        <span className="heading-3">{roleInfo?.name}</span>
       </div>
       <Line />
       <div className="flex flex-row gap-2">
@@ -48,8 +50,8 @@ const BasicInfo = () => {
               {icon && (
                 <div className="flex items-center gap-2 py-2 px-2">
                   <span>{icon}</span>
-                  {/* <span className="para-1 font-medium">{label}:</span> */}
-                  <span>{currentRole?.basic_info[name]}</span>
+                  <span>{roleInfo[name]}</span>{' '}
+                  {/* Sử dụng roleInfo thay vì currentRole */}
                 </div>
               )}
             </React.Fragment>

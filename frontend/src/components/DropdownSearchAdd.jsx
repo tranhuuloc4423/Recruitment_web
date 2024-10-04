@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import Button from './Button'
 import Tag from './Tag' // Assuming you have a Tag component
 
-const DropdownSearchAdd = ({ onAddItem, onAddToDatabase }) => {
+const DropdownSearchAdd = ({ onAddItem, onAddToDatabase, tags, setTags }) => {
   const items = ['ReactJS', 'HTML', 'CSS', 'MongoDB', 'VueJS']
   const [search, setSearch] = useState('')
   const [focus, setFocus] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
   const [filteredItems, setFilteredItems] = useState(items)
-  const [tags, setTags] = useState([]) // State to hold the added tags
+  // const [tags, setTags] = useState([]) // State to hold the added tags
 
   // Handle search input and filter items
   const handleSearchChange = (e) => {
@@ -81,7 +81,7 @@ const DropdownSearchAdd = ({ onAddItem, onAddToDatabase }) => {
       <div className="flex flex-col gap-2 py-4">
         <div>Các kỹ năng : </div>
         <div className="flex flex-wrap gap-2">
-          {tags.map((tag, index) => (
+          {tags?.map((tag, index) => (
             <Tag
               key={index}
               label={tag}

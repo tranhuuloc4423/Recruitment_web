@@ -12,6 +12,7 @@ import info from '../utils/infos'
 
 const BasicInfoForm = ({ open, setOpen }) => {
   const { currentUser } = useSelector((state) => state.auth)
+  const { currentRole } = useSelector((state) => state.app)
   const { basicInfo } = info.find((info) => info.name === currentUser?.role)
   const dispatch = useDispatch()
   const [image, setImage] = useState(null)
@@ -32,12 +33,12 @@ const BasicInfoForm = ({ open, setOpen }) => {
     if (valuesCheck) return
     const imagebs64 = await convertToBase64(image)
     updateBasicInfo(
-      currentUser._id,
+      currentRole._id,
       { ...values, image: imagebs64, gender: gender?.value },
       dispatch,
       currentUser.role
     )
-    getById(currentUser._id, dispatch, currentUser.role)
+    // getById(currentUser._id, dispatch, currentUser.role)
     setOpen(false)
   }
 
