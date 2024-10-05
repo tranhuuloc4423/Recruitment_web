@@ -56,7 +56,6 @@ const postController = {
     const { userId, authorType, updatedPost } = req.body
 
     try {
-      // Kiểm tra quyền sở hữu bài đăng
       const post = await Post.findOne({
         _id: postId,
         author: userId,
@@ -66,7 +65,6 @@ const postController = {
         return res.status(404).json({ message: 'Author or Post not found' })
       }
 
-      // Nếu `status` thay đổi, cần cập nhật `manage_post`
       const oldStatus = post.status
       const newStatus = updatedPost.status
       if (oldStatus !== newStatus) {
@@ -93,7 +91,6 @@ const postController = {
         }
       }
 
-      // Cập nhật bài đăng
       const updated = await Post.findByIdAndUpdate(postId, updatedPost, {
         new: true
       })
@@ -107,7 +104,6 @@ const postController = {
     const { userId, authorType } = req.body
 
     try {
-      // Kiểm tra quyền sở hữu bài đăng
       const post = await Post.findOne({
         _id: postId,
         author: userId,
@@ -117,13 +113,10 @@ const postController = {
         return res.status(404).json({ message: 'Author or Post not found' })
       }
 
-      // Xóa bài đăng
       await Post.findByIdAndDelete(postId)
 
-      // Chuyển đổi `postId` sang ObjectId nếu cần thiết
       const postObjectId = mongoose.Types.ObjectId(postId)
 
-      // Xóa tham chiếu bài đăng từ Admin hoặc Recruiter
       const Model = authorType === 'admin' ? Admin : Recruiter
       await Model.findByIdAndUpdate(
         userId,
@@ -183,13 +176,12 @@ const postController = {
     }
   },
   updateViews: async (req, res) => {
-    const { postId } = req.params // Lấy `postId` từ params
+    const { postId } = req.params
 
     try {
-      // Tìm bài đăng và cập nhật trường `views`
       const post = await Post.findByIdAndUpdate(
         postId,
-        { $inc: { views: 1 } }, // Tăng `views` thêm 1 mỗi khi có request đến
+        { $inc: { views: 1 } },
         { new: true }
       )
 
@@ -222,7 +214,6 @@ const postController = {
         return res.status(404).json({ message: 'Post not found' })
       }
 
-      // Gọi hàm updateCandidate để cập nhật thông tin ứng viên
       await updateAppliedJobs(candidateId, postId)
 
       res.json({ message: 'Applied updated successfully', post })
@@ -232,7 +223,7 @@ const postController = {
   },
   updateSaved: async (req, res) => {
     const { postId } = req.params
-    const { candidateId } = req.body // Nhận `candidateId` và `postId` từ body
+    const { candidateId } = req.body
 
     try {
       const candidate = await Candidate.findById(candidateId)
@@ -250,7 +241,6 @@ const postController = {
         return res.status(404).json({ message: 'Post not found' })
       }
 
-      // Gọi hàm updateSavedJobs để cập nhật thông tin ứng viên
       await updateSavedJobs(candidateId, postId)
 
       res.json({ message: 'Saved job updated successfully', post })
@@ -263,7 +253,6 @@ const postController = {
     const { userId, authorId } = req.body
 
     try {
-      // Kiểm tra quyền của userId có phải admin không
       const admin = await Admin.findById(userId)
       if (!admin) {
         return res
@@ -271,24 +260,20 @@ const postController = {
           .json({ message: 'User is not authorized as admin' })
       }
 
-      // Tìm bài đăng
       const post = await Post.findById(postId)
       if (!post) {
         return res.status(404).json({ message: 'Post not found' })
       }
 
-      // Kiểm tra trạng thái hiện tại của bài đăng
       const oldStatus = post.status
       if (oldStatus === 'confirmed') {
         return res.json({ message: 'Post is already confirmed', post })
       }
 
-      // Nếu bài đăng có trạng thái là `posted`, cập nhật thành `confirmed`
       if (oldStatus === 'posted') {
         post.status = 'confirmed'
         await post.save()
 
-        // Cập nhật `manage_post` của admin
         await Admin.findOneAndUpdate(
           { _id: userId },
           {

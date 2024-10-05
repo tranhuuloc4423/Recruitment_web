@@ -4,7 +4,7 @@ const recruiterSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User' // Liên kết với model User
+      ref: 'User'
     },
     basic_info: {
       name: {
@@ -55,27 +55,27 @@ const recruiterSchema = new mongoose.Schema(
     posts: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Post' // Liên kết với model Post
+        ref: 'Post'
       }
     ],
     manage_post: {
       confirmed: [
         {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Post' // Liên kết với model Post
+          ref: 'Post'
         }
       ],
       posted: [
         {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Post' // Liên kết với model Post
+          ref: 'Post'
         }
       ]
     },
     notifications: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Notification' // Liên kết với model Notification
+        ref: 'Notification'
       }
     ]
   },

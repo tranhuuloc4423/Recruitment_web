@@ -62,7 +62,7 @@ const recruiterControllers = {
       }
 
       const other_info = await Recruiter.findOneAndUpdate(
-        { _id: candidateId },
+        { _id: recruiterId },
         { $set: updateFields },
         { new: true }
       )

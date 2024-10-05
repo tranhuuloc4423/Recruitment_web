@@ -15,7 +15,7 @@ const userControllers = {
     }
   },
   updatePassword: async (req, res) => {
-    const { id } = req.params // id là _id
+    const { id } = req.params
     const { oldPassword, newPassword } = req.body
 
     try {

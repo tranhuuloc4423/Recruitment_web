@@ -4,7 +4,7 @@ const adminSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User' // Liên kết với model User
+      ref: 'User'
     },
     basic_info: {
       name: {
@@ -55,20 +55,20 @@ const adminSchema = new mongoose.Schema(
     posts: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Post' // Liên kết với model Post
+        ref: 'Post'
       }
     ],
     manage_post: {
       confirmed: [
         {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Post' // Liên kết với model Post
+          ref: 'Post'
         }
       ],
       posted: [
         {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Post' // Liên kết với model Post
+          ref: 'Post'
         }
       ]
     },
@@ -106,7 +106,7 @@ const adminSchema = new mongoose.Schema(
     notifications: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Notification' // Liên kết với model Notification
+        ref: 'Notification'
       }
     ]
   },

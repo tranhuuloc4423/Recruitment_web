@@ -4,7 +4,7 @@ const candidateSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User' // Liên kết với model User
+      ref: 'User'
     },
     basic_info: {
       image: {
@@ -66,7 +66,7 @@ const candidateSchema = new mongoose.Schema(
           type: Number
         }
       },
-      type: [
+      types: [
         {
           type: String
         }
@@ -80,19 +80,19 @@ const candidateSchema = new mongoose.Schema(
       saved: [
         {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Post' // Liên kết với model User
+          ref: 'Post'
         }
       ],
       recent: [
         {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Post' // Liên kết với model User
+          ref: 'Post'
         }
       ],
       applied: [
         {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Post' // Liên kết với model User
+          ref: 'Post'
         }
       ],
       followed: [
@@ -104,7 +104,7 @@ const candidateSchema = new mongoose.Schema(
     notifications: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Notification' // Liên kết với model Notification
+        ref: 'Notification'
       }
     ]
   },

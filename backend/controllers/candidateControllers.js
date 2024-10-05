@@ -234,6 +234,32 @@ const candidateControllers = {
       console.error(error)
       res.status(500).json({ message: 'Lỗi khi theo dõi người dùng' })
     }
+  },
+  updateRecent: async (req, res) => {
+    try {
+      const { candidateId } = req.params
+      const { postId } = req.body
+
+      const candidate = await Candidate.findById(candidateId)
+      if (!candidate) {
+        return res.status(404).json({ message: 'Candidate not found' })
+      }
+
+      if (!candidate.jobs.recent.includes(postId)) {
+        candidate.jobs.recent.push(postId)
+      }
+
+      await candidate.save()
+
+      const post = await Post.findById(postId)
+      if (!post) {
+        return res.status(404).json({ message: 'Post not found' })
+      }
+
+      res.status(200).json(post)
+    } catch (error) {
+      res.status(500).json({ message: 'Server error', error })
+    }
   }
 }
 
