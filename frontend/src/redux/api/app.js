@@ -1,8 +1,13 @@
 import { toast } from 'react-toastify'
 import axios from '../../axios'
-import { setBasicInfo, setData, setOtherInfo } from '../slices/appSlice'
+import {
+  setBasicInfo,
+  setData,
+  setOtherInfo,
+  setTarget
+} from '../slices/appSlice'
 
-export const getById = async (id, dispatch, role) => {
+const getById = async (id, dispatch, role) => {
   try {
     const res = await axios.get(`${role}/${id}`)
     dispatch(setData(res.data))
@@ -11,27 +16,42 @@ export const getById = async (id, dispatch, role) => {
   }
 }
 
-export const updateBasicInfo = async (id, data, dispatch, role) => {
+const updateBasicInfo = async (id, data, dispatch, role) => {
   try {
-    const res = await axios.put(`${role}/${id}/basic_info`, data)
-    await getById(id, dispatch, role)
-    // dispatch(setBasicInfo(res.data))
-    toast.success('Cập nhật thông tinthành công!')
+    await axios.put(`${role}/${id}/basic_info`, data)
+    const res = axios.get(`${role}/${id}`)
+    dispatch(setBasicInfo(res.data?.basic_info))
+    toast.success('Cập nhật thông tin thành công!')
   } catch (error) {
     console.log(error)
     toast.error('Cập nhật thông tin không thành công!')
   }
 }
 
-export const updateOtherInfo = async (id, data, dispatch, role) => {
+const updateOtherInfo = async (id, data, dispatch, role) => {
   try {
     console.log(data)
-    const res = await axios.put(`${role}/${id}/other_info`, data)
-    // dispatch(setOtherInfo(res.data))
-    await getById(id, dispatch, role)
+    await axios.put(`${role}/${id}/other_info`, data)
+    const res = await axios.get(`${role}/${id}`)
+    dispatch(setOtherInfo(res.data.other_info))
     toast.success('Cập nhật thông tin thành công!')
   } catch (error) {
     console.log(error)
     toast.success('Cập nhật thông tin không thành công!')
   }
 }
+
+const updateTarget = async (id, data, dispatch) => {
+  try {
+    console.log(data)
+    await axios.put(`/candidate/${id}/target`, data)
+    const res = axios.get(`/candidate/${id}`)
+    dispatch(setTarget(res.data?.target))
+    toast.success('Cập nhật thông tin thành công!')
+  } catch (error) {
+    console.log(error)
+    toast.error('Cập nhật thông tin không thành công!')
+  }
+}
+
+export { updateBasicInfo, updateOtherInfo, updateTarget, getById }

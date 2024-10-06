@@ -111,6 +111,46 @@ const info = [
             label: 'Reactjs'
           }
         ]
+      },
+      {
+        title: 'Hình thức',
+        desc: 'Hình thức làm việc của công ty',
+        type: 'dropdown',
+        id: 4,
+        name: 'types',
+        placeholder: 'Hình thức làm việc',
+        options: [
+          {
+            value: 'fulltime',
+            label: 'Bán thời gian'
+          },
+          {
+            value: 'parttime',
+            label: 'Toàn thời gian'
+          }
+        ]
+      },
+      {
+        title: 'Phương thức',
+        desc: 'Phương thức làm việc của công ty',
+        type: 'dropdown',
+        id: 5,
+        name: 'wforms',
+        placeholder: 'Phương thức làm việc',
+        options: [
+          {
+            value: 'onsite',
+            label: 'Tại văn phòng'
+          },
+          {
+            value: 'remote',
+            label: 'Từ xa'
+          },
+          {
+            value: 'hybrid',
+            label: 'Linh hoạt'
+          }
+        ]
       }
     ]
   },
@@ -183,7 +223,7 @@ const info = [
       {
         title: 'Hình ảnh',
         desc: 'Các hình ảnh của công ty',
-        type: 'richText',
+        type: 'images',
         id: 2,
         name: 'images'
       },
@@ -192,32 +232,46 @@ const info = [
         desc: 'Các kỹ năng chuyên môn chính của công ty',
         type: 'dropdown',
         id: 3,
-        name: 'skills',
-        placeholder: 'Tìm kiếm kỹ năng',
+        name: 'speciality',
+        placeholder: 'Tìm kiếm kỹ năng'
+      },
+      {
+        title: 'Hình thức',
+        desc: 'Hình thức làm việc của công ty',
+        type: 'dropdown',
+        id: 4,
+        name: 'types',
+        placeholder: 'Hình thức làm việc',
         options: [
           {
-            value: 'Reactjs',
-            label: 'Reactjs'
+            value: 'fulltime',
+            label: 'Bán thời gian'
           },
           {
-            value: 'MongoDB',
-            label: 'Reactjs'
+            value: 'parttime',
+            label: 'Toàn thời gian'
+          }
+        ]
+      },
+      {
+        title: 'Phương thức',
+        desc: 'Phương thức làm việc của công ty',
+        type: 'dropdown',
+        id: 5,
+        name: 'wforms',
+        placeholder: 'Phương thức làm việc',
+        options: [
+          {
+            value: 'onsite',
+            label: 'Tại văn phòng'
           },
           {
-            value: 'Reactjs',
-            label: 'Reactjs'
+            value: 'remote',
+            label: 'Từ xa'
           },
           {
-            value: 'Reactjs',
-            label: 'Reactjs'
-          },
-          {
-            value: 'Reactjs',
-            label: 'Reactjs'
-          },
-          {
-            value: 'Reactjs',
-            label: 'Reactjs'
+            value: 'hybrid',
+            label: 'Linh hoạt'
           }
         ]
       }
@@ -312,7 +366,7 @@ const info = [
         desc: 'Thông tin về kinh nghiệm làm việc.',
         type: 'richText',
         id: 2,
-        name: 'exp'
+        name: 'exps'
       },
       {
         title: 'Kỹ năng',
@@ -320,33 +374,7 @@ const info = [
         type: 'dropdown',
         id: 3,
         name: 'skills',
-        placeholder: 'Tìm kiếm kỹ năng',
-        options: [
-          {
-            value: 'Reactjs',
-            label: 'Reactjs'
-          },
-          {
-            value: 'MongoDB',
-            label: 'Reactjs'
-          },
-          {
-            value: 'Reactjs',
-            label: 'Reactjs'
-          },
-          {
-            value: 'Reactjs',
-            label: 'Reactjs'
-          },
-          {
-            value: 'Reactjs',
-            label: 'Reactjs'
-          },
-          {
-            value: 'Reactjs',
-            label: 'Reactjs'
-          }
-        ]
+        placeholder: 'Tìm kiếm kỹ năng'
       },
       {
         title: 'Học vấn',

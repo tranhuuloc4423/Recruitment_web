@@ -13,7 +13,7 @@ const Nav = ({ data }) => {
     <div className={`flex justify-center items-center w-full bg-white rounded`}>
       {data.map((item, index) => (
         <Link
-          key={item.id}
+          key={index}
           to={item.path}
           onClick={() => handlePath(index)}
           className={`p-4 para-1 ${

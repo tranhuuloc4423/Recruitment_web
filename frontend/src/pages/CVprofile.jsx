@@ -29,28 +29,6 @@ const CVprofile = () => {
 
   const downloadPDF = () => {
     console.log(1)
-    // const input = cvRef.current
-    // html2canvas(input, { useCORS: true }).then((canvas) => {
-    //   const imgData = canvas.toDataURL('image/png')
-    //   const pdf = new jsPDF('p', 'mm', 'a4')
-    //   const imgWidth = 210
-    //   const pageHeight = 297
-    //   const imgHeight = (canvas.height * imgWidth) / canvas.width
-    //   let heightLeft = imgHeight
-    //   let position = 0
-
-    //   pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
-    //   heightLeft -= pageHeight
-
-    //   while (heightLeft >= 0) {
-    //     position = heightLeft - imgHeight
-    //     pdf.addPage()
-    //     pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
-    //     heightLeft -= pageHeight
-    //   }
-
-    //   pdf.save('CV.pdf')
-    // })
   }
 
   const handleThemeChange = (themeIndex) => {
@@ -75,7 +53,7 @@ const CVprofile = () => {
   return (
     <div className="flex flex-row items-start">
       <div className="flex flex-row items-center w-1/3 gap-4">
-        {themeState.themes.map((theme, index) => (
+        {themeState?.themes.map((theme, index) => (
           <div
             key={index}
             className={`w-1/2 cursor-pointer relative ${
@@ -95,32 +73,6 @@ const CVprofile = () => {
             )}
           </div>
         ))}
-        {/* <div
-          className={`w-1/2 cursor-pointer relative ${
-            themeState.activeTheme === 0 ? 'border-second border-4' : ''
-          }`}
-          onClick={() => handleThemeChange(0)}
-        >
-          <img src={cv_t_0} alt="" className="w-full" />
-          {themeState.activeTheme === 0 && (
-            <span className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] p-3 bg-second rounded-full">
-              <FaCheck size={48} color="white" />
-            </span>
-          )}
-        </div>
-        <div
-          className={`w-1/2 cursor-pointer relative ${
-            themeState.activeTheme === 1 ? 'border-second border-4' : ''
-          }`}
-          onClick={() => handleThemeChange(1)}
-        >
-          <img src={cv_t_1} alt="" className="w-full" />
-          {themeState.activeTheme === 1 && (
-            <span className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] p-3 bg-second rounded-full">
-              <FaCheck size={48} color="white" />
-            </span>
-          )}
-        </div> */}
       </div>
       <div className="w-2/3 flex flex-col items-center justify-space-between gap-8">
         {/* Theme zone */}
@@ -135,7 +87,7 @@ const CVprofile = () => {
           <div className="flex flex-row gap-4 items-center">
             <span>Màu sắc : </span>
             <div className="flex items-center gap-2">
-              {activeTheme.color?.map((color, index) => (
+              {activeTheme?.color?.map((color, index) => (
                 <span
                   key={index}
                   className={`w-8 h-8 flex justify-center items-center cursor-pointer rounded-full border border-white ${

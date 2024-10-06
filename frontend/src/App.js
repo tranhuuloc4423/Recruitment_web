@@ -13,17 +13,17 @@ import {
 } from './pages'
 import { useEffect } from 'react'
 import { Bounce, ToastContainer } from 'react-toastify'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import 'react-toastify/dist/ReactToastify.css'
 import { setCurrentUser } from './redux/slices/authSlice'
 import { getById } from './redux/api/app'
 
-const { HOME, SIGNIN, SIGNUP, SETTINGS, INFO, POSTS, CV, TARGETS } = paths
+const { HOME, SIGNIN, SIGNUP, SETTINGS, INFO, POSTS, CV, TARGET } = paths
 
 function App() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { currentUser } = useSelector((state) => state.auth)
+  // const { currentUser } = useSelector((state) => state.auth)
 
   const fetchRoleData = async (user) => {
     await getById(user._id, dispatch, user.role)
@@ -54,7 +54,7 @@ function App() {
           <Route path={INFO} element={<Info />}>
             <Route path={''} element={<InfoProfile />} />
             <Route path={CV} element={<CVprofile />} />
-            <Route path={TARGETS} element={<Target />} />
+            <Route path={TARGET} element={<Target />} />
           </Route>
         </Route>
       </Routes>

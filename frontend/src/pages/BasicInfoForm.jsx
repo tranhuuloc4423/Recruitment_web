@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getById, updateBasicInfo } from '../redux/api/app'
+import { updateBasicInfo } from '../redux/api/app'
 import { convertToBase64 } from '../utils/functions'
 import Avatar from '../components/Avatar'
 import Input from '../components/Input'
@@ -32,21 +32,18 @@ const BasicInfoForm = ({ open, setOpen }) => {
     )
     if (valuesCheck) return
     const imagebs64 = await convertToBase64(image)
-    updateBasicInfo(
-      currentRole._id,
-      { ...values, image: imagebs64, gender: gender?.value },
-      dispatch,
-      currentUser.role
-    )
+    let data
+
+    currentUser.role === 'candidate'
+      ? (data = { ...values, gender: gender.value, image: imagebs64 })
+      : (data = { ...values, image: imagebs64 })
+    updateBasicInfo(currentRole._id, data, dispatch, currentUser.role)
     // getById(currentUser._id, dispatch, currentUser.role)
     setOpen(false)
   }
 
   return (
-    <div
-      className="fixed bg-overlay inset-0 flex justify-center items-center w-full"
-      onClick={() => setOpen(false)}
-    >
+    <div className="fixed bg-overlay inset-0 flex justify-center items-center w-full">
       <div
         className="bg-white rounded p-4 flex flex-col gap-4 w-1/2"
         onClick={(e) => e.stopPropagation()}

@@ -33,7 +33,8 @@ const recruiterSchema = new mongoose.Schema(
       },
       speciality: [
         {
-          type: String
+          type: String,
+          value: String
         }
       ],
       images: [
@@ -43,12 +44,14 @@ const recruiterSchema = new mongoose.Schema(
       ],
       types: [
         {
-          type: String
+          type: String,
+          value: String
         }
       ],
       wforms: [
         {
-          type: String
+          type: String,
+          value: String
         }
       ]
     },

@@ -3,8 +3,8 @@ import { GoBell } from 'react-icons/go'
 const Noti = () => {
   const [active, setActive] = useState(false)
   return (
-    <div className="relative cursor-pointer" onClick={() => setActive(!active)}>
-      <div>
+    <div className="relative">
+      <div className="cursor-pointer" onClick={() => setActive(!active)}>
         <GoBell size={24} color="white" />
       </div>
       <div
@@ -74,9 +74,9 @@ const Noti = () => {
           </li> */}
         </ul>
         <div className="p-4 bg-gray-50 text-center">
-          <a href="#" className="text-primary">
+          {/* <a href="#" className="text-primary">
             See all recent activity
-          </a>
+          </a> */}
         </div>
       </div>
     </div>

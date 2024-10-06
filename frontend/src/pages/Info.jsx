@@ -3,7 +3,7 @@ import Nav from '../components/Nav'
 import paths from '../utils/paths'
 import { Outlet } from 'react-router-dom'
 
-const { INFO } = paths
+const { INFO, TARGET, CV } = paths
 
 const candidateNavInfo = [
   {
@@ -14,13 +14,13 @@ const candidateNavInfo = [
   },
   {
     name: 'CV',
-    path: '/' + INFO + '/cv',
+    path: '/' + INFO + '/' + CV,
     active: false,
     id: 1
   },
   {
     name: 'Tiêu chí',
-    path: '/' + INFO + '/targets',
+    path: '/' + INFO + '/' + TARGET,
     active: false,
     id: 2
   }

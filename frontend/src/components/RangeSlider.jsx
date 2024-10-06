@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import ReactSlider from 'react-slider'
 
 const RangeSlider = ({ values, setValues }) => {
@@ -8,7 +7,7 @@ const RangeSlider = ({ values, setValues }) => {
         className="slider"
         thumbClassName="thumb"
         trackClassName="example-track"
-        defaultValue={values}
+        value={values}
         ariaLabel={['Lower thumb', 'Upper thumb']}
         ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
         pearling

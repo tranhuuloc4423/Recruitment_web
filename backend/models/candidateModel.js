@@ -42,7 +42,8 @@ const candidateSchema = new mongoose.Schema(
       },
       skills: [
         {
-          type: String
+          value: String,
+          label: String
         }
       ],
       projects: {
@@ -55,7 +56,8 @@ const candidateSchema = new mongoose.Schema(
     target: {
       skills: [
         {
-          type: String
+          value: String,
+          label: String
         }
       ],
       target_money: {
@@ -68,13 +70,20 @@ const candidateSchema = new mongoose.Schema(
       },
       types: [
         {
-          type: String
+          value: String,
+          label: String
         }
       ],
-      location: {
-        type: String
+      address: {
+        value: String,
+        label: String
       },
-      wform: [{ type: String }]
+      wforms: [
+        {
+          value: String,
+          label: String
+        }
+      ]
     },
     jobs: {
       saved: [

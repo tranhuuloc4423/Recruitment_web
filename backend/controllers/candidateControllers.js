@@ -89,7 +89,9 @@ const candidateControllers = {
       const { candidateId } = req.params
       const target = await Candidate.findOneAndUpdate(
         { _id: candidateId },
-        req.body,
+        {
+          $set: req.body
+        },
         {
           new: true
         }
