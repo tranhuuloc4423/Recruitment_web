@@ -100,6 +100,12 @@ const OtherInfo = () => {
       dispatch,
       currentUser.role
     )
+    console.log(
+      currentRole?._id,
+      { [item.name]: newValue },
+      // dispatch,
+      currentUser.role
+    )
 
     setValues((prev) => ({
       ...prev,

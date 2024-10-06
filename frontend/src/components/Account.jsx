@@ -28,18 +28,10 @@ const Account = () => {
       <div className="text-white select-none">
         {currentRole?.basic_info?.name}
       </div>
-      <IoIosArrowDown
-        size={24}
-        color="white"
-        className={`transition-transform ${
-          active
-            ? 'rotate-180 duration-200 ease-in'
-            : 'rotate-0 duration-200 ease-out'
-        }`}
-      />
+      <IoIosArrowDown size={24} color="white" />
       <div
         className={`absolute select-none w-full top-[100%] left-0 bg-white shadow-md flex flex-col rounded transition-transform ${
-          active ? 'translate-y-0' : '-translate-y-10 opacity-0'
+          active ? 'translate-y-0' : 'translate-y-0 hidden'
         } ${active ? 'duration-200' : 'duration-200'}`}
       >
         <Link to={'/settings'} className="flex items-center gap-2 px-4 py-2">

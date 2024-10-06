@@ -33,7 +33,7 @@ const recruiterSchema = new mongoose.Schema(
       },
       speciality: [
         {
-          type: String,
+          label: String,
           value: String
         }
       ],
@@ -44,13 +44,13 @@ const recruiterSchema = new mongoose.Schema(
       ],
       types: [
         {
-          type: String,
+          label: String,
           value: String
         }
       ],
       wforms: [
         {
-          type: String,
+          label: String,
           value: String
         }
       ]

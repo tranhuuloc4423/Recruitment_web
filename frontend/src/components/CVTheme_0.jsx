@@ -9,13 +9,12 @@ const CVTheme_0 = ({ color }) => {
   const { currentRole } = useSelector((state) => state.app)
   const [otherInfo, setOtherInfo] = useState()
   const [basicInfo, setBasicInfo] = useState()
-  useEffect(() => {
-    setOtherInfo(info.find((item) => item?.name === 'candidate')?.otherInfo)
-  }, [otherInfo])
 
   useEffect(() => {
-    setBasicInfo(info.find((item) => item?.name === 'candidate')?.basicInfo)
-  }, [basicInfo])
+    setBasicInfo(info.find((item) => item?.name === 'candidate').basicInfo)
+    setOtherInfo(info.find((item) => item?.name === 'candidate').otherInfo)
+  }, [])
+
   return (
     <div className="w-[794px] flex flex-col px-8 py-2 ">
       {/* header */}
@@ -25,39 +24,40 @@ const CVTheme_0 = ({ color }) => {
       >
         <div className="bg-cover w-[100px] h-[100px]">
           <img
-            src={currentRole?.basic_info.image || avatar}
+            src={currentRole?.basic_info?.image || avatar}
+            alt="avatar"
             className={`w-full h-full bg-cover bg-center`}
           />
         </div>
         <div className="flex-1 flex flex-col">
           <div className="gap-2 px-4 py-2">
             <div className="heading-3 text-white">
-              {currentRole?.basic_info.name}
+              {currentRole?.basic_info?.name}
             </div>
             <div className="para-1">UX/UI Design</div>
           </div>
           <div className="flex flex-row gap-4 px-4">
-            {basicInfo?.slice(0, 4).map(({ name, label, icon }) => (
-              <React.Fragment key={name}>
-                {icon && (
+            {basicInfo?.slice(0, 4)?.map((item, index) => (
+              <div key={index}>
+                {item?.icon && (
                   <div className="flex items-center gap-2 py-2 flex-1">
-                    <span>{icon}</span>
-                    <span>{currentRole?.basic_info[name]}</span>
+                    <span>{item?.icon}</span>
+                    <span>{currentRole?.basic_info[item.name]}</span>
                   </div>
                 )}
-              </React.Fragment>
+              </div>
             ))}
           </div>
           <div className="flex flex-row gap-4 px-4">
-            {basicInfo?.slice(4, 7).map(({ name, label, icon }) => (
-              <React.Fragment key={name}>
-                {icon && (
+            {basicInfo?.slice(4, 7)?.map((item, index) => (
+              <div key={index}>
+                {item?.icon && (
                   <div className="flex items-center gap-2 py-2 flex-1">
-                    <span>{icon}</span>
-                    <span>{currentRole?.basic_info[name]}</span>
+                    <span>{item?.icon}</span>
+                    <span>{currentRole?.basic_info[item.name]}</span>
                   </div>
                 )}
-              </React.Fragment>
+              </div>
             ))}
             <span className="flex-1"></span>
           </div>
