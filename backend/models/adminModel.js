@@ -33,7 +33,8 @@ const adminSchema = new mongoose.Schema(
       },
       speciality: [
         {
-          type: String
+          label: String,
+          value: String
         }
       ],
       images: [
@@ -43,12 +44,14 @@ const adminSchema = new mongoose.Schema(
       ],
       types: [
         {
-          type: String
+          label: String,
+          value: String
         }
       ],
       wforms: [
         {
-          type: String
+          label: String,
+          value: String
         }
       ]
     },

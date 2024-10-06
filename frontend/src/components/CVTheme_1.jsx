@@ -12,10 +12,12 @@ const CVTheme_1 = ({ color }) => {
   const [basicInfo, setBasicInfo] = useState()
   useEffect(() => {
     setOtherInfo(info.find((item) => item?.name === 'candidate')?.otherInfo)
+    console.log(otherInfo)
   }, [otherInfo])
 
   useEffect(() => {
     setBasicInfo(info.find((item) => item?.name === 'candidate')?.basicInfo)
+    console.log(otherInfo)
   }, [basicInfo])
   return (
     <div className="flex flex-col px-8 py-2 w-[794px]">
@@ -36,6 +38,7 @@ const CVTheme_1 = ({ color }) => {
         <div className="bg-cover w-[150px] h-[150px] rounded-full overflow-hidden border-2 border-white">
           <img
             src={currentRole?.basic_info.image || avatar}
+            alt="avatar"
             className={`w-full h-full bg-cover bg-center`}
           />
         </div>
@@ -47,15 +50,15 @@ const CVTheme_1 = ({ color }) => {
             <span className={`uppercase text-lg font-medium`} style={{ color }}>
               Thông tin cá nhân
             </span>
-            {basicInfo?.map(({ name, label, icon }) => (
-              <React.Fragment key={name}>
+            {basicInfo?.map(({ name, icon }) => (
+              <div key={name}>
                 {icon && (
                   <div className="flex items-center gap-2 py-2">
                     <span>{icon}</span>
                     <span>{currentRole?.basic_info[name]}</span>
                   </div>
                 )}
-              </React.Fragment>
+              </div>
             ))}
           </div>
 

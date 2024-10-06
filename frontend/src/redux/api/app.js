@@ -33,11 +33,11 @@ const updateOtherInfo = async (id, data, dispatch, role) => {
     console.log(data)
     await axios.put(`${role}/${id}/other_info`, data)
     const res = await axios.get(`${role}/${id}`)
-    dispatch(setOtherInfo(res.data.other_info))
+    dispatch(setOtherInfo(res.data?.other_info))
     toast.success('Cập nhật thông tin thành công!')
   } catch (error) {
     console.log(error)
-    toast.success('Cập nhật thông tin không thành công!')
+    toast.error('Cập nhật thông tin không thành công!')
   }
 }
 

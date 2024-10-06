@@ -41,7 +41,7 @@ const Target = () => {
 
       // Update the state based on the current role's target
       setSkills(skills || [])
-      setSalarys([target_money.min_money, target_money.max_money])
+      setSalarys([target_money?.min_money, target_money?.max_money])
       setAddress(address || null)
 
       // Update the tags based on types and wforms
