@@ -2,12 +2,42 @@ const Post = require('../models/postModel')
 const Admin = require('../models/adminModel')
 const Recruiter = require('../models/recruiterModel')
 const Candidate = require('../models/candidateModel')
-const {
-  updateAppliedJobs,
-  updateSavedJobs
-} = require('../controllers/candidateControllers')
 
 const postController = {
+  updateAppliedJobs: async (candidateId, postId) => {
+    try {
+      const updatedCandidate = await Candidate.findOneAndUpdate(
+        { _id: candidateId },
+        { $push: { 'jobs.applied': postId } },
+        { new: true }
+      )
+
+      if (!updatedCandidate) {
+        throw new Error('Candidate not found or update failed')
+      }
+
+      return updatedCandidate
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  },
+  updateSavedJobs: async (candidateId, postId) => {
+    try {
+      const updatedCandidate = await Candidate.findOneAndUpdate(
+        { _id: candidateId },
+        { $push: { 'jobs.saved': postId } },
+        { new: true }
+      )
+
+      if (!updatedCandidate) {
+        throw new Error('Candidate not found or update failed')
+      }
+
+      return updatedCandidate
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  },
   createPost: async (req, res) => {
     const { userId, userType, postData } = req.body
 
@@ -154,8 +184,8 @@ const postController = {
     }
   },
   getPostById: async (req, res) => {
-    const { userId, postId } = req.params
-    const { authorType } = req.body
+    const { postId } = req.params
+    const { userId, authorType } = req.body
 
     try {
       const post = await Post.findOne({

@@ -33,7 +33,7 @@ const notiControllers = {
 
   getNotificationsBySender: async (req, res) => {
     try {
-      const senderId = req.params.senderId
+      const { senderId } = req.params
       const notifications = await Notification.find({ sender: senderId })
       res.status(200).json(notifications)
     } catch (error) {
@@ -45,7 +45,7 @@ const notiControllers = {
 
   getNotificationsByRecipient: async (req, res) => {
     try {
-      const recipientId = req.params.recipientId
+      const { recipientId } = req.params
       const notifications = await Notification.find({ recipient: recipientId })
       res.status(200).json(notifications)
     } catch (error) {

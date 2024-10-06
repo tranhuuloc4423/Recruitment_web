@@ -4,7 +4,7 @@ const User = require('../models/userModel')
 const recruiterControllers = {
   updateBasicInfo: async (req, res) => {
     const { recruiterId } = req.params
-    const { image, field, tax_id, address, name, email } = req.body
+    const { image, field, tax_id, address, name } = req.body
 
     try {
       const basic_info = await Recruiter.findOneAndUpdate(
@@ -15,8 +15,7 @@ const recruiterControllers = {
             'basic_info.field': field,
             'basic_info.tax_id': tax_id,
             'basic_info.address': address,
-            'basic_info.name': name,
-            'basic_info.email': email
+            'basic_info.name': name
           }
         },
         { new: true }
@@ -26,7 +25,6 @@ const recruiterControllers = {
         { _id: basic_info.userId },
         {
           $set: {
-            email: email,
             name: name
           }
         },

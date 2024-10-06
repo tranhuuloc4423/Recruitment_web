@@ -4,7 +4,7 @@ const User = require('../models/userModel')
 const candidateControllers = {
   updateBasicInfo: async (req, res) => {
     const { candidateId } = req.params
-    const { image, dob, phone, address, gender, email, name } = req.body
+    const { image, dob, phone, address, gender, name } = req.body
 
     try {
       const basic_info = await Candidate.findOneAndUpdate(
@@ -16,7 +16,6 @@ const candidateControllers = {
             'basic_info.phone': phone,
             'basic_info.address': address,
             'basic_info.gender': gender,
-            'basic_info.email': email,
             'basic_info.name': name
           }
         },
@@ -31,7 +30,6 @@ const candidateControllers = {
         { _id: basic_info.userId },
         {
           $set: {
-            email: email,
             name: name
           }
         },
@@ -116,40 +114,6 @@ const candidateControllers = {
       res.status(200).json(candidate)
     } catch (error) {
       res.status(500).json(error)
-    }
-  },
-  updateAppliedJobs: async (candidateId, postId) => {
-    try {
-      const updatedCandidate = await Candidate.findOneAndUpdate(
-        { _id: candidateId },
-        { $push: { 'jobs.applied': postId } },
-        { new: true }
-      )
-
-      if (!updatedCandidate) {
-        throw new Error('Candidate not found or update failed')
-      }
-
-      return updatedCandidate
-    } catch (error) {
-      throw new Error(error.message)
-    }
-  },
-  updateSavedJobs: async (candidateId, postId) => {
-    try {
-      const updatedCandidate = await Candidate.findOneAndUpdate(
-        { _id: candidateId },
-        { $push: { 'jobs.saved': postId } },
-        { new: true }
-      )
-
-      if (!updatedCandidate) {
-        throw new Error('Candidate not found or update failed')
-      }
-
-      return updatedCandidate
-    } catch (error) {
-      throw new Error(error.message)
     }
   },
   getSavedJobs: async (req, res) => {
