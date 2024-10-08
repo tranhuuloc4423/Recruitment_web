@@ -34,6 +34,11 @@ const postSchema = new mongoose.Schema(
     desc: {
       type: String
     },
+    location: {
+      address: {
+        type: String
+      }
+    },
     request: {
       type: String
     },

@@ -1,5 +1,6 @@
 const Admin = require('../models/adminModel')
 const User = require('../models/userModel')
+const Post = require('../models/postModel')
 
 const adminControllers = {
   updateBasicInfo: async (req, res) => {
@@ -90,6 +91,57 @@ const adminControllers = {
       res.status(200).json(admin)
     } catch (error) {
       res.status(500).json(error)
+    }
+  },
+  getPosts: async (req, res) => {
+    try {
+      const { userId } = req.params
+
+      const admin = await Admin.findOne({ userId }).populate('posts')
+
+      if (!admin) {
+        return res.status(404).json({ message: 'Admin not found' })
+      }
+
+      return res.status(200).json(admin.posts)
+    } catch (err) {
+      return res.status(500).json({ error: err.message })
+    }
+  },
+
+  getConfirmedPosts: async (req, res) => {
+    try {
+      const { userId } = req.params
+
+      const admin = await Admin.findOne({ userId }).populate(
+        'manage_post.confirmed'
+      )
+
+      if (!admin) {
+        return res.status(404).json({ message: 'Admin not found' })
+      }
+
+      return res.status(200).json(admin.manage_post.confirmed)
+    } catch (err) {
+      return res.status(500).json({ error: err.message })
+    }
+  },
+
+  getPostedPosts: async (req, res) => {
+    try {
+      const { userId } = req.params
+
+      const admin = await Admin.findOne({ userId }).populate(
+        'manage_post.posted'
+      )
+
+      if (!admin) {
+        return res.status(404).json({ message: 'Admin not found' })
+      }
+
+      return res.status(200).json(admin.manage_post.posted)
+    } catch (err) {
+      return res.status(500).json({ error: err.message })
     }
   }
 }

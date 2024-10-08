@@ -45,17 +45,29 @@ const postController = {
       postData.author = userId
       postData.authorType = userType
 
+      let user
       if (userType === 'admin') {
-        postData.status = 'confirmed'
+        user = await Admin.findById(userId)
+        if (user) {
+          postData.location = { address: user.basic_info.address }
+          postData.status = 'confirmed'
+        }
       } else if (userType === 'recruiter') {
-        postData.status = 'posted'
+        user = await Recruiter.findById(userId)
+        if (user) {
+          postData.location = { address: user.basic_info.address }
+          postData.status = 'posted'
+        }
+      }
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' })
       }
 
       const newPost = await Post.create(postData)
 
-      let user
       if (userType === 'admin') {
-        user = await Admin.findByIdAndUpdate(
+        await Admin.findByIdAndUpdate(
           userId,
           {
             $push: { posts: newPost._id, 'manage_post.confirmed': newPost._id }
@@ -63,7 +75,7 @@ const postController = {
           { new: true }
         )
       } else if (userType === 'recruiter') {
-        user = await Recruiter.findByIdAndUpdate(
+        await Recruiter.findByIdAndUpdate(
           userId,
           {
             $push: { posts: newPost._id, 'manage_post.posted': newPost._id }
@@ -72,15 +84,12 @@ const postController = {
         )
       }
 
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' })
-      }
-
       res.status(201).json(newPost)
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
   },
+
   updatePost: async (req, res) => {
     const { postId } = req.params
     const { userId, authorType, updatedPost } = req.body
@@ -93,6 +102,19 @@ const postController = {
       })
       if (!post) {
         return res.status(404).json({ message: 'Author or Post not found' })
+      }
+
+      if (!updatedPost.location) {
+        let user
+        if (authorType === 'admin') {
+          user = await Admin.findById(userId)
+        } else if (authorType === 'recruiter') {
+          user = await Recruiter.findById(userId)
+        }
+
+        if (user && user.basic_info && user.basic_info.address) {
+          updatedPost.location = { address: user.basic_info.address }
+        }
       }
 
       const oldStatus = post.status
@@ -129,6 +151,7 @@ const postController = {
       res.status(500).json({ message: error.message })
     }
   },
+
   deletePost: async (req, res) => {
     const { postId } = req.params
     const { userId, authorType } = req.body

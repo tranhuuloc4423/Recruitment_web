@@ -1,5 +1,6 @@
 const Recruiter = require('../models/recruiterModel')
 const User = require('../models/userModel')
+const Post = require('../models/postModel')
 
 const recruiterControllers = {
   updateBasicInfo: async (req, res) => {
@@ -89,6 +90,57 @@ const recruiterControllers = {
       res.status(200).json(recruiter)
     } catch (error) {
       res.status(500).json(error)
+    }
+  },
+  getPosts: async (req, res) => {
+    try {
+      const { userId } = req.params
+
+      const recruiter = await Recruiter.findOne({ userId }).populate('posts')
+
+      if (!recruiter) {
+        return res.status(404).json({ message: 'Recruiter not found' })
+      }
+
+      return res.status(200).json(recruiter.posts)
+    } catch (err) {
+      return res.status(500).json({ error: err.message })
+    }
+  },
+
+  getConfirmedPosts: async (req, res) => {
+    try {
+      const { userId } = req.params
+
+      const recruiter = await Recruiter.findOne({ userId }).populate(
+        'manage_post.confirmed'
+      )
+
+      if (!recruiter) {
+        return res.status(404).json({ message: 'Recruiter not found' })
+      }
+
+      return res.status(200).json(recruiter.manage_post.confirmed)
+    } catch (err) {
+      return res.status(500).json({ error: err.message })
+    }
+  },
+
+  getPostedPosts: async (req, res) => {
+    try {
+      const { userId } = req.params
+
+      const recruiter = await Recruiter.findOne({ userId }).populate(
+        'manage_post.posted'
+      )
+
+      if (!recruiter) {
+        return res.status(404).json({ message: 'Recruiter not found' })
+      }
+
+      return res.status(200).json(recruiter.manage_post.posted)
+    } catch (err) {
+      return res.status(500).json({ error: err.message })
     }
   }
 }
