@@ -61,6 +61,12 @@ const postSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Candidate'
       }
+    ],
+    approved: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Candidate'
+      }
     ]
   },
   { timestamps: true }

@@ -1,6 +1,5 @@
 const Admin = require('../models/adminModel')
 const User = require('../models/userModel')
-const Post = require('../models/postModel')
 
 const adminControllers = {
   updateBasicInfo: async (req, res) => {
@@ -108,7 +107,6 @@ const adminControllers = {
       return res.status(500).json({ error: err.message })
     }
   },
-
   getConfirmedPosts: async (req, res) => {
     try {
       const { userId } = req.params
@@ -126,7 +124,6 @@ const adminControllers = {
       return res.status(500).json({ error: err.message })
     }
   },
-
   getPostedPosts: async (req, res) => {
     try {
       const { userId } = req.params

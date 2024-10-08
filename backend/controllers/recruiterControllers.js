@@ -1,6 +1,5 @@
 const Recruiter = require('../models/recruiterModel')
 const User = require('../models/userModel')
-const Post = require('../models/postModel')
 
 const recruiterControllers = {
   updateBasicInfo: async (req, res) => {
@@ -107,7 +106,6 @@ const recruiterControllers = {
       return res.status(500).json({ error: err.message })
     }
   },
-
   getConfirmedPosts: async (req, res) => {
     try {
       const { userId } = req.params
@@ -125,7 +123,6 @@ const recruiterControllers = {
       return res.status(500).json({ error: err.message })
     }
   },
-
   getPostedPosts: async (req, res) => {
     try {
       const { userId } = req.params

@@ -171,7 +171,9 @@ const candidateControllers = {
       res.status(200).json(candidate.jobs.followed)
     } catch (error) {
       console.error(error)
-      res.status(500).json({ message: 'Lỗi khi lấy công việc đang theo dõi' })
+      res
+        .status(500)
+        .json({ message: 'Lỗi khi lấy nhà tuyển dụng đang theo dõi' })
     }
   },
   followUser: async (req, res) => {
