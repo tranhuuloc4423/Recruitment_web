@@ -104,6 +104,12 @@ const candidateSchema = new mongoose.Schema(
           ref: 'Post'
         }
       ],
+      approved: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Post'
+        }
+      ],
       followed: [
         {
           type: mongoose.Schema.Types.ObjectId

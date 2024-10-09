@@ -63,23 +63,73 @@ const userControllers = {
 
       const savedUser = await newUser.save()
 
-      let newData = {
-        basic_info: { name, email }
+      let newCandidateData = {
+        basic_info: {
+          name,
+          email,
+          image: '',
+          dob: '',
+          phone: '',
+          address: '',
+          gender: ''
+        },
+        other_info: {
+          desc: '',
+          education: '',
+          exps: '',
+          skills: [],
+          projects: '',
+          certificates: ''
+        }
+      }
+      let newRecruiterData = {
+        basic_info: {
+          name,
+          email,
+          image: '',
+          field: '',
+          tax_id: '',
+          address: ''
+        },
+        other_info: {
+          desc: '',
+          speciality: [],
+          types: [],
+          wforms: [],
+          images: []
+        }
+      }
+      let newAdminData = {
+        basic_info: {
+          name,
+          email,
+          image: '',
+          field: '',
+          tax_id: '',
+          address: ''
+        },
+        other_info: {
+          desc: '',
+          speciality: [],
+          types: [],
+          wforms: [],
+          images: []
+        }
       }
 
       if (savedUser.role === 'candidate') {
-        newData.userId = savedUser._id
-        const newCandidate = new Candidate(newData)
+        newCandidateData.userId = savedUser._id
+        const newCandidate = new Candidate(newCandidateData)
         const savedCandidate = await newCandidate.save()
         res.status(201).json(savedCandidate)
       } else if (savedUser.role === 'recruiter') {
-        newData.userId = savedUser._id
-        const newRecruiter = new Recruiter(newData)
+        newRecruiterData.userId = savedUser._id
+        const newRecruiter = new Recruiter(newRecruiterData)
         const savedRecruiter = await newRecruiter.save()
         res.status(201).json(savedRecruiter)
       } else if (savedUser.role === 'admin') {
-        newData.userId = savedUser._id
-        const newAdmin = new Admin(newData)
+        newAdminData.userId = savedUser._id
+        const newAdmin = new Admin(newAdminData)
         const savedAdmin = await newAdmin.save()
         res.status(201).json(savedAdmin)
       } else {

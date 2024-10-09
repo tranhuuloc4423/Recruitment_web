@@ -21,6 +21,23 @@ const postController = {
       throw new Error(error.message)
     }
   },
+  updateApprovedJobs: async (candidateId, postId) => {
+    try {
+      const updatedCandidate = await Candidate.findOneAndUpdate(
+        { _id: candidateId },
+        { $push: { 'jobs.approved': postId } },
+        { new: true }
+      )
+
+      if (!updatedCandidate) {
+        throw new Error('Candidate not found or update failed')
+      }
+
+      return updatedCandidate
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  },
   updateSavedJobs: async (candidateId, postId) => {
     try {
       const updatedCandidate = await Candidate.findOneAndUpdate(
@@ -45,17 +62,29 @@ const postController = {
       postData.author = userId
       postData.authorType = userType
 
+      let user
       if (userType === 'admin') {
-        postData.status = 'confirmed'
+        user = await Admin.findById(userId)
+        if (user) {
+          postData.location = { address: user.basic_info.address }
+          postData.status = 'confirmed'
+        }
       } else if (userType === 'recruiter') {
-        postData.status = 'posted'
+        user = await Recruiter.findById(userId)
+        if (user) {
+          postData.location = { address: user.basic_info.address }
+          postData.status = 'posted'
+        }
+      }
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' })
       }
 
       const newPost = await Post.create(postData)
 
-      let user
       if (userType === 'admin') {
-        user = await Admin.findByIdAndUpdate(
+        await Admin.findByIdAndUpdate(
           userId,
           {
             $push: { posts: newPost._id, 'manage_post.confirmed': newPost._id }
@@ -63,17 +92,13 @@ const postController = {
           { new: true }
         )
       } else if (userType === 'recruiter') {
-        user = await Recruiter.findByIdAndUpdate(
+        await Recruiter.findByIdAndUpdate(
           userId,
           {
             $push: { posts: newPost._id, 'manage_post.posted': newPost._id }
           },
           { new: true }
         )
-      }
-
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' })
       }
 
       res.status(201).json(newPost)
@@ -93,6 +118,19 @@ const postController = {
       })
       if (!post) {
         return res.status(404).json({ message: 'Author or Post not found' })
+      }
+
+      if (!updatedPost.location) {
+        let user
+        if (authorType === 'admin') {
+          user = await Admin.findById(userId)
+        } else if (authorType === 'recruiter') {
+          user = await Recruiter.findById(userId)
+        }
+
+        if (user && user.basic_info && user.basic_info.address) {
+          updatedPost.location = { address: user.basic_info.address }
+        }
       }
 
       const oldStatus = post.status
@@ -166,6 +204,46 @@ const postController = {
     }
   },
   getAllPosts: async (req, res) => {
+    try {
+      const posts = await Post.find()
+
+      res.status(200).json(posts)
+    } catch (error) {
+      console.error('Có lỗi xảy ra khi lấy các bài Post:', error)
+      res.status(500).json({ message: 'Không thể lấy các bài Post.' })
+    }
+  },
+  getAllConfirmedPosts: async (req, res) => {
+    try {
+      const posts = await Post.find({ status: 'confirmed' })
+
+      res.status(200).json(posts)
+    } catch (error) {
+      console.error('Có lỗi xảy ra khi lấy các bài Post:', error)
+      res.status(500).json({ message: 'Không thể lấy các bài Post.' })
+    }
+  },
+
+  getDataByKeyword: async (req, res) => {
+    try {
+      const { keyword } = req.query
+
+      const posts = await Post.find({
+        status: 'confirmed',
+        $or: [
+          { title: { $regex: keyword, $options: 'i' } },
+          { skills: { $regex: keyword, $options: 'i' } },
+          { 'location.address': { $regex: keyword, $options: 'i' } }
+        ]
+      })
+
+      res.status(200).json(posts)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: 'Lỗi khi tìm kiếm bài đăng.' })
+    }
+  },
+  getPostByUserId: async (req, res) => {
     const { userId } = req.params
     const { authorType } = req.body
 
@@ -251,6 +329,35 @@ const postController = {
       res.status(500).json({ message: error.message })
     }
   },
+  updateApproved: async (req, res) => {
+    const { postId } = req.params
+    const { candidateId } = req.body
+
+    try {
+      const candidate = await Candidate.findById(candidateId)
+      if (!candidate) {
+        return res.status(404).json({ message: 'Candidate not found' })
+      }
+
+      const post = await Post.findById(postId)
+      if (!post) {
+        return res.status(404).json({ message: 'Post not found' })
+      }
+
+      if (post.quantity && post.approved.length >= post.quantity) {
+        return res.status(400).json({ message: 'Approved list is full' })
+      }
+
+      post.approved.push(candidateId)
+      await post.save()
+
+      await updateApprovedJobs(candidateId, postId)
+
+      res.json({ message: 'Applied updated successfully', post })
+    } catch (error) {
+      res.status(500).json({ message: error.message })
+    }
+  },
   updateSaved: async (req, res) => {
     const { postId } = req.params
     const { candidateId } = req.body
@@ -279,7 +386,7 @@ const postController = {
     }
   },
   updateStatus: async (req, res) => {
-    const { postId } = req.body
+    const { postId } = req.params
     const { userId, authorId } = req.body
 
     try {

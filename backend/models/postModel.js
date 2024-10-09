@@ -34,6 +34,11 @@ const postSchema = new mongoose.Schema(
     desc: {
       type: String
     },
+    location: {
+      address: {
+        type: String
+      }
+    },
     request: {
       type: String
     },
@@ -52,6 +57,12 @@ const postSchema = new mongoose.Schema(
       default: 0
     },
     applied: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Candidate'
+      }
+    ],
+    approved: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Candidate'

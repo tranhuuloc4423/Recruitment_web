@@ -5,7 +5,7 @@ const notiSchema = new mongoose.Schema(
     sender: mongoose.Schema.Types.ObjectId,
     recipient: mongoose.Schema.Types.ObjectId,
     time: {
-      type: Date
+      type: String
     },
     title: {
       type: String
