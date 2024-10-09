@@ -26,7 +26,7 @@ const RichText = ({ value, onChange, label, name }) => {
   }
   return (
     <div className="w-full">
-      <div className="heading-3 text-left">{label}</div>
+      <div className="heading-3 font-medium text-left">{label}</div>
       <ReactQuill
         ref={richRef}
         theme="snow"

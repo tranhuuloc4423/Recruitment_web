@@ -9,7 +9,7 @@ const Noti = () => {
       </div>
       <div
         className={`w-72 bg-white shadow-md rounded overflow-hidden absolute top-[100%] right-[-8px] transition-all ${
-          active ? 'translate-y-0' : '-translate-y-10 opacity-0'
+          active ? 'translate-y-0 mt-2' : 'translate-y-10 hidden'
         }`}
       >
         <div className="bg-second text-white heading-3 px-4 py-2 flex justify-between items-center">

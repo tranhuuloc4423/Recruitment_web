@@ -7,7 +7,9 @@ const paths = {
   INFO: 'info',
   POSTS: 'posts',
   CV: 'cv',
-  TARGET: 'target'
+  TARGET: 'target',
+  MANAGE: 'manage',
+  CHART: 'chart'
 }
 
 export default paths

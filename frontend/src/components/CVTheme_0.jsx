@@ -7,13 +7,14 @@ import avatar from '../assets/imgs/blank-profile-picture-973460_960_720.png'
 
 const CVTheme_0 = ({ color }) => {
   const { currentRole } = useSelector((state) => state.app)
-  const [otherInfo, setOtherInfo] = useState()
-  const [basicInfo, setBasicInfo] = useState()
+  const [otherInfo, setOtherInfo] = useState([])
+  const [basicInfo, setBasicInfo] = useState([])
 
   useEffect(() => {
-    setBasicInfo(info.find((item) => item?.name === 'candidate').basicInfo)
-    setOtherInfo(info.find((item) => item?.name === 'candidate').otherInfo)
-  }, [])
+    let renderInfo = info.find((item) => item?.name === 'candidate')
+    setBasicInfo(renderInfo?.basicInfo)
+    setOtherInfo(renderInfo?.otherInfo)
+  }, [currentRole.basic_info, currentRole.other_info, basicInfo, otherInfo])
 
   return (
     <div className="w-[794px] flex flex-col px-8 py-2 ">
@@ -36,8 +37,8 @@ const CVTheme_0 = ({ color }) => {
             </div>
             <div className="para-1">UX/UI Design</div>
           </div>
-          <div className="flex flex-row gap-4 px-4">
-            {basicInfo?.slice(0, 4)?.map((item, index) => (
+          <div className="grid grid-cols-3 grid-flow-row gap-2 px-4">
+            {basicInfo?.slice(1, 4)?.map((item, index) => (
               <div key={index}>
                 {item?.icon && (
                   <div className="flex items-center gap-2 py-2 flex-1">
@@ -47,8 +48,6 @@ const CVTheme_0 = ({ color }) => {
                 )}
               </div>
             ))}
-          </div>
-          <div className="flex flex-row gap-4 px-4">
             {basicInfo?.slice(4, 7)?.map((item, index) => (
               <div key={index}>
                 {item?.icon && (
@@ -59,7 +58,6 @@ const CVTheme_0 = ({ color }) => {
                 )}
               </div>
             ))}
-            <span className="flex-1"></span>
           </div>
         </div>
       </div>
@@ -68,10 +66,24 @@ const CVTheme_0 = ({ color }) => {
         {otherInfo?.map((item, index) => {
           return (
             <div key={index} className="flex flex-col gap-4 py-2">
-              <div className="flex flex-row items-start justify-between gap-4">
+              <div className="flex flex-col items-start justify-between gap-4">
                 <span className="text-xl">{item.title}</span>
                 <div className="flex-1">
-                  {currentRole?.other_info[item.name]}
+                  {item?.name === 'skills' ? (
+                    <div>
+                      {currentRole?.other_info?.[item.name]?.map((skill) => (
+                        <div key={skill.value} className="para-1">
+                          {skill?.label}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: currentRole?.other_info?.[item.name]
+                      }}
+                    ></div>
+                  )}
                 </div>
               </div>
               {index === otherInfo.length - 1 ? '' : <Line />}

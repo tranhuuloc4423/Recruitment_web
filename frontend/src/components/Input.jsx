@@ -1,6 +1,4 @@
-import { useRef, useState } from 'react'
-import RichTextEditor from './RichText'
-import RichText from './RichText'
+import { useState } from 'react'
 
 const Input = (props) => {
   const [focused, setFocused] = useState(false)

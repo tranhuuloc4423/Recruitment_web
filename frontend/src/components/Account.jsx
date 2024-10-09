@@ -25,9 +25,9 @@ const Account = () => {
       onClick={() => setActive(!active)}
     >
       <img src={avatar} alt="avatar" className="rounded-full w-10 h-10" />
-      <div className="text-white select-none">
+      <span className="text-white select-none whitespace-nowrap overflow-hidden text-ellipsis">
         {currentRole?.basic_info?.name}
-      </div>
+      </span>
       <IoIosArrowDown size={24} color="white" />
       <div
         className={`absolute select-none w-full top-[100%] left-0 bg-white shadow-md flex flex-col rounded transition-transform ${

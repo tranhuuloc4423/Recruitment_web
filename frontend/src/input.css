@@ -28,6 +28,14 @@
     font-size: 8px;
   }
 
+  .flex-row-center {
+    @apply flex flex-row items-center;
+  }
+
+  .flex-col-center {
+    @apply flex flex-col items-center;
+  }
+
   .input input:invalid[focused='true'] {
     @apply border-2 border-red;
   }
