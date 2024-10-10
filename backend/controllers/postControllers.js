@@ -111,11 +111,7 @@ const postController = {
     const { userId, authorType, updatedPost } = req.body
 
     try {
-      const post = await Post.findOne({
-        _id: postId,
-        author: userId,
-        authorType
-      })
+      const post = await Post.findById(postId)
       if (!post) {
         return res.status(404).json({ message: 'Author or Post not found' })
       }
@@ -171,28 +167,26 @@ const postController = {
     const { postId } = req.params
     const { userId, authorType } = req.body
 
+    console.log(postId)
+    console.log(userId)
+    console.log(authorType)
+
     try {
-      const post = await Post.findOne({
-        _id: postId,
-        author: userId,
-        authorType
-      })
+      const post = await Post.findById(postId)
       if (!post) {
         return res.status(404).json({ message: 'Author or Post not found' })
       }
 
       await Post.findByIdAndDelete(postId)
 
-      const postObjectId = mongoose.Types.ObjectId(postId)
-
       const Model = authorType === 'admin' ? Admin : Recruiter
       await Model.findByIdAndUpdate(
         userId,
         {
           $pull: {
-            posts: postObjectId,
-            'manage_post.confirmed': postObjectId,
-            'manage_post.posted': postObjectId
+            posts: postId,
+            'manage_post.confirmed': postId,
+            'manage_post.posted': postId
           }
         },
         { new: true }
@@ -223,32 +217,11 @@ const postController = {
       res.status(500).json({ message: 'Không thể lấy các bài Post.' })
     }
   },
-
-  getDataByKeyword: async (req, res) => {
-    try {
-      const { keyword } = req.query
-
-      const posts = await Post.find({
-        status: 'confirmed',
-        $or: [
-          { title: { $regex: keyword, $options: 'i' } },
-          { skills: { $regex: keyword, $options: 'i' } },
-          { 'location.address': { $regex: keyword, $options: 'i' } }
-        ]
-      })
-
-      res.status(200).json(posts)
-    } catch (error) {
-      console.error(error)
-      res.status(500).json({ message: 'Lỗi khi tìm kiếm bài đăng.' })
-    }
-  },
   getPostByUserId: async (req, res) => {
     const { userId } = req.params
-    const { authorType } = req.body
 
     try {
-      const posts = await Post.find({ author: userId, authorType })
+      const posts = await Post.find({ author: userId })
 
       if (!posts || posts.length === 0) {
         return res
@@ -287,7 +260,7 @@ const postController = {
     const { postId } = req.params
 
     try {
-      const post = await Post.findByIdAndUpdate(
+      let post = await Post.findByIdAndUpdate(
         postId,
         { $inc: { views: 1 } },
         { new: true }
@@ -295,6 +268,21 @@ const postController = {
 
       if (!post) {
         return res.status(404).json({ message: 'Post not found' })
+      }
+
+      let updateType = null
+      if (post.views >= 200 && post.type !== 'superhot') {
+        updateType = 'superhot'
+      } else if (post.views >= 100 && post.type !== 'hot') {
+        updateType = 'hot'
+      }
+
+      if (updateType) {
+        post = await Post.findByIdAndUpdate(
+          postId,
+          { type: updateType },
+          { new: true }
+        )
       }
 
       res.json({ message: 'Views updated successfully', post })
@@ -436,6 +424,20 @@ const postController = {
       res.status(400).json({ message: 'Invalid post status' })
     } catch (error) {
       res.status(500).json({ message: error.message })
+    }
+  },
+  searchPostsByKeyword: async (req, res) => {
+    const { keyword } = req.query
+
+    try {
+      const posts = await Post.findFuzzy(
+        { $or: ['title', 'skills', 'location.address'] },
+        keyword
+      )
+
+      res.json(posts)
+    } catch (err) {
+      res.status(500).json({ message: err.message })
     }
   }
 }

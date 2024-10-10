@@ -24,6 +24,20 @@ const adminSchema = new mongoose.Schema(
         type: String
       },
       address: {
+        province: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Address'
+        },
+        district: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Address.districts'
+        },
+        ward: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Address.districts.wards'
+        }
+      },
+      phone: {
         type: String
       }
     },
@@ -33,8 +47,8 @@ const adminSchema = new mongoose.Schema(
       },
       speciality: [
         {
-          label: String,
-          value: String
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Skill'
         }
       ],
       images: [

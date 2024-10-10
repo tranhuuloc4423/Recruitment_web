@@ -23,11 +23,22 @@ const candidateSchema = new mongoose.Schema(
         type: String
       },
       address: {
-        type: String
+        province: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Address'
+        },
+        district: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Address.districts'
+        },
+        ward: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Address.districts.wards'
+        }
       },
       gender: {
         type: String,
-        enum: ['male', 'female']
+        enum: ['male', 'female', 'other']
       }
     },
     other_info: {
@@ -42,8 +53,8 @@ const candidateSchema = new mongoose.Schema(
       },
       skills: [
         {
-          value: String,
-          label: String
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Skill'
         }
       ],
       projects: {
@@ -75,8 +86,10 @@ const candidateSchema = new mongoose.Schema(
         }
       ],
       address: {
-        value: String,
-        label: String
+        province: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Address'
+        }
       },
       wforms: [
         {
