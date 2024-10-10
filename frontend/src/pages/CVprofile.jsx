@@ -7,8 +7,8 @@ import Button from '../components/Button'
 import { FiDownload } from 'react-icons/fi'
 import CVTheme_0 from '../components/CVTheme_0'
 import CVTheme_1 from '../components/CVTheme_1'
-import html2canvas from 'html2canvas'
-import jsPDF from 'jspdf'
+// import html2canvas from 'html2canvas'
+// import jsPDF from 'jspdf'
 
 const CVprofile = () => {
   const { currentRole } = useSelector((state) => state.app)

@@ -1,31 +1,7 @@
 import { useSelector } from 'react-redux'
 import Nav from '../components/Nav'
-import paths from '../utils/paths'
 import { Outlet } from 'react-router-dom'
-
-const { INFO, TARGET, CV } = paths
-
-const candidateNavInfo = [
-  {
-    name: 'Hồ sơ',
-    path: '/' + INFO + '/',
-    active: true,
-    id: 0
-  },
-  {
-    name: 'CV',
-    path: '/' + INFO + '/' + CV,
-    active: false,
-    id: 1
-  },
-  {
-    name: 'Tiêu chí',
-    path: '/' + INFO + '/' + TARGET,
-    active: false,
-    id: 2
-  }
-]
-
+import { candidateNavInfo } from '../utils/nav'
 const Info = () => {
   const { currentUser } = useSelector((state) => state.auth)
 

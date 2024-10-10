@@ -14,7 +14,7 @@ const Button = ({
       }
     >
       {iconPosition === 'left' && icon && <span className="">{icon}</span>}
-      <span className="text-white text-center">{label}</span>
+      <div className="text-white text-center whitespace-nowrap">{label}</div>
       {iconPosition === 'right' && icon && <span className="">{icon}</span>}
     </div>
   )

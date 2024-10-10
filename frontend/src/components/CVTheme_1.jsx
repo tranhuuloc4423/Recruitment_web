@@ -11,14 +11,10 @@ const CVTheme_1 = ({ color }) => {
   const [otherInfo, setOtherInfo] = useState()
   const [basicInfo, setBasicInfo] = useState()
   useEffect(() => {
-    setOtherInfo(info.find((item) => item?.name === 'candidate')?.otherInfo)
-    console.log(otherInfo)
-  }, [otherInfo])
-
-  useEffect(() => {
-    setBasicInfo(info.find((item) => item?.name === 'candidate')?.basicInfo)
-    console.log(otherInfo)
-  }, [basicInfo])
+    let renderInfo = info.find((item) => item?.name === 'candidate')
+    setBasicInfo(renderInfo?.basicInfo)
+    setOtherInfo(renderInfo?.otherInfo)
+  }, [currentRole.basic_info, currentRole.other_info])
   return (
     <div className="flex flex-col px-8 py-2 w-[794px]">
       {/* header */}
@@ -29,7 +25,7 @@ const CVTheme_1 = ({ color }) => {
         <div className="flex-1 flex flex-col">
           <div className="gap-2 pb-6">
             <div className="heading-1 font-medium">
-              {currentRole?.basic_info.name}
+              {currentRole?.basic_info?.name}
             </div>
             <div className="para-1">UX/UI Design</div>
           </div>
@@ -64,8 +60,8 @@ const CVTheme_1 = ({ color }) => {
 
           {otherInfo?.slice(0, 3).map((item, index) => {
             return (
-              <div key={index} className="flex flex-col gap-4 py-2">
-                <div className="flex flex-row items-start justify-between gap-4">
+              <div key={index} className="flex flex-col gap-4">
+                <div className="flex flex-col items-start justify-between gap-4">
                   <span
                     className={`uppercase text-lg font-medium`}
                     style={{ color }}
@@ -73,7 +69,24 @@ const CVTheme_1 = ({ color }) => {
                     {item.title}
                   </span>
                   <div className="flex-1">
-                    {currentRole?.other_info[item.name]}
+                    {item?.name === 'skills' ? (
+                      <div>
+                        {currentRole?.other_info?.[item?.name]?.map((skill) => (
+                          <div
+                            key={skill.value}
+                            className="flex items-center gap-2"
+                          >
+                            <span>{skill?.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: currentRole?.other_info?.[item.name]
+                        }}
+                      ></div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -84,8 +97,8 @@ const CVTheme_1 = ({ color }) => {
         <div className="flex flex-col gap-4 w-[65%]">
           {otherInfo?.slice(3, 6).map((item, index) => {
             return (
-              <div key={index} className="flex flex-col gap-4 py-2 w-full">
-                <div className="flex flex-row items-start justify-between gap-4">
+              <div key={index} className="flex flex-col gap-4 w-full">
+                <div className="flex flex-col items-start justify-between gap-4">
                   <span
                     className={`uppercase text-lg font-medium`}
                     style={{ color }}
@@ -93,7 +106,24 @@ const CVTheme_1 = ({ color }) => {
                     {item.title}
                   </span>
                   <div className="flex-1">
-                    {currentRole?.other_info[item.name]}
+                    {item?.name === 'skills' ? (
+                      <div>
+                        {currentRole?.other_info?.[item?.name]?.map((skill) => (
+                          <div
+                            key={skill.value}
+                            className="flex items-center gap-2 py-2"
+                          >
+                            <span>{skill?.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: currentRole?.other_info?.[item.name]
+                        }}
+                      ></div>
+                    )}
                   </div>
                 </div>
               </div>

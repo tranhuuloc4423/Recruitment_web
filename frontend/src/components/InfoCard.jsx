@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GoPlusCircle } from 'react-icons/go'
 import { IoClose } from 'react-icons/io5'
 import Line from './Line'
@@ -7,6 +7,7 @@ import Button from './Button'
 const InfoCard = (props) => {
   const { title, desc, children, childTitle, onClick, open, setOpen, infos } =
     props
+
   return (
     <>
       <div className="flex flex-col bg-white rounded p-4 gap-2">

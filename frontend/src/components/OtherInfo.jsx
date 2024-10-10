@@ -33,47 +33,29 @@ const OtherInfo = () => {
     }
   ]
 
-  // useEffect(() => {
-  //   if (currentUser?.role === 'candidate') {
-  //     setValues({
-  //       desc: '',
-  //       exps: '',
-  //       education: '',
-  //       certificates: '',
-  //       skills: '',
-  //       projects: ''
-  //     })
-  //   } else {
-  //     setValues({
-  //       desc: '',
-  //       speciality: '',
-  //       images: '',
-  //       types: '',
-  //       wforms: ''
-  //     })
-  //   }
-  // }, [currentUser?.role])
-
   useEffect(() => {
     if (currentUser?.role === 'candidate') {
-      setValues({
-        desc: currentRole?.other_info?.desc || '',
-        exps: currentRole?.other_info?.exps || '',
-        education: currentRole?.other_info?.education || '',
-        certificates: currentRole?.other_info?.certificates || '',
-        skills: currentRole?.other_info?.skills || [],
-        projects: currentRole?.other_info?.projects || ''
-      })
+      setValues((prevValues) => ({
+        ...prevValues,
+        desc: currentRole?.other_info?.desc || prevValues.desc,
+        exps: currentRole?.other_info?.exps || prevValues.exps,
+        education: currentRole?.other_info?.education || prevValues.education,
+        certificates:
+          currentRole?.other_info?.certificates || prevValues.certificates,
+        skills: currentRole?.other_info?.skills || prevValues.skills
+      }))
     } else {
-      setValues({
-        desc: currentRole?.other_info?.desc || '',
-        speciality: currentRole?.other_info?.speciality || [],
-        images: currentRole?.other_info?.images || '',
-        types: currentRole?.other_info?.types || [],
-        wforms: currentRole?.other_info?.wforms || []
-      })
+      setValues((prevValues) => ({
+        ...prevValues,
+        desc: currentRole?.other_info?.desc || prevValues.desc,
+        speciality:
+          currentRole?.other_info?.speciality || prevValues.speciality,
+        images: currentRole?.other_info?.images || prevValues.images,
+        types: currentRole?.other_info?.types || prevValues.types,
+        wforms: currentRole?.other_info?.wforms || prevValues.wforms
+      }))
     }
-  }, [currentUser?.role, currentRole])
+  }, [currentRole, currentUser?.role])
 
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value })
@@ -99,30 +81,18 @@ const OtherInfo = () => {
       { [item.name]: newValue },
       dispatch,
       currentUser.role
-    )
-    console.log(
-      currentRole?._id,
-      { [item.name]: newValue },
-      // dispatch,
-      currentUser.role
-    )
+    ).then(() => {
+      setValues((prev) => ({
+        ...prev,
+        [item.name]: newValue
+      }))
 
-    setValues((prev) => ({
-      ...prev,
-      [item.name]: newValue
-    }))
-
-    setOpenStates((prev) => ({
-      ...prev,
-      [item.id]: false
-    }))
+      setOpenStates((prev) => ({
+        ...prev,
+        [item.id]: false
+      }))
+    })
   }
-
-  useEffect(() => {
-    if (currentUser) {
-      console.log(currentRole)
-    }
-  }, [currentUser, currentRole])
 
   const toggleOpen = (id) => {
     setOpenStates((prev) => ({
@@ -135,11 +105,12 @@ const OtherInfo = () => {
     <div className="gap-4 w-[70%] flex flex-col">
       {info
         .find((item) => item?.name === currentUser?.role)
-        ?.otherInfo.map((item) => (
+        ?.otherInfo?.map((item) => (
           <InfoCard
             key={item.id}
             title={item.title}
             desc={item.desc}
+            value={values[item?.name]}
             open={openStates[item.id] || false}
             setOpen={() => toggleOpen(item.id)}
             children={
@@ -168,20 +139,23 @@ const OtherInfo = () => {
             }
             infos={
               <>
-                {item.type === 'richText' && (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: currentRole.other_info[item.name]
-                    }}
-                  ></div>
-                )}
-                {item.type === 'dropdown' && (
-                  <div className="flex flex-row gap-2">
-                    {currentRole.other_info[item.name]?.map((item, index) => (
-                      <Tag key={item.value} label={item.label} />
-                    ))}
-                  </div>
-                )}
+                {item.type === 'richText' &&
+                  item?.name &&
+                  currentRole?.other_info?.[item?.name] && (
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: currentRole?.other_info[item?.name]
+                      }}
+                    ></div>
+                  )}
+                {item.type === 'dropdown' &&
+                  currentRole?.other_info?.[item.name]?.length > 0 && (
+                    <div className="flex flex-row gap-2">
+                      {currentRole?.other_info[item?.name]?.map((item) => (
+                        <Tag key={item.value} label={item.label} />
+                      ))}
+                    </div>
+                  )}
               </>
             }
             onClick={() => handleOtherInfo(item)}

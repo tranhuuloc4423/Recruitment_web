@@ -1,4 +1,4 @@
-import { IoMailOutline, IoLocationOutline } from 'react-icons/io5'
+import { IoLocationOutline } from 'react-icons/io5'
 import { LuCake } from 'react-icons/lu'
 import { FiPhone } from 'react-icons/fi'
 import { BsGenderAmbiguous } from 'react-icons/bs'
@@ -12,23 +12,24 @@ const info = [
         id: 0,
         name: 'name',
         type: 'text',
-        placeholder: 'Họ và Tên',
-        error: 'Họ và Tên ít nhất 6 ký tự',
-        pattern: '.{6,}',
-        label: 'Họ và Tên',
+        placeholder: 'Tên công ty (Doanh nghiệp)',
+        error:
+          'Tên công ty (Doanh nghiệp) ít nhất 6 ký tự và nhiều nhất 24 ký tự',
+        pattern: '.{6,24}',
+        label: 'Tên công ty (Doanh nghiệp)',
         required: true
       },
-      {
-        id: 1,
-        name: 'email',
-        type: 'email',
-        placeholder: 'Email',
-        error: 'Địa chỉ email không hợp lệ',
-        pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
-        label: 'Email',
-        required: true,
-        icon: <IoMailOutline size={24} />
-      },
+      // {
+      //   id: 1,
+      //   name: 'email',
+      //   type: 'email',
+      //   placeholder: 'Email',
+      //   error: 'Địa chỉ email không hợp lệ',
+      //   pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
+      //   label: 'Email',
+      //   required: true,
+      //   icon: <IoMailOutline size={24} />
+      // },
       {
         id: 2,
         name: 'field',
@@ -161,23 +162,23 @@ const info = [
         id: 0,
         name: 'name',
         type: 'text',
-        placeholder: 'Họ và Tên',
-        error: 'Họ và Tên ít nhất 6 ký tự',
-        pattern: '.{6,}',
-        label: 'Họ và Tên',
+        placeholder: 'Tên Công Ty (Doanh nghiệp)',
+        error: 'Tên Công Ty (Doanh nghiệp) nhất 6 ký tự và nhiều nhất 24 ký tự',
+        pattern: '.{6,24}',
+        label: 'Tên Công Ty (Doanh nghiệp)',
         required: true
       },
-      {
-        id: 1,
-        name: 'email',
-        type: 'email',
-        placeholder: 'Email',
-        error: 'Địa chỉ email không hợp lệ',
-        pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
-        label: 'Email',
-        required: true,
-        icon: <IoMailOutline size={24} />
-      },
+      // {
+      //   id: 1,
+      //   name: 'email',
+      //   type: 'email',
+      //   placeholder: 'Email',
+      //   error: 'Địa chỉ email không hợp lệ',
+      //   pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
+      //   label: 'Email',
+      //   required: true,
+      //   icon: <IoMailOutline size={24} />
+      // },
       {
         id: 2,
         name: 'field',
@@ -290,17 +291,17 @@ const info = [
         label: 'Họ và Tên',
         required: true
       },
-      {
-        id: 3,
-        name: 'email',
-        type: 'email',
-        placeholder: 'Email',
-        error: 'Địa chỉ email không hợp lệ',
-        pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
-        label: 'Email',
-        required: true,
-        icon: <IoMailOutline size={24} />
-      },
+      // {
+      //   id: 3,
+      //   name: 'email',
+      //   type: 'email',
+      //   placeholder: 'Email',
+      //   error: 'Địa chỉ email không hợp lệ',
+      //   pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
+      //   label: 'Email',
+      //   required: true,
+      //   icon: <IoMailOutline size={24} />
+      // },
       {
         id: 4,
         name: 'dob',

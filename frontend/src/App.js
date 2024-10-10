@@ -5,11 +5,12 @@ import {
   Signin,
   Signup,
   Settings,
-  Posts,
+  Main,
   Info,
   CVprofile,
   Target,
-  InfoProfile
+  InfoProfile,
+  Manage
 } from './pages'
 import { useEffect } from 'react'
 import { Bounce, ToastContainer } from 'react-toastify'
@@ -17,8 +18,10 @@ import { useDispatch } from 'react-redux'
 import 'react-toastify/dist/ReactToastify.css'
 import { setCurrentUser } from './redux/slices/authSlice'
 import { getById } from './redux/api/app'
+import { CreatePost } from './components'
 
-const { HOME, SIGNIN, SIGNUP, SETTINGS, INFO, POSTS, CV, TARGET } = paths
+const { HOME, SIGNIN, SIGNUP, SETTINGS, INFO, POSTS, CV, TARGET, MANAGE } =
+  paths
 
 function App() {
   const navigate = useNavigate()
@@ -49,12 +52,16 @@ function App() {
         <Route path={SIGNIN} element={<Signin />} />
         <Route path={SIGNUP} element={<Signup />} />
         <Route path={HOME} element={<Home />}>
-          <Route path={POSTS} element={<Posts />} />
+          <Route path={POSTS} element={<Main />} />
           <Route path={SETTINGS} element={<Settings />} />
           <Route path={INFO} element={<Info />}>
             <Route path={''} element={<InfoProfile />} />
             <Route path={CV} element={<CVprofile />} />
             <Route path={TARGET} element={<Target />} />
+          </Route>
+          <Route path={MANAGE} element={<Manage />}>
+            {/* <Route path="create-post" element /> */}
+            <Route path="" element={<CreatePost />} />
           </Route>
         </Route>
       </Routes>
