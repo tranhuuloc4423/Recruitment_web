@@ -1,11 +1,17 @@
 const express = require('express')
 const router = express.Router()
-const skillControllers = require('../controllers/skillControllers')
+const {
+  fetchAndSaveSkills,
+  getAllSkills,
+  getSkillById,
+  createSkill,
+  deleteSkill
+} = require('../controllers/skillControllers')
 
-router.get('/fetch-and-save', skillControllers.fetchAndSaveSkills)
-router.get('/', skillControllers.getAllSkills)
-router.get('/:id', skillControllers.getSkillById)
-router.post('/', skillControllers.createSkill)
-router.delete('/:id', skillControllers.deleteSkill)
+router.get('/fetch-and-save', fetchAndSaveSkills)
+router.get('/', getAllSkills)
+router.get('/:id', getSkillById)
+router.post('/', createSkill)
+router.delete('/:id', deleteSkill)
 
 module.exports = router

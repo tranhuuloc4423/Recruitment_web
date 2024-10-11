@@ -4,14 +4,14 @@ const skillControllers = {
   fetchAndSaveSkills: async (req, res) => {
     try {
       const skillsData = [
-        { value: 'ReactJS', label: 'Frontend' },
-        { value: 'NodeJS', label: 'Backend' },
-        { value: 'MongoDB', label: 'Database' },
-        { value: 'JavaScript', label: 'Programming Language' },
-        { value: 'HTML', label: 'Frontend' },
-        { value: 'CSS', label: 'Frontend' },
-        { value: 'ExpressJS', label: 'Backend' },
-        { value: 'Python', label: 'Programming Language' }
+        { value: 'reactjs', label: 'React JS' },
+        { value: 'nodejs', label: 'NodeJS' },
+        { value: 'mongodb', label: 'MongoDB' },
+        { value: 'javascript', label: 'JavaScript' },
+        { value: 'html', label: 'HTML' },
+        { value: 'css', label: 'CSS' },
+        { value: 'expressjs', label: 'ExpressJS' },
+        { value: 'python', label: 'Python' }
       ]
       const operations = skillsData.map((skill) => ({
         updateOne: {

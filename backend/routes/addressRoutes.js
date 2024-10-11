@@ -1,18 +1,18 @@
 const express = require('express')
 const router = express.Router()
-const addressControllers = require('../controllers/addressControllers')
+const {
+  getProvinceByCode,
+  getDistrictsByProvinceCode,
+  getWardsByDistrictCode,
+  deleteProvinceByCode
+} = require('../controllers/addressControllers')
 
-router.get('/fetch-and-save', addressControllers.fetchAndSaveProvinces)
-router.get('/provinces', addressControllers.getAllProvinces)
-router.get('/provinces/:id', addressControllers.getProvinceById)
+router.get('/province/:code', getProvinceByCode)
+router.get('/province/:provinceCode/districts', getDistrictsByProvinceCode)
 router.get(
-  '/provinces/:provinceId/districts',
-  addressControllers.getDistrictsByProvinceId
+  '/province/:provinceCode/district/:districtCode/wards',
+  getWardsByDistrictCode
 )
-router.get(
-  '/provinces/:provinceId/districts/:districtId/wards',
-  addressControllers.getWardsByDistrictId
-)
-router.delete('/provinces/:id', addressControllers.deleteProvinceById)
+router.delete('/province/:code', deleteProvinceByCode)
 
 module.exports = router
