@@ -30,7 +30,6 @@ const validateAddress = async (address) => {
 }
 
 const adminControllers = {
-  // Cập nhật thông tin cơ bản của Admin
   updateBasicInfo: async (req, res) => {
     const { adminId } = req.params
     const { image, field, tax_id, address, name, email, phone } = req.body
@@ -41,7 +40,6 @@ const adminControllers = {
         return res.status(404).json({ message: 'Admin không tồn tại' })
       }
 
-      // Kiểm tra email trùng lặp
       if (email) {
         const emailExists = await User.findOne({
           email: email,
@@ -65,7 +63,6 @@ const adminControllers = {
         updatedAddress = validatedAddress
       }
 
-      // Cập nhật thông tin cơ bản của Admin
       const basic_info = await Admin.findOneAndUpdate(
         { _id: adminId },
         {
@@ -86,7 +83,6 @@ const adminControllers = {
         return res.status(404).json({ message: 'Admin không tồn tại' })
       }
 
-      // Cập nhật thông tin trong bảng User liên quan
       const updatedUser = await User.findOneAndUpdate(
         { _id: basic_info.userId },
         { $set: { name: name, email: email } },
@@ -101,7 +97,6 @@ const adminControllers = {
     }
   },
 
-  // Cập nhật thông tin khác của Admin
   updateOtherInfo: async (req, res) => {
     const { adminId } = req.params
     const { desc, speciality, images, types, wforms } = req.body
@@ -146,7 +141,6 @@ const adminControllers = {
     }
   },
 
-  // Lấy thông tin chi tiết của Admin theo ID
   getDataById: async (req, res) => {
     const { adminId } = req.params
     try {
@@ -166,13 +160,49 @@ const adminControllers = {
     }
   },
 
-  // Lấy tất cả thông tin Admin
   getAllData: async (req, res) => {
     try {
       const admin = await Admin.find()
       res.status(200).json(admin)
     } catch (error) {
       res.status(500).json(error)
+    }
+  },
+  getPosts: async (req, res) => {
+    try {
+      const admin = await Admin.findById(req.params.id).populate('posts')
+      if (!admin) {
+        return res.status(404).json({ message: 'Admin not found' })
+      }
+      res.status(200).json(admin.posts)
+    } catch (error) {
+      res.status(500).json({ message: 'Server error', error })
+    }
+  },
+  getConfirmedPosts: async (req, res) => {
+    try {
+      const admin = await Admin.findById(req.params.id).populate(
+        'manage_post.confirmed'
+      )
+      if (!admin) {
+        return res.status(404).json({ message: 'Admin not found' })
+      }
+      res.status(200).json(admin.manage_post.confirmed)
+    } catch (error) {
+      res.status(500).json({ message: 'Server error', error })
+    }
+  },
+  getPostedPosts: async (req, res) => {
+    try {
+      const admin = await Admin.findById(req.params.id).populate(
+        'manage_post.posted'
+      )
+      if (!admin) {
+        return res.status(404).json({ message: 'Admin not found' })
+      }
+      res.status(200).json(admin.manage_post.posted)
+    } catch (error) {
+      res.status(500).json({ message: 'Server error', error })
     }
   }
 }

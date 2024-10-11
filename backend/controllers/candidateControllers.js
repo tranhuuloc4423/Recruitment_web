@@ -41,7 +41,6 @@ const candidateControllers = {
         return res.status(404).json({ message: 'Candidate not found' })
       }
 
-      // Kiểm tra email trùng lặp
       if (email) {
         const emailExists = await User.findOne({
           email,
@@ -65,7 +64,6 @@ const candidateControllers = {
         updatedAddress = validatedAddress
       }
 
-      // Cập nhật thông tin cơ bản của ứng viên
       const basic_info = await Candidate.findOneAndUpdate(
         { _id: candidateId },
         {
@@ -85,7 +83,6 @@ const candidateControllers = {
       if (!basic_info)
         return res.status(404).json({ message: 'Candidate not found' })
 
-      // Cập nhật thông tin người dùng liên quan
       const updatedUser = await User.findOneAndUpdate(
         { _id: basic_info.userId },
         { $set: { name: name, email: email } },

@@ -8,6 +8,7 @@ const adminRoute = require('./adminRoutes')
 const postRoute = require('./postRoutes')
 const notiRoute = require('./notificationRoutes')
 const addressRoute = require('./addressRoutes')
+const skillRoute = require('./skillRoutes')
 
 router.use('/user', userRoute)
 router.use('/candidate', candidateRoute)
@@ -16,5 +17,6 @@ router.use('/admin', adminRoute)
 router.use('/post', postRoute)
 router.use('/notification', notiRoute)
 router.use('/address', addressRoute)
+router.use('/skill', skillRoute)
 
 module.exports = router

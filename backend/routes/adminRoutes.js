@@ -14,8 +14,8 @@ router.put('/:adminId/basic_info', updateBasicInfo)
 router.put('/:adminId/other_info', updateOtherInfo)
 router.get('/:adminId/', getDataById)
 router.get('/', getAllData)
-router.get('/:userId', getPosts)
-router.get('/:userId/confirmed', getConfirmedPosts)
-router.get('/:userId/posted', getPostedPosts)
+router.get('/:id/posts', getPosts)
+router.get('/:id/manage_post/confirmed', getConfirmedPosts)
+router.get('/:id/manage_post/posted', getPostedPosts)
 
 module.exports = router
