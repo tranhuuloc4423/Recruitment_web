@@ -112,6 +112,22 @@ const addressControllers = {
     }
   },
 
+  getAllData: async (req, res) => {
+    try {
+      const addresses = await Address.find().populate({
+        path: 'districts',
+        populate: {
+          path: 'wards'
+        }
+      })
+
+      res.status(200).json(addresses)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: 'Lỗi khi lấy dữ liệu' })
+    }
+  },
+
   deleteProvinceByCode: async (req, res) => {
     try {
       const { code } = req.params

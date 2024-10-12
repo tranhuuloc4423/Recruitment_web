@@ -4,15 +4,14 @@ const {
   getProvinceByCode,
   getDistrictsByProvinceCode,
   getWardsByDistrictCode,
+  getAllData,
   deleteProvinceByCode
 } = require('../controllers/addressControllers')
 
-router.get('/province/:code', getProvinceByCode)
-router.get('/province/:provinceCode/districts', getDistrictsByProvinceCode)
-router.get(
-  '/province/:provinceCode/district/:districtCode/wards',
-  getWardsByDistrictCode
-)
-router.delete('/province/:code', deleteProvinceByCode)
+router.get('/:code', getProvinceByCode)
+router.get('/:provinceCode/districts', getDistrictsByProvinceCode)
+router.get('/:provinceCode/:districtCode/wards', getWardsByDistrictCode)
+router.get('/provinces', getAllData)
+router.delete('/:code', deleteProvinceByCode)
 
 module.exports = router
