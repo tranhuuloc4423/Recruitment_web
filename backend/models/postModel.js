@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const mongooseFuzzySearching = require('mongoose-fuzzy-searching')
 
 const postSchema = new mongoose.Schema(
   {
@@ -72,10 +71,6 @@ const postSchema = new mongoose.Schema(
   },
   { timestamps: true }
 )
-
-postSchema.plugin(mongooseFuzzySearching, {
-  fields: ['title', 'skills']
-})
 
 const Post = mongoose.model('Post', postSchema)
 module.exports = Post

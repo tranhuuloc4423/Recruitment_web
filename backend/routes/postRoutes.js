@@ -12,8 +12,8 @@ const {
   updateApplied,
   updateSaved,
   updateStatus,
-  updateApproved,
-  searchPostsByKeyword
+  updateApproved
+  // searchPostsByKeyword
 } = require('../controllers/postControllers')
 
 router.post('/create', createPost)
@@ -28,6 +28,6 @@ router.put('/:postId/applied', updateApplied)
 router.put('/:postId/approved', updateApproved)
 router.put('/:postId/saved', updateSaved)
 router.put('/:postId/status', updateStatus)
-router.get('/keywords', searchPostsByKeyword)
+// router.get('/keywords', searchPostsByKeyword)
 
 module.exports = router

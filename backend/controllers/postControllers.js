@@ -425,21 +425,21 @@ const postController = {
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
-  },
-  searchPostsByKeyword: async (req, res) => {
-    const { keyword } = req.query
-
-    try {
-      const posts = await Post.findFuzzy(
-        { $or: ['title', 'skills', 'location.address'] },
-        keyword
-      )
-
-      res.json(posts)
-    } catch (err) {
-      res.status(500).json({ message: err.message })
-    }
   }
+  // searchPostsByKeyword: async (req, res) => {
+  //   const { keyword } = req.query
+
+  //   try {
+  //     const posts = await Post.findFuzzy(
+  //       { $or: ['title', 'skills', 'location.address'] },
+  //       keyword
+  //     )
+
+  //     res.json(posts)
+  //   } catch (err) {
+  //     res.status(500).json({ message: err.message })
+  //   }
+  // }
 }
 
 module.exports = postController
