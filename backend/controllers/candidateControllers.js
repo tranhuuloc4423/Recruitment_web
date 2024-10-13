@@ -1,4 +1,3 @@
-const mongoose = require('mongoose')
 const Candidate = require('../models/candidateModel')
 const User = require('../models/userModel')
 const Address = require('../models/addressModel')
@@ -64,6 +63,16 @@ const candidateControllers = {
         updatedAddress = validatedAddress
       }
 
+      if (req.file) {
+        const { path, filename } = req.file
+        const newImage = new Image({
+          public_id: filename,
+          url: path
+        })
+        const savedImage = await newImage.save()
+        imageId = savedImage._id
+      }
+
       const basic_info = await Candidate.findOneAndUpdate(
         { _id: candidateId },
         {
@@ -101,16 +110,17 @@ const candidateControllers = {
   updateOtherInfo: async (req, res) => {
     const { candidateId } = req.params
     const { desc, education, exps, skills, projects, certificates } = req.body
+    let updateFields = {}
 
     try {
-      const updateFields = {}
       if (desc) updateFields['other_info.desc'] = desc
       if (education) updateFields['other_info.education'] = education
       if (exps) updateFields['other_info.exps'] = exps
-      if (skills)
-        updateFields['other_info.skills'] = skills.map((skillId) =>
-          mongoose.Types.ObjectId(skillId)
-        )
+      if (skills) {
+        updateFields['other_info.skills'] = Array.isArray(skills)
+          ? skills
+          : [skills]
+      }
       if (projects) updateFields['other_info.projects'] = projects
       if (certificates) updateFields['other_info.certificates'] = certificates
 
@@ -134,9 +144,8 @@ const candidateControllers = {
   updateTarget: async (req, res) => {
     const { candidateId } = req.params
     const { target_money, skills, types, address, wforms } = req.body
-
+    let updateFields = {}
     try {
-      const updateFields = {}
       if (target_money) {
         updateFields['target.target_money.min_money'] = target_money.min_money
         updateFields['target.target_money.max_money'] = target_money.max_money
@@ -162,9 +171,16 @@ const candidateControllers = {
   },
 
   getDataById: async (req, res) => {
+    const { candidateId } = req.params
     try {
-      const { candidateId } = req.params
-      const candidate = await Candidate.findOne({ userId: candidateId })
+      const candidate = await Candidate.findOne({
+        userId: candidateId
+      }).populate([
+        { path: 'basic_info.address.province', select: 'name' },
+        { path: 'basic_info.address.district', select: 'name' },
+        { path: 'basic_info.address.ward', select: 'name' },
+        { path: 'basic_info.image', select: 'public_id url' }
+      ])
       res.status(200).json(candidate)
     } catch (error) {
       res.status(500).json(error)

@@ -2,21 +2,6 @@ const Image = require('../models/imageModel')
 const cloudinary = require('cloudinary').v2
 
 const imageControllers = {
-  uploadImage: async (req, res) => {
-    try {
-      const { path, public_id } = req.file
-
-      const newImage = new Image({ public_id, url: path })
-      await newImage.save()
-
-      res.status(201).json({
-        message: 'Upload thành công!',
-        data: newImage
-      })
-    } catch (error) {
-      res.status(500).json({ message: 'Upload thất bại!', error })
-    }
-  },
   getAllImages: async (req, res) => {
     try {
       const images = await Image.find()

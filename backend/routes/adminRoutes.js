@@ -7,11 +7,50 @@ const {
   getConfirmedPosts,
   getPostedPosts
 } = require('../controllers/adminControllers')
+const upload = require('../index')
 
 const router = require('express').Router()
 
-router.put('/:adminId/basic_info', updateBasicInfo)
-router.put('/:adminId/other_info', updateOtherInfo)
+router.put(
+  '/:adminId/basic_info',
+  (req, res, next) => {
+    upload.single('image')(req, res, function (err) {
+      if (err) {
+        res.json({ msg: err.message })
+      } else {
+        const file = req.file
+        console.log(file)
+
+        try {
+        } catch (e) {
+          console.error(e)
+        }
+        res.json({ msg: 'ok' })
+      }
+    })
+  },
+  updateBasicInfo
+)
+router.put(
+  '/:adminId/other_info',
+  (req, res, next) => {
+    upload.array('images', 10)(req, res, function (err) {
+      if (err) {
+        res.json({ msg: err.message })
+      } else {
+        const file = req.file
+        console.log(file)
+
+        try {
+        } catch (e) {
+          console.error(e)
+        }
+        res.json({ msg: 'ok' })
+      }
+    })
+  },
+  updateOtherInfo
+)
 router.get('/:adminId/', getDataById)
 router.get('/', getAllData)
 router.get('/:id/posts', getPosts)

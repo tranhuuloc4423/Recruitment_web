@@ -1,7 +1,7 @@
-const mongoose = require('mongoose')
 const Admin = require('../models/adminModel')
 const User = require('../models/userModel')
 const Address = require('../models/addressModel')
+const Image = require('../models/imageModel')
 
 const validateAddress = async (address) => {
   if (address && address.province && address.district && address.ward) {
@@ -32,7 +32,8 @@ const validateAddress = async (address) => {
 const adminControllers = {
   updateBasicInfo: async (req, res) => {
     const { adminId } = req.params
-    const { image, field, tax_id, address, name, email, phone } = req.body
+    const { field, tax_id, address, name, email, phone } = req.body
+    let imageId = null
 
     try {
       const currentAdmin = await Admin.findById(adminId)
@@ -63,11 +64,21 @@ const adminControllers = {
         updatedAddress = validatedAddress
       }
 
+      if (req.file) {
+        const { path, filename } = req.file
+        const newImage = new Image({
+          public_id: filename,
+          url: path
+        })
+        const savedImage = await newImage.save()
+        imageId = savedImage._id
+      }
+
       const basic_info = await Admin.findOneAndUpdate(
         { _id: adminId },
         {
           $set: {
-            'basic_info.image': image,
+            'basic_info.image': imageId,
             'basic_info.field': field,
             'basic_info.tax_id': tax_id,
             'basic_info.address': updatedAddress,
@@ -89,9 +100,10 @@ const adminControllers = {
         { new: true }
       )
 
-      await updatedUser.save()
+      if (!updatedUser)
+        return res.status(404).json({ message: 'User not found' })
 
-      res.json(basic_info)
+      res.json({ admin: basic_info, user: updatedUser })
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
@@ -99,27 +111,42 @@ const adminControllers = {
 
   updateOtherInfo: async (req, res) => {
     const { adminId } = req.params
-    const { desc, speciality, images, types, wforms } = req.body
+    const { desc, speciality, types, wforms } = req.body
+    let updateFields = {}
 
     try {
-      let updateFields = {}
-
-      if (desc !== undefined) updateFields['other_info.desc'] = desc
-      if (speciality !== undefined)
+      if (desc) updateFields['other_info.desc'] = desc
+      if (speciality) {
         updateFields['other_info.speciality'] = Array.isArray(speciality)
           ? speciality
           : [speciality]
-      if (types !== undefined)
+      }
+      if (types) {
         updateFields['other_info.types'] = types.map((item) => ({
           label: item.label,
           value: item.value
         }))
-      if (wforms !== undefined)
+      }
+      if (wforms) {
         updateFields['other_info.wforms'] = wforms.map((item) => ({
           label: item.label,
           value: item.value
         }))
-      if (images !== undefined) updateFields['other_info.images'] = images
+      }
+
+      if (req.files && req.files.length > 0) {
+        const savedImages = await Promise.all(
+          req.files.map(async (file) => {
+            const newImage = new Image({
+              public_id: file.filename,
+              url: file.path
+            })
+            const savedImage = await newImage.save()
+            return savedImage._id
+          })
+        )
+        updateFields['other_info.images'] = savedImages
+      }
 
       if (Object.keys(updateFields).length === 0) {
         return res.status(400).json({ message: 'No fields to update' })
@@ -144,11 +171,10 @@ const adminControllers = {
   getDataById: async (req, res) => {
     const { adminId } = req.params
     try {
-      const admin = await Admin.findById(adminId).populate([
+      const admin = await Admin.findOne({ userId: adminId }).populate([
         { path: 'basic_info.address.province', select: 'name' },
         { path: 'basic_info.address.district', select: 'name' },
-        { path: 'basic_info.address.ward', select: 'name' },
-        { path: 'other_info.speciality', select: 'label value' }
+        { path: 'basic_info.address.ward', select: 'name' }
       ])
 
       if (!admin) {

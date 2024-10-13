@@ -28,7 +28,7 @@ const storage = new CloudinaryStorage({
   }
 })
 
-const upload = multer({ storage })
+const upload = multer({ storage: storage })
 
 app.use(
   cors({
@@ -47,3 +47,5 @@ mongoose
 app.listen(PORT, () => {
   console.log(`Server đang chạy tại http://localhost:${PORT}`)
 })
+
+module.exports = upload

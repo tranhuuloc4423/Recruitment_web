@@ -11,7 +11,8 @@ const recruiterSchema = new mongoose.Schema(
         type: String
       },
       image: {
-        type: String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Image'
       },
       field: {
         type: String
@@ -53,7 +54,8 @@ const recruiterSchema = new mongoose.Schema(
       ],
       images: [
         {
-          type: String
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Image'
         }
       ],
       types: [

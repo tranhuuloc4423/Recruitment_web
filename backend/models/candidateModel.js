@@ -8,7 +8,8 @@ const candidateSchema = new mongoose.Schema(
     },
     basic_info: {
       image: {
-        type: String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Image'
       },
       name: {
         type: String
