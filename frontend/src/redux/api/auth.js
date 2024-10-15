@@ -39,9 +39,9 @@ export const signupUser = async (user, dispatch, navigate) => {
   }
 }
 
-export const changePassword = async (id, newpass, navigate) => {
+export const changePassword = async (id, data, navigate) => {
   try {
-    await axios.put(`/user/${id}/`, newpass)
+    await axios.put(`/user/password/${id}/`, data)
     toast.success('Change Password Success!')
     navigate('/signin')
   } catch (error) {

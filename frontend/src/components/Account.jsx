@@ -14,7 +14,7 @@ const Account = () => {
   useEffect(() => {
     if (currentUser) {
       let userImage = defaultAvatar
-      userImage = currentRole?.basic_info?.image || defaultAvatar
+      userImage = currentRole?.basic_info?.image?.url || defaultAvatar
       setAvatar(userImage)
     }
   }, [currentUser, currentRole])

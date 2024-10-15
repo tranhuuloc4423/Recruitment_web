@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import InfoCard from './InfoCard'
 import RichText from './RichText'
@@ -6,14 +6,18 @@ import DropdownSearchAdd from './DropdownSearchAdd'
 import info from '../utils/infos'
 import { updateOtherInfo } from '../redux/api/app'
 import UploadImages from './UploadImages'
+import { convertFiles } from '../utils/functions'
 import Tag from './Tag'
 const OtherInfo = () => {
   const { currentUser } = useSelector((state) => state.auth)
   const { currentRole } = useSelector((state) => state.app)
   const dispatch = useDispatch()
   const [skills, setSkills] = useState([])
+  const [images, setImages] = useState([])
   const [values, setValues] = useState({})
+
   const [openStates, setOpenStates] = useState({})
+  const [, forceUpdate] = useState(0)
   const staticSkills = [
     {
       label: 'Java',
@@ -55,13 +59,13 @@ const OtherInfo = () => {
         wforms: currentRole?.other_info?.wforms || prevValues.wforms
       }))
     }
-  }, [currentRole, currentUser?.role])
+  }, [currentRole.other_info, currentUser])
 
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value })
   }
 
-  const handleOtherInfo = (item) => {
+  const handleOtherInfo = async (item) => {
     let newValue
     switch (item.type) {
       case 'richText':
@@ -71,7 +75,8 @@ const OtherInfo = () => {
         newValue = skills
         break
       case 'images':
-        newValue = skills
+        let results = await convertFiles(images)
+        newValue = results
         break
       default:
         break
@@ -91,6 +96,8 @@ const OtherInfo = () => {
         ...prev,
         [item.id]: false
       }))
+
+      forceUpdate((prev) => prev + 1)
     })
   }
 
@@ -121,6 +128,8 @@ const OtherInfo = () => {
                     value={values[item?.name]}
                     onChange={onChange}
                     name={item.name}
+                    template={item.template}
+                    hasImage={item?.hasImage}
                   />
                 )}
                 {item?.type === 'dropdown' && (
@@ -134,30 +143,12 @@ const OtherInfo = () => {
                     </div>
                   </>
                 )}
-                {item.type === 'images' && <UploadImages />}
+                {item.type === 'images' && (
+                  <UploadImages files={images} setFiles={setImages} />
+                )}
               </>
             }
-            infos={
-              <>
-                {item.type === 'richText' &&
-                  item?.name &&
-                  currentRole?.other_info?.[item?.name] && (
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: currentRole?.other_info[item?.name]
-                      }}
-                    ></div>
-                  )}
-                {item.type === 'dropdown' &&
-                  currentRole?.other_info?.[item.name]?.length > 0 && (
-                    <div className="flex flex-row gap-2">
-                      {currentRole?.other_info[item?.name]?.map((item) => (
-                        <Tag key={item.value} label={item.label} />
-                      ))}
-                    </div>
-                  )}
-              </>
-            }
+            item={item}
             onClick={() => handleOtherInfo(item)}
           />
         ))}

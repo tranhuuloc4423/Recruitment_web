@@ -3,25 +3,60 @@ import { GoPlusCircle } from 'react-icons/go'
 import { IoClose } from 'react-icons/io5'
 import Line from './Line'
 import Button from './Button'
+import { useSelector } from 'react-redux'
+import Tag from './Tag'
 
 const InfoCard = (props) => {
-  const { title, desc, children, childTitle, onClick, open, setOpen, infos } =
+  const { currentRole } = useSelector((state) => state.app)
+  const { title, desc, children, childTitle, onClick, open, setOpen, item } =
     props
 
+  useEffect(() => {}, [currentRole.other_info, item])
   return (
     <>
       <div className="flex flex-col bg-white rounded p-4 gap-2">
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-col gap-2 flex-1">
             <span className="heading-3">{title}</span>
-            {!infos && <span className="">{desc}</span>}
+            {!item && <span className="">{desc}</span>}
           </div>
           <div onClick={() => setOpen(true)} className="cursor-pointer">
             <GoPlusCircle size={32} color="#284F9E" />
           </div>
         </div>
         <Line />
-        <div>{infos}</div>
+        <div>
+          {item?.type === 'richText' &&
+            item?.name &&
+            currentRole?.other_info?.[item?.name] && (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: currentRole?.other_info[item?.name]
+                }}
+              ></div>
+            )}
+          {item?.type === 'dropdown' &&
+            currentRole?.other_info?.[item.name]?.length > 0 && (
+              <div className="flex flex-row gap-2">
+                {currentRole?.other_info[item?.name]?.map((item) => (
+                  <Tag key={item.value} label={item.label} />
+                ))}
+              </div>
+            )}
+          {item?.type === 'images' &&
+            currentRole?.other_info?.[item.name]?.length > 0 && (
+              <div className="flex flex-wrap gap-2 justify-between">
+                {currentRole?.other_info[item?.name]?.map((item) => (
+                  <img
+                    key={item?.url}
+                    src={item?.url}
+                    className="w-[250px] h-[250px] object-cover"
+                    alt="company imgs"
+                  />
+                ))}
+              </div>
+            )}
+        </div>
       </div>
       {open && (
         <div

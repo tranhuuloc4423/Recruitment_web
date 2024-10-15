@@ -2,9 +2,12 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import Input from '../components/Input'
 import Button from '../components/Button'
+import { changePassword } from '../redux/api/auth'
+import { useNavigate } from 'react-router-dom'
 
 const Settings = () => {
   const { currentUser } = useSelector((state) => state.auth)
+  const navigate = useNavigate()
   const [values, setValues] = useState({
     old: '',
     new: '',
@@ -32,13 +35,36 @@ const Settings = () => {
       name: 'renew',
       type: 'password',
       placeholder: 'Nhập lại mật khẩu mới',
-      error: values.new,
+      // error: values.new,
       pattern: '.{6,}'
     }
   ]
 
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value })
+  }
+
+  const handleSubmit = () => {
+    if (!values.old) {
+      return
+    }
+
+    // Kiểm tra mật khẩu mới
+    if (!values.new || values.new.length < 6) {
+      return
+    }
+
+    // Kiểm tra nhập lại mật khẩu mới
+    if (values.new !== values.renew) {
+      return
+    }
+
+    const data = {
+      oldPassword: values.old,
+      newPassword: values.new
+    }
+
+    changePassword(currentUser?._id, data, navigate)
   }
 
   return (
@@ -71,15 +97,12 @@ const Settings = () => {
                 onChange={onChange}
               />
             ))}
-            <Button
-              label={'Cập nhật mật khẩu'}
-              onClick={() => console.log(1)}
-            />
+            <Button label={'Cập nhật mật khẩu'} onClick={handleSubmit} />
           </div>
           <div className="flex-1"></div>
         </div>
       </div>
-      <div className="flex flex-col gap-4 p-4 bg-white rounded">
+      {/* <div className="flex flex-col gap-4 p-4 bg-white rounded">
         <div className="heading-2">Tài khoản</div>
         <div className="w-full h-[1px] bg-black"></div>
         <div className="para-1">
@@ -89,7 +112,7 @@ const Settings = () => {
           label={'Xoá tài khoản'}
           className="bg-red active:bg-[rgba(237, 27, 47, 0.85)] w-fit"
         />
-      </div>
+      </div> */}
     </div>
   )
 }

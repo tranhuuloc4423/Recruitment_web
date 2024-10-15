@@ -1,9 +1,16 @@
-import { IoLocationOutline } from 'react-icons/io5'
+import { IoLocationOutline, IoMailOutline } from 'react-icons/io5'
 import { LuCake } from 'react-icons/lu'
 import { FiPhone } from 'react-icons/fi'
 import { BsGenderAmbiguous } from 'react-icons/bs'
 import { HiOutlineReceiptTax } from 'react-icons/hi'
 import { FaCompass } from 'react-icons/fa'
+import {
+  project,
+  education,
+  certificatesAchievements,
+  introduce,
+  experience
+} from './RichTextTemplate'
 const info = [
   {
     name: 'admin',
@@ -19,17 +26,17 @@ const info = [
         label: 'Tên công ty (Doanh nghiệp)',
         required: true
       },
-      // {
-      //   id: 1,
-      //   name: 'email',
-      //   type: 'email',
-      //   placeholder: 'Email',
-      //   error: 'Địa chỉ email không hợp lệ',
-      //   pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
-      //   label: 'Email',
-      //   required: true,
-      //   icon: <IoMailOutline size={24} />
-      // },
+      {
+        id: 1,
+        name: 'email',
+        type: 'email',
+        placeholder: 'Email',
+        error: 'Địa chỉ email không hợp lệ',
+        pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
+        label: 'Email',
+        required: true,
+        icon: <IoMailOutline size={24} />
+      },
       {
         id: 2,
         name: 'field',
@@ -168,17 +175,17 @@ const info = [
         label: 'Tên Công Ty (Doanh nghiệp)',
         required: true
       },
-      // {
-      //   id: 1,
-      //   name: 'email',
-      //   type: 'email',
-      //   placeholder: 'Email',
-      //   error: 'Địa chỉ email không hợp lệ',
-      //   pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
-      //   label: 'Email',
-      //   required: true,
-      //   icon: <IoMailOutline size={24} />
-      // },
+      {
+        id: 1,
+        name: 'email',
+        type: 'email',
+        placeholder: 'Email',
+        error: 'Địa chỉ email không hợp lệ',
+        pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
+        label: 'Email',
+        required: true,
+        icon: <IoMailOutline size={24} />
+      },
       {
         id: 2,
         name: 'field',
@@ -291,17 +298,17 @@ const info = [
         label: 'Họ và Tên',
         required: true
       },
-      // {
-      //   id: 3,
-      //   name: 'email',
-      //   type: 'email',
-      //   placeholder: 'Email',
-      //   error: 'Địa chỉ email không hợp lệ',
-      //   pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
-      //   label: 'Email',
-      //   required: true,
-      //   icon: <IoMailOutline size={24} />
-      // },
+      {
+        id: 3,
+        name: 'email',
+        type: 'email',
+        placeholder: 'Email',
+        error: 'Địa chỉ email không hợp lệ',
+        pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
+        label: 'Email',
+        required: true,
+        icon: <IoMailOutline size={24} />
+      },
       {
         id: 4,
         name: 'dob',
@@ -360,14 +367,16 @@ const info = [
         desc: 'Thông tin cá nhân của bạn.',
         type: 'richText',
         id: 1,
-        name: 'desc'
+        name: 'desc',
+        template: introduce
       },
       {
         title: 'Kinh nghiệm',
         desc: 'Thông tin về kinh nghiệm làm việc.',
         type: 'richText',
         id: 2,
-        name: 'exps'
+        name: 'exps',
+        template: experience
       },
       {
         title: 'Kỹ năng',
@@ -382,21 +391,25 @@ const info = [
         desc: 'Thông tin học vấn và bằng cấp.',
         type: 'richText',
         id: 4,
-        name: 'education'
+        name: 'education',
+        template: education
       },
       {
         title: 'Dự án',
         desc: 'Dự án bạn đã thực hiện.',
         type: 'richText',
         id: 5,
-        name: 'projects'
+        name: 'projects',
+        template: project
       },
       {
         title: 'Chứng chỉ',
         desc: 'Thông tin về chứng chỉ đã đạt được.',
         type: 'richText',
         id: 6,
-        name: 'certificates'
+        name: 'certificates',
+        template: certificatesAchievements,
+        hasImage: true
       }
     ]
   }

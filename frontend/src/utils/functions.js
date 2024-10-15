@@ -1,4 +1,4 @@
-const convertToBase64 = (file) => {
+const convertFile = (file) => {
   return new Promise((resolve, reject) => {
     const fileReader = new FileReader()
     fileReader.readAsDataURL(file)
@@ -9,6 +9,23 @@ const convertToBase64 = (file) => {
       reject(error)
     }
   })
+}
+
+const convertFiles = (files) => {
+  return Promise.all(
+    Array.from(files).map((file) => {
+      return new Promise((resolve, reject) => {
+        const fileReader = new FileReader()
+        fileReader.readAsDataURL(file)
+        fileReader.onload = () => {
+          resolve(fileReader.result) // Trả về kết quả là base64
+        }
+        fileReader.onerror = (error) => {
+          reject(error) // Bắt lỗi nếu có
+        }
+      })
+    })
+  )
 }
 
 const convertFileToURL = (file) => {
@@ -27,4 +44,4 @@ const convertFileToURL = (file) => {
   })
 }
 
-export { convertToBase64, convertFileToURL }
+export { convertFile, convertFileToURL, convertFiles }

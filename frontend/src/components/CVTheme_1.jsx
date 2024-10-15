@@ -60,7 +60,7 @@ const CVTheme_1 = ({ color }) => {
 
           {otherInfo?.slice(0, 3).map((item, index) => {
             return (
-              <div key={index} className="flex flex-col gap-4">
+              <div key={index} className="flex flex-col">
                 <div className="flex flex-col items-start justify-between gap-4">
                   <span
                     className={`uppercase text-lg font-medium`}
@@ -94,11 +94,11 @@ const CVTheme_1 = ({ color }) => {
           })}
         </div>
         <Line direction="y" />
-        <div className="flex flex-col gap-4 w-[65%]">
+        <div className="flex flex-col w-[65%]">
           {otherInfo?.slice(3, 6).map((item, index) => {
             return (
-              <div key={index} className="flex flex-col gap-4 w-full">
-                <div className="flex flex-col items-start justify-between gap-4">
+              <div key={index} className="flex flex-col w-full">
+                <div className="flex flex-col items-start justify-between">
                   <span
                     className={`uppercase text-lg font-medium`}
                     style={{ color }}

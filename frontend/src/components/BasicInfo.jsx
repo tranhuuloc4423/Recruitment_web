@@ -18,7 +18,7 @@ const BasicInfo = () => {
     console.log('currentRole has changed:', currentRole)
 
     if (currentRole?.basic_info) {
-      let userImage = currentRole?.basic_info?.image || defaultAvatar
+      let userImage = currentRole?.basic_info?.image?.url || defaultAvatar
       setAvatar(userImage)
     }
     const infoToUpdate = info.find(

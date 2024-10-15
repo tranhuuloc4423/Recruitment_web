@@ -2,7 +2,7 @@ const Candidate = require('../models/candidateModel')
 const User = require('../models/userModel')
 const Address = require('../models/addressModel')
 const Post = require('../models/postModel')
-const cloudinary = require('../utils/cloudinary')
+const { uploadImage } = require('../utils/funcs')
 
 const validateAddress = async (address) => {
   if (address && address.province && address.district && address.ward) {
@@ -67,19 +67,17 @@ const candidateControllers = {
       //   updatedAddress = validatedAddress
       // }
 
-      const imageResult = await cloudinary.uploader.upload(image, {
-        folder: 'candidate/basic'
-      })
-      const newImage = await Image.create({
-        public_id: imageResult.public_id,
-        url: imageResult.secure_url
-      })
+      const imageResult = await uploadImage(
+        currentCandidate,
+        image,
+        'candidate/basic'
+      )
 
       const basic_info = await Candidate.findOneAndUpdate(
         { _id: candidateId },
         {
           $set: {
-            'basic_info.image': newImage,
+            'basic_info.image': imageResult,
             'basic_info.dob': dob,
             'basic_info.phone': phone,
             'basic_info.gender': gender,
