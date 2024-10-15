@@ -23,7 +23,14 @@ const validateAddress = async (address) => {
       return { success: false, message: 'Phường/Xã không tồn tại' }
     }
 
-    return { success: true, validatedAddress: address }
+    return {
+      success: true,
+      validatedAddress: {
+        province: { name: provinceObj.name, code: provinceObj.code },
+        district: { name: districtObj.name, code: districtObj.code },
+        ward: { name: wardObj.name, code: wardObj.code }
+      }
+    }
   }
 
   return {
@@ -35,8 +42,8 @@ const validateAddress = async (address) => {
 const candidateControllers = {
   updateBasicInfo: async (req, res) => {
     const { candidateId } = req.params
+    const { dob, phone, address, gender, name, email } = req.body
     // const { image, dob, phone, address, gender, name, email } = req.body
-    const { image, dob, phone, gender, name, email } = req.body
 
     try {
       const currentCandidate = await Candidate.findById(candidateId)
@@ -56,34 +63,34 @@ const candidateControllers = {
         }
       }
 
-      // let updatedAddress = {}
-      // if (address) {
-      //   const { success, message, validatedAddress } = await validateAddress(
-      //     address
-      //   )
-      //   if (!success) {
-      //     return res.status(400).json({ message })
-      //   }
-      //   updatedAddress = validatedAddress
-      // }
+      let updatedAddress = {}
+      if (address) {
+        const { success, message, validatedAddress } = await validateAddress(
+          address
+        )
+        if (!success) {
+          return res.status(400).json({ message })
+        }
+        updatedAddress = validatedAddress
+      }
 
-      const imageResult = await uploadImage(
-        currentCandidate,
-        image,
-        'candidate/basic'
-      )
+      // const imageResult = await uploadImage(
+      //   currentCandidate,
+      //   image,
+      //   'candidate/basic'
+      // )
 
       const basic_info = await Candidate.findOneAndUpdate(
         { _id: candidateId },
         {
           $set: {
-            'basic_info.image': imageResult,
+            // 'basic_info.image': imageResult,
             'basic_info.dob': dob,
             'basic_info.phone': phone,
             'basic_info.gender': gender,
             'basic_info.name': name,
-            'basic_info.email': email
-            // 'basic_info.address': updatedAddress
+            'basic_info.email': email,
+            'basic_info.address': updatedAddress
           }
         },
         { new: true }
@@ -145,15 +152,22 @@ const candidateControllers = {
     const { candidateId } = req.params
     const { target_money, skills, types, address, wforms } = req.body
     let updateFields = {}
+
     try {
       if (target_money) {
         updateFields['target.target_money.min_money'] = target_money.min_money
         updateFields['target.target_money.max_money'] = target_money.max_money
       }
+
       if (skills) updateFields['target.skills'] = skills
       if (types) updateFields['target.types'] = types
-      if (address && address.province)
-        updateFields['target.address.province'] = address.province
+
+      if (address) {
+        if (address.province) {
+          updateFields['target.address.province.name'] = address.province.name
+          updateFields['target.address.province.code'] = address.province.code
+        }
+      }
       if (wforms) updateFields['target.wforms'] = wforms
 
       const updatedTarget = await Candidate.findOneAndUpdate(
@@ -164,6 +178,7 @@ const candidateControllers = {
 
       if (!updatedTarget)
         return res.status(404).json({ message: 'Candidate not found' })
+
       res.json(updatedTarget)
     } catch (error) {
       res.status(500).json({ message: error.message })

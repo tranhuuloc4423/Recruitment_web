@@ -47,11 +47,13 @@ const addressControllers = {
 
   getAllProvinces: async (req, res) => {
     try {
-      const provinces = await Address.find()
-      res.status(200).json(provinces)
+      const addresses = await Address.find()
+      // const provinces = await Address.find()
+      res.status(200).json(addresses)
+      // res.status(200).json(provinces)
     } catch (error) {
       res.status(500).json({
-        message: 'Error fetching provinces data',
+        message: 'Error fetching addresses data',
         error: error.message
       })
     }

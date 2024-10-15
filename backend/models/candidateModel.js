@@ -29,21 +29,20 @@ const candidateSchema = new mongoose.Schema(
       },
       address: {
         province: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Address'
+          name: { type: String },
+          code: { type: String }
         },
         district: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Address.districts'
+          name: { type: String },
+          code: { type: String }
         },
         ward: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Address.districts.wards'
+          name: { type: String },
+          code: { type: String }
         }
       },
       gender: {
-        type: String,
-        enum: ['male', 'female', 'other']
+        type: String
       }
     },
     other_info: {
@@ -92,8 +91,8 @@ const candidateSchema = new mongoose.Schema(
       ],
       address: {
         province: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Address'
+          name: { type: String },
+          code: { type: String }
         }
       },
       wforms: [

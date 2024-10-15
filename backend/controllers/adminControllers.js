@@ -22,7 +22,14 @@ const validateAddress = async (address) => {
       return { success: false, message: 'Phường/Xã không tồn tại' }
     }
 
-    return { success: true, validatedAddress: address }
+    return {
+      success: true,
+      validatedAddress: {
+        province: { name: provinceObj.name, code: provinceObj.code },
+        district: { name: districtObj.name, code: districtObj.code },
+        ward: { name: wardObj.name, code: wardObj.code }
+      }
+    }
   }
 
   return {
@@ -34,7 +41,8 @@ const validateAddress = async (address) => {
 const adminControllers = {
   updateBasicInfo: async (req, res) => {
     const { adminId } = req.params
-    const { field, tax_id, address, name, email, phone, image } = req.body
+    const { field, tax_id, address, name, email, phone } = req.body
+    // const { field, tax_id, address, name, email, phone, image } = req.body
 
     try {
       const currentAdmin = await Admin.findById(adminId)
@@ -65,13 +73,13 @@ const adminControllers = {
         updatedAddress = validatedAddress
       }
 
-      const imageResult = await uploadImage(currentAdmin, image, 'admin/basic')
+      // const imageResult = await uploadImage(currentAdmin, image, 'admin/basic')
 
       const basic_info = await Admin.findOneAndUpdate(
         { _id: adminId },
         {
           $set: {
-            'basic_info.image': imageResult,
+            // 'basic_info.image': imageResult,
             'basic_info.field': field,
             'basic_info.tax_id': tax_id,
             'basic_info.address': updatedAddress,

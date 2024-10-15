@@ -1,7 +1,6 @@
 const Recruiter = require('../models/recruiterModel')
 const Address = require('../models/addressModel')
 const User = require('../models/userModel')
-const Skill = require('../models/skillModel')
 const { uploadImage, uploadImages } = require('../utils/funcs')
 
 const validateAddress = async (address) => {
@@ -23,7 +22,14 @@ const validateAddress = async (address) => {
       return { success: false, message: 'Phường/Xã không tồn tại' }
     }
 
-    return { success: true, validatedAddress: address }
+    return {
+      success: true,
+      validatedAddress: {
+        province: { name: provinceObj.name, code: provinceObj.code },
+        district: { name: districtObj.name, code: districtObj.code },
+        ward: { name: wardObj.name, code: wardObj.code }
+      }
+    }
   }
 
   return {
@@ -35,7 +41,8 @@ const validateAddress = async (address) => {
 const recruiterControllers = {
   updateBasicInfo: async (req, res) => {
     const { recruiterId } = req.params
-    const { field, tax_id, address, name, email, phone, image } = req.body
+    const { field, tax_id, address, name, email, phone } = req.body
+    // const { field, tax_id, address, name, email, phone, image } = req.body
 
     try {
       const currentRecruiter = await Recruiter.findById(recruiterId)
@@ -55,32 +62,31 @@ const recruiterControllers = {
         }
       }
 
-      // let updatedAddress = {}
-      // if (address) {
-      //   const { success, message, validatedAddress } = await validateAddress(
-      //     address
-      //   )
-      //   if (!success) {
-      //     return res.status(400).json({ message })
-      //   }
-      //   updatedAddress = validatedAddress
-      // }
+      let updatedAddress = {}
+      if (address) {
+        const { success, message, validatedAddress } = await validateAddress(
+          address
+        )
+        if (!success) {
+          return res.status(400).json({ message })
+        }
+        updatedAddress = validatedAddress
+      }
 
-      // hàm này để upload hình ảnh
-      const imageResult = await uploadImage(
-        currentRecruiter,
-        image,
-        'recruiter/basic'
-      )
+      // const imageResult = await uploadImage(
+      //   currentRecruiter,
+      //   image,
+      //   'recruiter/basic'
+      // )
 
       const basic_info = await Recruiter.findOneAndUpdate(
         { _id: recruiterId },
         {
           $set: {
-            'basic_info.image': imageResult,
+            // 'basic_info.image': imageResult,
             'basic_info.field': field,
             'basic_info.tax_id': tax_id,
-            // 'basic_info.address': updatedAddress,
+            'basic_info.address': updatedAddress,
             'basic_info.name': name,
             'basic_info.email': email,
             'basic_info.phone': phone
