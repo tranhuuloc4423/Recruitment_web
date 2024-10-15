@@ -65,8 +65,8 @@ const CVTheme_0 = ({ color }) => {
       <div className="flex flex-col gap-2 p-4 bg-white h-[931px]">
         {otherInfo?.map((item, index) => {
           return (
-            <div key={index} className="flex flex-col gap-4 py-2">
-              <div className="flex flex-col items-start justify-between gap-4">
+            <div key={index} className="flex flex-col gap-4">
+              <div className="flex flex-col items-start justify-between">
                 <span className="text-xl">{item.title}</span>
                 <div className="flex-1">
                   {item?.name === 'skills' ? (

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateBasicInfo } from '../redux/api/app'
-import { convertToBase64 } from '../utils/functions'
+import { convertFile } from '../utils/functions'
 import Avatar from '../components/Avatar'
 import Input from '../components/Input'
 import Button from '../components/Button'
@@ -31,12 +31,14 @@ const BasicInfoForm = ({ open, setOpen }) => {
       (value) => value.trim() === ''
     )
     if (valuesCheck) return
-    const imagebs64 = await convertToBase64(image)
+    const imagebs64 = await convertFile(image)
     let data
 
     currentUser.role === 'candidate'
       ? (data = { ...values, gender: gender.value, image: imagebs64 })
       : (data = { ...values, image: imagebs64 })
+
+    // console.log(image)
     updateBasicInfo(currentRole._id, data, dispatch, currentUser.role)
     // getById(currentUser._id, dispatch, currentUser.role)
     setOpen(false)

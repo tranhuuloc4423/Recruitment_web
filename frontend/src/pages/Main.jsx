@@ -8,6 +8,7 @@ import {
   Post,
   FilterFrame
 } from '../components'
+import Recruiter from '../pages/Recruiter'
 const Main = () => {
   const [posts, setPosts] = useState([])
   const [suggess, setsuggess] = useState([
@@ -65,12 +66,17 @@ const Main = () => {
           </span>
         </div>
         <div className="flex flex-row gap-4">
-          <div className="w-1/3">
+          {/* <div className="w-1/3 flex flex-col gap-2 overflow-y-scroll">
+            <Post />
+            <Post />
+            <Post />
             <Post />
           </div>
           <div className="w-2/3">
             <PostDetails />
-          </div>
+          </div> */}
+
+          <Recruiter />
         </div>
       </div>
     </div>

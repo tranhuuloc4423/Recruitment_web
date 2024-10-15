@@ -811,6 +811,14 @@ video {
   height: 1px;
 }
 
+.h-auto {
+  height: auto;
+}
+
+.h-\[250px\] {
+  height: 250px;
+}
+
 .max-h-40 {
   max-height: 10rem;
 }
@@ -901,6 +909,18 @@ video {
 
 .w-full {
   width: 100%;
+}
+
+.w-1\/4 {
+  width: 25%;
+}
+
+.w-\[200px\] {
+  width: 200px;
+}
+
+.w-\[250px\] {
+  width: 250px;
 }
 
 .flex-1 {
@@ -1185,6 +1205,11 @@ video {
 
 .p-4 {
   padding: 1rem;
+}
+
+.px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
 }
 
 .px-10 {

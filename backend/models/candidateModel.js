@@ -8,8 +8,12 @@ const candidateSchema = new mongoose.Schema(
     },
     basic_info: {
       image: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Image'
+        public_id: {
+          type: String
+        },
+        url: {
+          type: String
+        }
       },
       name: {
         type: String

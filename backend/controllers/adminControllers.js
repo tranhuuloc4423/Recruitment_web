@@ -1,7 +1,7 @@
 const Admin = require('../models/adminModel')
 const User = require('../models/userModel')
 const Address = require('../models/addressModel')
-const Image = require('../models/imageModel')
+const { uploadImage, uploadImages } = require('../utils/funcs')
 
 const validateAddress = async (address) => {
   if (address && address.province && address.district && address.ward) {
@@ -34,8 +34,7 @@ const validateAddress = async (address) => {
 const adminControllers = {
   updateBasicInfo: async (req, res) => {
     const { adminId } = req.params
-    const { field, tax_id, address, name, email, phone } = req.body
-    let imageId = null
+    const { field, tax_id, address, name, email, phone, image } = req.body
 
     try {
       const currentAdmin = await Admin.findById(adminId)
@@ -66,21 +65,13 @@ const adminControllers = {
         updatedAddress = validatedAddress
       }
 
-      if (req.file) {
-        const { path, filename } = req.file
-        const newImage = new Image({
-          public_id: filename,
-          url: path
-        })
-        const savedImage = await newImage.save()
-        imageId = savedImage._id
-      }
+      const imageResult = await uploadImage(currentAdmin, image, 'admin/basic')
 
       const basic_info = await Admin.findOneAndUpdate(
         { _id: adminId },
         {
           $set: {
-            'basic_info.image': imageId,
+            'basic_info.image': imageResult,
             'basic_info.field': field,
             'basic_info.tax_id': tax_id,
             'basic_info.address': updatedAddress,
@@ -113,10 +104,14 @@ const adminControllers = {
 
   updateOtherInfo: async (req, res) => {
     const { adminId } = req.params
-    const { desc, speciality, types, wforms } = req.body
+    const { desc, speciality, types, wforms, images } = req.body
     let updateFields = {}
 
     try {
+      const currentAdmin = await Admin.findById(adminId)
+      if (!currentAdmin) {
+        return res.status(404).json({ message: 'Admin không tồn tại' })
+      }
       if (desc) updateFields['other_info.desc'] = desc
       if (speciality) {
         updateFields['other_info.speciality'] = Array.isArray(speciality)
@@ -136,18 +131,14 @@ const adminControllers = {
         }))
       }
 
-      if (req.files && req.files.length > 0) {
-        const savedImages = await Promise.all(
-          req.files.map(async (file) => {
-            const newImage = new Image({
-              public_id: file.filename,
-              url: file.path
-            })
-            const savedImage = await newImage.save()
-            return savedImage._id
-          })
-        )
-        updateFields['other_info.images'] = savedImages
+      const imagesResult = await uploadImages(
+        currentAdmin,
+        images,
+        'admin/other'
+      )
+
+      if (images) {
+        updateFields['other_info.images'] = imagesResult
       }
 
       if (Object.keys(updateFields).length === 0) {

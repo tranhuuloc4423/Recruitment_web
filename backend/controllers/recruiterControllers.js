@@ -1,7 +1,8 @@
 const Recruiter = require('../models/recruiterModel')
 const Address = require('../models/addressModel')
 const User = require('../models/userModel')
-const Image = require('../models/imageModel')
+const Skill = require('../models/skillModel')
+const { uploadImage, uploadImages } = require('../utils/funcs')
 
 const validateAddress = async (address) => {
   if (address && address.province && address.district && address.ward) {
@@ -34,8 +35,7 @@ const validateAddress = async (address) => {
 const recruiterControllers = {
   updateBasicInfo: async (req, res) => {
     const { recruiterId } = req.params
-    const { field, tax_id, address, name, email, phone } = req.body
-    let imageId = null
+    const { field, tax_id, address, name, email, phone, image } = req.body
 
     try {
       const currentRecruiter = await Recruiter.findById(recruiterId)
@@ -55,35 +55,32 @@ const recruiterControllers = {
         }
       }
 
-      let updatedAddress = {}
-      if (address) {
-        const { success, message, validatedAddress } = await validateAddress(
-          address
-        )
-        if (!success) {
-          return res.status(400).json({ message })
-        }
-        updatedAddress = validatedAddress
-      }
+      // let updatedAddress = {}
+      // if (address) {
+      //   const { success, message, validatedAddress } = await validateAddress(
+      //     address
+      //   )
+      //   if (!success) {
+      //     return res.status(400).json({ message })
+      //   }
+      //   updatedAddress = validatedAddress
+      // }
 
-      if (req.file) {
-        const { path, filename } = req.file
-        const newImage = new Image({
-          public_id: filename,
-          url: path
-        })
-        const savedImage = await newImage.save()
-        imageId = savedImage._id
-      }
+      // hàm này để upload hình ảnh
+      const imageResult = await uploadImage(
+        currentRecruiter,
+        image,
+        'recruiter/basic'
+      )
 
       const basic_info = await Recruiter.findOneAndUpdate(
         { _id: recruiterId },
         {
           $set: {
-            'basic_info.image': imageId,
+            'basic_info.image': imageResult,
             'basic_info.field': field,
             'basic_info.tax_id': tax_id,
-            'basic_info.address': updatedAddress,
+            // 'basic_info.address': updatedAddress,
             'basic_info.name': name,
             'basic_info.email': email,
             'basic_info.phone': phone
@@ -115,10 +112,15 @@ const recruiterControllers = {
 
   updateOtherInfo: async (req, res) => {
     const { recruiterId } = req.params
-    const { desc, speciality, types, wforms } = req.body
+    const { desc, speciality, types, wforms, images } = req.body
     let updateFields = {}
 
     try {
+      const currentRecruiter = await Recruiter.findById(recruiterId)
+      if (!currentRecruiter) {
+        return res.status(404).json({ message: 'Recruiter không tồn tại' })
+      }
+
       if (desc) updateFields['other_info.desc'] = desc
       if (speciality) {
         updateFields['other_info.speciality'] = Array.isArray(speciality)
@@ -138,18 +140,14 @@ const recruiterControllers = {
         }))
       }
 
-      if (req.files && req.files.length > 0) {
-        const savedImages = await Promise.all(
-          req.files.map(async (file) => {
-            const newImage = new Image({
-              public_id: file.filename,
-              url: file.path
-            })
-            const savedImage = await newImage.save()
-            return savedImage._id
-          })
-        )
-        updateFields['other_info.images'] = savedImages
+      const imagesResult = await uploadImages(
+        currentRecruiter,
+        images,
+        'recruiter/other'
+      )
+
+      if (images) {
+        updateFields['other_info.images'] = imagesResult
       }
 
       if (Object.keys(updateFields).length === 0) {

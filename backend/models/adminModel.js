@@ -11,8 +11,12 @@ const adminSchema = new mongoose.Schema(
         type: String
       },
       image: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Image'
+        public_id: {
+          type: String
+        },
+        url: {
+          type: String
+        }
       },
       field: {
         type: String
@@ -54,8 +58,12 @@ const adminSchema = new mongoose.Schema(
       ],
       images: [
         {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Image'
+          public_id: {
+            type: String
+          },
+          url: {
+            type: String
+          }
         }
       ],
       types: [
