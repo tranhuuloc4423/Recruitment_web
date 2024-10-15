@@ -173,11 +173,7 @@ const adminControllers = {
   getDataById: async (req, res) => {
     const { adminId } = req.params
     try {
-      const admin = await Admin.findOne({ userId: adminId }).populate([
-        { path: 'basic_info.address.province', select: 'name' },
-        { path: 'basic_info.address.district', select: 'name' },
-        { path: 'basic_info.address.ward', select: 'name' }
-      ])
+      const admin = await Admin.findOne({ userId: adminId })
 
       if (!admin) {
         return res.status(404).json({ message: 'Admin not found' })

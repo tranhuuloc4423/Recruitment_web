@@ -1,7 +1,6 @@
 const Recruiter = require('../models/recruiterModel')
 const Address = require('../models/addressModel')
 const User = require('../models/userModel')
-const Skill = require('../models/skillModel')
 const Image = require('../models/imageModel')
 
 const validateAddress = async (address) => {
@@ -178,11 +177,7 @@ const recruiterControllers = {
     try {
       const recruiter = await Recruiter.findOne({
         userId: recruiterId
-      }).populate([
-        { path: 'basic_info.address.province', select: 'name' },
-        { path: 'basic_info.address.district', select: 'name' },
-        { path: 'basic_info.address.ward', select: 'name' }
-      ])
+      })
 
       if (!recruiter) {
         return res.status(404).json({ message: 'Recruiter not found' })
