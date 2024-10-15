@@ -47,9 +47,7 @@ const addressControllers = {
 
   getAllProvinces: async (req, res) => {
     try {
-      const provinces = await Address.find().select(
-        'name code districts.name districts.code'
-      )
+      const provinces = await Address.find()
       res.status(200).json(provinces)
     } catch (error) {
       res.status(500).json({
@@ -109,37 +107,6 @@ const addressControllers = {
       res
         .status(500)
         .json({ message: 'Error fetching wards data', error: error.message })
-    }
-  },
-
-  getAllData: async (req, res) => {
-    try {
-      const addresses = await Address.find().populate({
-        path: 'districts',
-        populate: {
-          path: 'wards'
-        }
-      })
-
-      res.status(200).json(addresses)
-    } catch (error) {
-      console.error(error)
-      res.status(500).json({ message: 'Lỗi khi lấy dữ liệu' })
-    }
-  },
-
-  deleteProvinceByCode: async (req, res) => {
-    try {
-      const { code } = req.params
-      const deletedProvince = await Address.findOneAndDelete({ code })
-      if (!deletedProvince) {
-        return res.status(404).json({ message: 'Province not found' })
-      }
-      res.status(200).json({ message: 'Province deleted successfully' })
-    } catch (error) {
-      res
-        .status(500)
-        .json({ message: 'Error deleting province', error: error.message })
     }
   }
 }

@@ -67,11 +67,9 @@ const userControllers = {
         basic_info: {
           name,
           email,
-          image: '',
           dob: '',
           phone: '',
-          address: '',
-          gender: ''
+          address: ''
         },
         other_info: {
           desc: '',
@@ -86,7 +84,6 @@ const userControllers = {
         basic_info: {
           name,
           email,
-          image: '',
           field: '',
           tax_id: '',
           address: ''
@@ -103,7 +100,6 @@ const userControllers = {
         basic_info: {
           name,
           email,
-          image: '',
           field: '',
           tax_id: '',
           address: ''

@@ -2,20 +2,23 @@ const Candidate = require('../models/candidateModel')
 const User = require('../models/userModel')
 const Address = require('../models/addressModel')
 const Post = require('../models/postModel')
+const cloudinary = require('../utils/cloudinary')
 
 const validateAddress = async (address) => {
   if (address && address.province && address.district && address.ward) {
-    const provinceObj = await Address.findById(address.province)
+    const provinceObj = await Address.findOne({ name: address.province })
     if (!provinceObj) {
       return { success: false, message: 'Tỉnh/Thành không tồn tại' }
     }
 
-    const districtObj = provinceObj.districts.id(address.district)
+    const districtObj = provinceObj.districts.find(
+      (district) => district.name === address.district
+    )
     if (!districtObj) {
       return { success: false, message: 'Quận/Huyện không tồn tại' }
     }
 
-    const wardObj = districtObj.wards.id(address.ward)
+    const wardObj = districtObj.wards.find((ward) => ward.name === address.ward)
     if (!wardObj) {
       return { success: false, message: 'Phường/Xã không tồn tại' }
     }
@@ -32,7 +35,8 @@ const validateAddress = async (address) => {
 const candidateControllers = {
   updateBasicInfo: async (req, res) => {
     const { candidateId } = req.params
-    const { image, dob, phone, address, gender, name, email } = req.body
+    // const { image, dob, phone, address, gender, name, email } = req.body
+    const { image, dob, phone, gender, name, email } = req.body
 
     try {
       const currentCandidate = await Candidate.findById(candidateId)
@@ -52,38 +56,36 @@ const candidateControllers = {
         }
       }
 
-      let updatedAddress = {}
-      if (address) {
-        const { success, message, validatedAddress } = await validateAddress(
-          address
-        )
-        if (!success) {
-          return res.status(400).json({ message })
-        }
-        updatedAddress = validatedAddress
-      }
+      // let updatedAddress = {}
+      // if (address) {
+      //   const { success, message, validatedAddress } = await validateAddress(
+      //     address
+      //   )
+      //   if (!success) {
+      //     return res.status(400).json({ message })
+      //   }
+      //   updatedAddress = validatedAddress
+      // }
 
-      if (req.file) {
-        const { path, filename } = req.file
-        const newImage = new Image({
-          public_id: filename,
-          url: path
-        })
-        const savedImage = await newImage.save()
-        imageId = savedImage._id
-      }
+      const imageResult = await cloudinary.uploader.upload(image, {
+        folder: 'candidate/basic'
+      })
+      const newImage = await Image.create({
+        public_id: imageResult.public_id,
+        url: imageResult.secure_url
+      })
 
       const basic_info = await Candidate.findOneAndUpdate(
         { _id: candidateId },
         {
           $set: {
-            'basic_info.image': image,
+            'basic_info.image': newImage,
             'basic_info.dob': dob,
             'basic_info.phone': phone,
             'basic_info.gender': gender,
             'basic_info.name': name,
-            'basic_info.email': email,
-            'basic_info.address': updatedAddress
+            'basic_info.email': email
+            // 'basic_info.address': updatedAddress
           }
         },
         { new: true }
@@ -175,12 +177,7 @@ const candidateControllers = {
     try {
       const candidate = await Candidate.findOne({
         userId: candidateId
-      }).populate([
-        { path: 'basic_info.address.province', select: 'name' },
-        { path: 'basic_info.address.district', select: 'name' },
-        { path: 'basic_info.address.ward', select: 'name' },
-        { path: 'basic_info.image', select: 'public_id url' }
-      ])
+      })
       res.status(200).json(candidate)
     } catch (error) {
       res.status(500).json(error)

@@ -5,17 +5,19 @@ const Image = require('../models/imageModel')
 
 const validateAddress = async (address) => {
   if (address && address.province && address.district && address.ward) {
-    const provinceObj = await Address.findById(address.province)
+    const provinceObj = await Address.findOne({ name: address.province })
     if (!provinceObj) {
       return { success: false, message: 'Tỉnh/Thành không tồn tại' }
     }
 
-    const districtObj = provinceObj.districts.id(address.district)
+    const districtObj = provinceObj.districts.find(
+      (district) => district.name === address.district
+    )
     if (!districtObj) {
       return { success: false, message: 'Quận/Huyện không tồn tại' }
     }
 
-    const wardObj = districtObj.wards.id(address.ward)
+    const wardObj = districtObj.wards.find((ward) => ward.name === address.ward)
     if (!wardObj) {
       return { success: false, message: 'Phường/Xã không tồn tại' }
     }
