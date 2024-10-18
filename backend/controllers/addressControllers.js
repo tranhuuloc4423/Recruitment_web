@@ -35,11 +35,11 @@ const addressControllers = {
         await newProvince.save()
       }
 
-      res.status(200).json({ message: 'Successfully saved provinces data' })
+      res.status(200).json({ message: 'Lưu dữ liệu tỉnh thành thành công' })
     } catch (error) {
       console.error(error)
       res.status(500).json({
-        message: 'Error fetching and saving provinces data',
+        message: 'Lỗi khi lấy và lưu dữ liệu tỉnh thành',
         error: error.message
       })
     }
@@ -48,12 +48,10 @@ const addressControllers = {
   getAllProvinces: async (req, res) => {
     try {
       const addresses = await Address.find()
-      // const provinces = await Address.find()
       res.status(200).json(addresses)
-      // res.status(200).json(provinces)
     } catch (error) {
       res.status(500).json({
-        message: 'Error fetching addresses data',
+        message: 'Lỗi khi lấy dữ liệu địa chỉ',
         error: error.message
       })
     }
@@ -66,13 +64,13 @@ const addressControllers = {
         'name code districts.name districts.code districts.wards.name districts.wards.code'
       )
       if (!province) {
-        return res.status(404).json({ message: 'Province not found' })
+        return res.status(404).json({ message: 'Không tìm thấy tỉnh' })
       }
       res.status(200).json(province)
     } catch (error) {
       res
         .status(500)
-        .json({ message: 'Error fetching province data', error: error.message })
+        .json({ message: 'Lỗi khi lấy dữ liệu tỉnh', error: error.message })
     }
   },
 
@@ -83,12 +81,12 @@ const addressControllers = {
         'districts.name districts.code'
       )
       if (!province) {
-        return res.status(404).json({ message: 'Province not found' })
+        return res.status(404).json({ message: 'Không tìm thấy tỉnh' })
       }
       res.status(200).json(province.districts)
     } catch (error) {
       res.status(500).json({
-        message: 'Error fetching districts data',
+        message: 'Lỗi khi lấy dữ liệu quận/huyện',
         error: error.message
       })
     }
@@ -102,13 +100,14 @@ const addressControllers = {
         { 'districts.$': 1 }
       )
       if (!province) {
-        return res.status(404).json({ message: 'District not found' })
+        return res.status(404).json({ message: 'Không tìm thấy quận/huyện' })
       }
       res.status(200).json(province.districts[0].wards)
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: 'Error fetching wards data', error: error.message })
+      res.status(500).json({
+        message: 'Lỗi khi lấy dữ liệu phường/xã',
+        error: error.message
+      })
     }
   }
 }

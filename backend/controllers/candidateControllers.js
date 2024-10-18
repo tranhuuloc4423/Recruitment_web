@@ -43,12 +43,11 @@ const candidateControllers = {
   updateBasicInfo: async (req, res) => {
     const { candidateId } = req.params
     const { dob, phone, address, gender, name, email } = req.body
-    // const { image, dob, phone, address, gender, name, email } = req.body
 
     try {
       const currentCandidate = await Candidate.findById(candidateId)
       if (!currentCandidate) {
-        return res.status(404).json({ message: 'Candidate not found' })
+        return res.status(404).json({ message: 'Ứng viên không tồn tại' })
       }
 
       if (email) {
@@ -74,17 +73,10 @@ const candidateControllers = {
         updatedAddress = validatedAddress
       }
 
-      // const imageResult = await uploadImage(
-      //   currentCandidate,
-      //   image,
-      //   'candidate/basic'
-      // )
-
       const basic_info = await Candidate.findOneAndUpdate(
         { _id: candidateId },
         {
           $set: {
-            // 'basic_info.image': imageResult,
             'basic_info.dob': dob,
             'basic_info.phone': phone,
             'basic_info.gender': gender,
@@ -97,7 +89,7 @@ const candidateControllers = {
       )
 
       if (!basic_info)
-        return res.status(404).json({ message: 'Candidate not found' })
+        return res.status(404).json({ message: 'Ứng viên không tồn tại' })
 
       const updatedUser = await User.findOneAndUpdate(
         { _id: basic_info.userId },
@@ -106,7 +98,7 @@ const candidateControllers = {
       )
 
       if (!updatedUser)
-        return res.status(404).json({ message: 'User not found' })
+        return res.status(404).json({ message: 'Người dùng không tồn tại' })
 
       res.json({ candidate: basic_info, user: updatedUser })
     } catch (error) {
@@ -132,7 +124,9 @@ const candidateControllers = {
       if (certificates) updateFields['other_info.certificates'] = certificates
 
       if (Object.keys(updateFields).length === 0) {
-        return res.status(400).json({ message: 'No fields to update' })
+        return res
+          .status(400)
+          .json({ message: 'Không có trường nào để cập nhật' })
       }
 
       const other_info = await Candidate.findOneAndUpdate(
@@ -142,12 +136,13 @@ const candidateControllers = {
       )
 
       if (!other_info)
-        return res.status(404).json({ message: 'Candidate not found' })
+        return res.status(404).json({ message: 'Ứng viên không tồn tại' })
       res.json(other_info)
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
   },
+
   updateTarget: async (req, res) => {
     const { candidateId } = req.params
     const { target_money, skills, types, address, wforms } = req.body
@@ -177,7 +172,7 @@ const candidateControllers = {
       )
 
       if (!updatedTarget)
-        return res.status(404).json({ message: 'Candidate not found' })
+        return res.status(404).json({ message: 'Ứng viên không tồn tại' })
 
       res.json(updatedTarget)
     } catch (error) {
@@ -196,6 +191,7 @@ const candidateControllers = {
       res.status(500).json(error)
     }
   },
+
   getAllData: async (req, res) => {
     try {
       const candidate = await Candidate.find()
@@ -204,6 +200,7 @@ const candidateControllers = {
       res.status(500).json(error)
     }
   },
+
   getSavedJobs: async (req, res) => {
     try {
       const candidateId = req.params.candidateId
@@ -219,6 +216,7 @@ const candidateControllers = {
       res.status(500).json({ message: 'Lỗi khi lấy công việc đã lưu' })
     }
   },
+
   getRecentJobs: async (req, res) => {
     try {
       const candidateId = req.params.candidateId
@@ -234,6 +232,7 @@ const candidateControllers = {
       res.status(500).json({ message: 'Lỗi khi lấy công việc gần đây' })
     }
   },
+
   getAppliedJobs: async (req, res) => {
     try {
       const candidateId = req.params.candidateId
@@ -249,6 +248,7 @@ const candidateControllers = {
       res.status(500).json({ message: 'Lỗi khi lấy công việc đã ứng tuyển' })
     }
   },
+
   getFollowedJobs: async (req, res) => {
     try {
       const candidateId = req.params.candidateId
@@ -264,6 +264,7 @@ const candidateControllers = {
         .json({ message: 'Lỗi khi lấy nhà tuyển dụng đang theo dõi' })
     }
   },
+
   followUser: async (req, res) => {
     try {
       const { candidateId } = req.params
@@ -291,6 +292,7 @@ const candidateControllers = {
       res.status(500).json({ message: 'Lỗi khi theo dõi người dùng' })
     }
   },
+
   updateRecent: async (req, res) => {
     try {
       const { candidateId } = req.params
@@ -298,7 +300,7 @@ const candidateControllers = {
 
       const candidate = await Candidate.findById(candidateId)
       if (!candidate) {
-        return res.status(404).json({ message: 'Candidate not found' })
+        return res.status(404).json({ message: 'Ứng viên không tồn tại' })
       }
 
       if (!candidate.jobs.recent.includes(postId)) {
@@ -309,12 +311,12 @@ const candidateControllers = {
 
       const post = await Post.findById(postId)
       if (!post) {
-        return res.status(404).json({ message: 'Post not found' })
+        return res.status(404).json({ message: 'Bài viết không tồn tại' })
       }
 
       res.status(200).json(post)
     } catch (error) {
-      res.status(500).json({ message: 'Server error', error })
+      res.status(500).json({ message: 'Lỗi máy chủ', error })
     }
   }
 }

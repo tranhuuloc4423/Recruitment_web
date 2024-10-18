@@ -47,7 +47,7 @@ const recruiterControllers = {
     try {
       const currentRecruiter = await Recruiter.findById(recruiterId)
       if (!currentRecruiter) {
-        return res.status(404).json({ message: 'Recruiter không tồn tại' })
+        return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })
       }
 
       if (email) {
@@ -96,7 +96,7 @@ const recruiterControllers = {
       )
 
       if (!basic_info) {
-        return res.status(404).json({ message: 'Recruiter không tồn tại' })
+        return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })
       }
 
       const updatedUser = await User.findOneAndUpdate(
@@ -124,7 +124,7 @@ const recruiterControllers = {
     try {
       const currentRecruiter = await Recruiter.findById(recruiterId)
       if (!currentRecruiter) {
-        return res.status(404).json({ message: 'Recruiter không tồn tại' })
+        return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })
       }
 
       if (desc) updateFields['other_info.desc'] = desc
@@ -157,7 +157,9 @@ const recruiterControllers = {
       }
 
       if (Object.keys(updateFields).length === 0) {
-        return res.status(400).json({ message: 'No fields to update' })
+        return res
+          .status(400)
+          .json({ message: 'Không có trường nào để cập nhật' })
       }
 
       const other_info = await Recruiter.findOneAndUpdate(
@@ -167,7 +169,7 @@ const recruiterControllers = {
       )
 
       if (!other_info) {
-        return res.status(404).json({ message: 'Recruiter not found' })
+        return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })
       }
 
       res.status(200).json(other_info)
@@ -184,7 +186,7 @@ const recruiterControllers = {
       })
 
       if (!recruiter) {
-        return res.status(404).json({ message: 'Recruiter not found' })
+        return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })
       }
       res.status(200).json(recruiter)
     } catch (error) {
@@ -207,11 +209,11 @@ const recruiterControllers = {
         'posts'
       )
       if (!recruiter) {
-        return res.status(404).json({ message: 'Recruiter not found' })
+        return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })
       }
       res.status(200).json(recruiter.posts)
     } catch (error) {
-      res.status(500).json({ message: 'Server error', error })
+      res.status(500).json({ message: 'Lỗi máy chủ', error })
     }
   },
 
@@ -221,11 +223,11 @@ const recruiterControllers = {
         'manage_post.confirmed'
       )
       if (!recruiter) {
-        return res.status(404).json({ message: 'Recruiter not found' })
+        return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })
       }
       res.status(200).json(recruiter.manage_post.confirmed)
     } catch (error) {
-      res.status(500).json({ message: 'Server error', error })
+      res.status(500).json({ message: 'Lỗi máy chủ', error })
     }
   },
 
@@ -235,11 +237,11 @@ const recruiterControllers = {
         'manage_post.posted'
       )
       if (!recruiter) {
-        return res.status(404).json({ message: 'Recruiter not found' })
+        return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })
       }
       res.status(200).json(recruiter.manage_post.posted)
     } catch (error) {
-      res.status(500).json({ message: 'Server error', error })
+      res.status(500).json({ message: 'Lỗi máy chủ', error })
     }
   }
 }

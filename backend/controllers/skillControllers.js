@@ -23,11 +23,11 @@ const skillControllers = {
 
       await Skill.bulkWrite(operations)
 
-      res.status(200).json({ message: 'Successfully saved skills data' })
+      res.status(200).json({ message: 'Lưu dữ liệu kỹ năng thành công' })
     } catch (error) {
       console.error(error)
       res.status(500).json({
-        message: 'Error fetching and saving skills data',
+        message: 'Lỗi khi lấy và lưu dữ liệu kỹ năng',
         error: error.message
       })
     }
@@ -40,7 +40,7 @@ const skillControllers = {
     } catch (error) {
       res
         .status(500)
-        .json({ message: 'Error fetching skills data', error: error.message })
+        .json({ message: 'Lỗi khi lấy dữ liệu kỹ năng', error: error.message })
     }
   },
 
@@ -49,13 +49,13 @@ const skillControllers = {
       const { id } = req.params
       const skill = await Skill.findById(id)
       if (!skill) {
-        return res.status(404).json({ message: 'Skill not found' })
+        return res.status(404).json({ message: 'Kỹ năng không tồn tại' })
       }
       res.status(200).json(skill)
     } catch (error) {
       res
         .status(500)
-        .json({ message: 'Error fetching skill data', error: error.message })
+        .json({ message: 'Lỗi khi lấy dữ liệu kỹ năng', error: error.message })
     }
   },
 
@@ -63,11 +63,11 @@ const skillControllers = {
     const { value, label } = req.body
     try {
       if (!value || !label) {
-        return res.status(400).json({ message: 'Value and label are required' })
+        return res.status(400).json({ message: 'Giá trị và nhãn là bắt buộc' })
       }
       const existingSkill = await Skill.findOne({ value })
       if (existingSkill) {
-        return res.status(400).json({ message: 'Skill already exists' })
+        return res.status(400).json({ message: 'Kỹ năng đã tồn tại' })
       }
 
       const newSkill = new Skill({ value, label })
@@ -76,7 +76,7 @@ const skillControllers = {
     } catch (error) {
       res
         .status(500)
-        .json({ message: 'Error creating skill', error: error.message })
+        .json({ message: 'Lỗi khi tạo kỹ năng', error: error.message })
     }
   },
 
@@ -85,13 +85,13 @@ const skillControllers = {
       const { id } = req.params
       const deletedSkill = await Skill.findByIdAndDelete(id)
       if (!deletedSkill) {
-        return res.status(404).json({ message: 'Skill not found' })
+        return res.status(404).json({ message: 'Kỹ năng không tồn tại' })
       }
-      res.status(200).json({ message: 'Skill deleted successfully' })
+      res.status(200).json({ message: 'Xóa kỹ năng thành công' })
     } catch (error) {
       res
         .status(500)
-        .json({ message: 'Error deleting skill', error: error.message })
+        .json({ message: 'Lỗi khi xóa kỹ năng', error: error.message })
     }
   }
 }

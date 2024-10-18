@@ -13,7 +13,7 @@ const postController = {
       )
 
       if (!updatedCandidate) {
-        throw new Error('Candidate not found or update failed')
+        throw new Error('Không tìm thấy ứng viên hoặc cập nhật thất bại')
       }
 
       return updatedCandidate
@@ -30,7 +30,7 @@ const postController = {
       )
 
       if (!updatedCandidate) {
-        throw new Error('Candidate not found or update failed')
+        throw new Error('Không tìm thấy ứng viên hoặc cập nhật thất bại')
       }
 
       return updatedCandidate
@@ -47,7 +47,7 @@ const postController = {
       )
 
       if (!updatedCandidate) {
-        throw new Error('Candidate not found or update failed')
+        throw new Error('Không tìm thấy ứng viên hoặc cập nhật thất bại')
       }
 
       return updatedCandidate
@@ -66,19 +66,21 @@ const postController = {
       if (userType === 'admin') {
         user = await Admin.findById(userId)
         if (user) {
+          console.log(user.basic_info.address)
           postData.location = { address: user.basic_info.address }
           postData.status = 'confirmed'
         }
       } else if (userType === 'recruiter') {
         user = await Recruiter.findById(userId)
         if (user) {
+          console.log(user.basic_info.address)
           postData.location = { address: user.basic_info.address }
           postData.status = 'posted'
         }
       }
 
       if (!user) {
-        return res.status(404).json({ message: 'User not found' })
+        return res.status(404).json({ message: 'Không tìm thấy người dùng' })
       }
 
       const newPost = await Post.create(postData)
@@ -113,7 +115,9 @@ const postController = {
     try {
       const post = await Post.findById(postId)
       if (!post) {
-        return res.status(404).json({ message: 'Author or Post not found' })
+        return res
+          .status(404)
+          .json({ message: 'Chủ sở hữu hoặc bài viết không tìm thấy' })
       }
 
       if (!updatedPost.location) {
@@ -174,7 +178,9 @@ const postController = {
     try {
       const post = await Post.findById(postId)
       if (!post) {
-        return res.status(404).json({ message: 'Author or Post not found' })
+        return res
+          .status(404)
+          .json({ message: 'Chủ sở hữu hoặc bài viết không tìm thấy' })
       }
 
       await Post.findByIdAndDelete(postId)
@@ -192,7 +198,7 @@ const postController = {
         { new: true }
       )
 
-      res.json({ message: 'Post deleted successfully' })
+      res.json({ message: 'Bài viết đã xóa thành công' })
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
@@ -226,7 +232,7 @@ const postController = {
       if (!posts || posts.length === 0) {
         return res
           .status(404)
-          .json({ message: 'No posts found for this author' })
+          .json({ message: 'Không tìm thấy bài viết cho chủ sở hữu này.' })
       }
 
       res.json(posts)
@@ -248,7 +254,7 @@ const postController = {
       if (!post) {
         return res
           .status(404)
-          .json({ message: 'Post not found or you do not have access' })
+          .json({ message: 'Bài viết không tìm thấy hoặc bạn không có quyền' })
       }
 
       res.json(post)
@@ -267,7 +273,7 @@ const postController = {
       )
 
       if (!post) {
-        return res.status(404).json({ message: 'Post not found' })
+        return res.status(404).json({ message: 'Bài viết không tìm thấy' })
       }
 
       let updateType = null
@@ -285,7 +291,7 @@ const postController = {
         )
       }
 
-      res.json({ message: 'Views updated successfully', post })
+      res.json({ message: 'Lượt xem cập nhật thành công', post })
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
@@ -297,7 +303,7 @@ const postController = {
     try {
       const candidate = await Candidate.findById(candidateId)
       if (!candidate) {
-        return res.status(404).json({ message: 'Candidate not found' })
+        return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
       }
 
       const post = await Post.findByIdAndUpdate(
@@ -307,12 +313,12 @@ const postController = {
       )
 
       if (!post) {
-        return res.status(404).json({ message: 'Post not found' })
+        return res.status(404).json({ message: 'Không tìm thấy bài viết' })
       }
 
       await updateAppliedJobs(candidateId, postId)
 
-      res.json({ message: 'Applied updated successfully', post })
+      res.json({ message: 'Cập nhật ứng tuyển thành công', post })
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
@@ -324,16 +330,16 @@ const postController = {
     try {
       const candidate = await Candidate.findById(candidateId)
       if (!candidate) {
-        return res.status(404).json({ message: 'Candidate not found' })
+        return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
       }
 
       const post = await Post.findById(postId)
       if (!post) {
-        return res.status(404).json({ message: 'Post not found' })
+        return res.status(404).json({ message: 'Không tìm thấy bài viết' })
       }
 
       if (post.quantity && post.approved.length >= post.quantity) {
-        return res.status(400).json({ message: 'Approved list is full' })
+        return res.status(400).json({ message: 'Đã đủ người được tuyển' })
       }
 
       post.approved.push(candidateId)
@@ -341,7 +347,7 @@ const postController = {
 
       await updateApprovedJobs(candidateId, postId)
 
-      res.json({ message: 'Applied updated successfully', post })
+      res.json({ message: 'Cập nhật duyệt ứng viên thành công', post })
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
@@ -353,7 +359,7 @@ const postController = {
     try {
       const candidate = await Candidate.findById(candidateId)
       if (!candidate) {
-        return res.status(404).json({ message: 'Candidate not found' })
+        return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
       }
 
       const post = await Post.findByIdAndUpdate(
@@ -363,12 +369,12 @@ const postController = {
       )
 
       if (!post) {
-        return res.status(404).json({ message: 'Post not found' })
+        return res.status(404).json({ message: 'Không tìm thấy bài viết' })
       }
 
       await updateSavedJobs(candidateId, postId)
 
-      res.json({ message: 'Saved job updated successfully', post })
+      res.json({ message: 'Lưu công việc thành công', post })
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
@@ -382,17 +388,17 @@ const postController = {
       if (!admin) {
         return res
           .status(403)
-          .json({ message: 'User is not authorized as admin' })
+          .json({ message: 'Tài khoản không phải là admin' })
       }
 
       const post = await Post.findById(postId)
       if (!post) {
-        return res.status(404).json({ message: 'Post not found' })
+        return res.status(404).json({ message: 'Bài viết không tìm thấy' })
       }
 
       const oldStatus = post.status
       if (oldStatus === 'confirmed') {
-        return res.json({ message: 'Post is already confirmed', post })
+        return res.json({ message: 'Bài viết này đã được duyệt', post })
       }
 
       if (oldStatus === 'posted') {
@@ -416,30 +422,34 @@ const postController = {
         )
 
         return res.json({
-          message: 'Post status updated to confirmed successfully',
+          message: 'Trạng thái bài viết cập nhật thành công',
           post
         })
       }
 
-      res.status(400).json({ message: 'Invalid post status' })
+      res.status(400).json({ message: 'Trạng thái bài đăng không hợp lệ' })
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
+  },
+  searchPosts: async (req, res) => {
+    try {
+      const { value } = req.query // Lấy giá trị tìm kiếm từ query parameter
+
+      // Sử dụng regex để tìm kiếm không phân biệt hoa/thường
+      const posts = await Post.find({
+        $or: [
+          { title: { $regex: value, $options: 'i' } },
+          { skills: { $regex: value, $options: 'i' } },
+          { 'location.address': { $regex: value, $options: 'i' } }
+        ]
+      })
+
+      res.status(200).json(posts)
+    } catch (error) {
+      res.status(500).json({ message: 'Lỗi khi tìm kiếm bài post', error })
+    }
   }
-  // searchPostsByKeyword: async (req, res) => {
-  //   const { keyword } = req.query
-
-  //   try {
-  //     const posts = await Post.findFuzzy(
-  //       { $or: ['title', 'skills', 'location.address'] },
-  //       keyword
-  //     )
-
-  //     res.json(posts)
-  //   } catch (err) {
-  //     res.status(500).json({ message: err.message })
-  //   }
-  // }
 }
 
 module.exports = postController

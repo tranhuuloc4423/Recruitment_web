@@ -1,4 +1,5 @@
 const cloudinary = require('./cloudinary')
+
 const uploadImage = async (currentRole, image, folder) => {
   // Xóa ảnh cũ nếu tồn tại
   if (
@@ -8,7 +9,7 @@ const uploadImage = async (currentRole, image, folder) => {
     await cloudinary.uploader.destroy(currentRole?.basic_info?.image?.public_id)
   }
 
-  // Upload ảnh mới lên Cloudinary
+  // Tải ảnh mới lên Cloudinary
   const imageResult = await cloudinary.uploader.upload(image, {
     folder: folder, // Thư mục lưu ảnh
     crop: 'limit', // Giữ tỷ lệ khung hình
@@ -36,7 +37,7 @@ const uploadImages = async (currentRole, images, folder) => {
   // Giới hạn số lượng ảnh tối đa
   const imagesToUpload = images.slice(0, 5) // Lấy tối đa 5 ảnh
 
-  // Upload các ảnh mới lên Cloudinary
+  // Tải các ảnh mới lên Cloudinary
   const uploadPromises = imagesToUpload.map((image) => {
     return cloudinary.uploader.upload(image, {
       folder: folder, // Thư mục lưu ảnh
@@ -52,8 +53,8 @@ const uploadImages = async (currentRole, images, folder) => {
       url: imageResult.secure_url
     }))
   } catch (error) {
-    console.error('Error uploading images:', error)
-    throw new Error('Error uploading images to Cloudinary')
+    console.error('Lỗi khi tải ảnh lên:', error)
+    throw new Error('Lỗi khi tải ảnh lên Cloudinary')
   }
 }
 

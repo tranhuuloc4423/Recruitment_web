@@ -21,14 +21,17 @@ const userControllers = {
     try {
       const user = await User.findById(id)
       console.log('User:', user)
-      console.log('User Password:', user ? user.password : 'User not found')
+      console.log(
+        'User Password:',
+        user ? user.password : 'Người dùng không tồn tại'
+      )
       if (!user) {
-        return res.status(404).json({ message: 'User not found' })
+        return res.status(404).json({ message: 'Người dùng không tồn tại' })
       }
 
       const isMatch = await compare(oldPassword, user.password)
       if (!isMatch) {
-        return res.status(400).json({ message: 'Old password is incorrect' })
+        return res.status(400).json({ message: 'Mật khẩu cũ không đúng' })
       }
 
       const hashedNewPassword = await hash(newPassword, 10)
@@ -36,7 +39,7 @@ const userControllers = {
       user.password = hashedNewPassword
       await user.save()
 
-      res.json({ message: 'Password updated successfully' })
+      res.json({ message: 'Cập nhật mật khẩu thành công' })
     } catch (err) {
       res.status(500).json({ message: err.message })
     }
@@ -48,7 +51,7 @@ const userControllers = {
       await Admin.findOneAndDelete(id)
       await Recruiter.findOneAndDelete(id)
 
-      res.json({ message: 'User deleted successfully' })
+      res.json({ message: 'Xóa người dùng thành công' })
     } catch (err) {
       res.status(400).json({ message: err.message })
     }
@@ -141,12 +144,16 @@ const userControllers = {
     try {
       const user = await User.findOne({ email })
       if (!user) {
-        return res.status(400).json({ message: 'Invalid email or password' })
+        return res
+          .status(400)
+          .json({ message: 'Email hoặc mật khẩu không hợp lệ' })
       }
 
       const validPassword = await compare(password, user.password)
       if (!validPassword) {
-        return res.status(400).json({ message: 'Invalid email or password' })
+        return res
+          .status(400)
+          .json({ message: 'Email hoặc mật khẩu không hợp lệ' })
       }
 
       const token = sign({ userId: user._id }, 'your_secret_key')

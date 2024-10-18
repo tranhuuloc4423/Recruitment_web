@@ -35,9 +35,22 @@ const postSchema = new mongoose.Schema(
       type: String
     },
     location: {
-      address: {
-        type: String
-      }
+      address: [
+        {
+          province: {
+            name: { type: String },
+            code: { type: String }
+          },
+          district: {
+            name: { type: String },
+            code: { type: String }
+          },
+          ward: {
+            name: { type: String },
+            code: { type: String }
+          }
+        }
+      ]
     },
     request: {
       type: String

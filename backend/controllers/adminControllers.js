@@ -42,7 +42,6 @@ const adminControllers = {
   updateBasicInfo: async (req, res) => {
     const { adminId } = req.params
     const { field, tax_id, address, name, email, phone } = req.body
-    // const { field, tax_id, address, name, email, phone, image } = req.body
 
     try {
       const currentAdmin = await Admin.findById(adminId)
@@ -73,13 +72,10 @@ const adminControllers = {
         updatedAddress = validatedAddress
       }
 
-      // const imageResult = await uploadImage(currentAdmin, image, 'admin/basic')
-
       const basic_info = await Admin.findOneAndUpdate(
         { _id: adminId },
         {
           $set: {
-            // 'basic_info.image': imageResult,
             'basic_info.field': field,
             'basic_info.tax_id': tax_id,
             'basic_info.address': updatedAddress,
@@ -102,11 +98,11 @@ const adminControllers = {
       )
 
       if (!updatedUser)
-        return res.status(404).json({ message: 'User not found' })
+        return res.status(404).json({ message: 'Người dùng không tìm thấy' })
 
       res.json({ admin: basic_info, user: updatedUser })
     } catch (error) {
-      res.status(500).json({ message: error.message })
+      res.status(500).json({ message: 'Lỗi máy chủ: ' + error.message })
     }
   },
 
@@ -150,7 +146,9 @@ const adminControllers = {
       }
 
       if (Object.keys(updateFields).length === 0) {
-        return res.status(400).json({ message: 'No fields to update' })
+        return res
+          .status(400)
+          .json({ message: 'Không có trường nào để cập nhật' })
       }
 
       const other_info = await Admin.findOneAndUpdate(
@@ -160,12 +158,12 @@ const adminControllers = {
       )
 
       if (!other_info) {
-        return res.status(404).json({ message: 'Admin not found' })
+        return res.status(404).json({ message: 'Admin không tồn tại' })
       }
 
       res.status(200).json(other_info)
     } catch (error) {
-      res.status(500).json({ message: error.message })
+      res.status(500).json({ message: 'Lỗi máy chủ: ' + error.message })
     }
   },
 
@@ -175,11 +173,11 @@ const adminControllers = {
       const admin = await Admin.findOne({ userId: adminId })
 
       if (!admin) {
-        return res.status(404).json({ message: 'Admin not found' })
+        return res.status(404).json({ message: 'Admin không tồn tại' })
       }
       res.status(200).json(admin)
     } catch (error) {
-      res.status(500).json(error)
+      res.status(500).json({ message: 'Lỗi máy chủ: ' + error.message })
     }
   },
 
@@ -188,44 +186,47 @@ const adminControllers = {
       const admin = await Admin.find()
       res.status(200).json(admin)
     } catch (error) {
-      res.status(500).json(error)
+      res.status(500).json({ message: 'Lỗi máy chủ: ' + error.message })
     }
   },
+
   getPosts: async (req, res) => {
     try {
       const admin = await Admin.findById(req.params.id).populate('posts')
       if (!admin) {
-        return res.status(404).json({ message: 'Admin not found' })
+        return res.status(404).json({ message: 'Admin không tồn tại' })
       }
       res.status(200).json(admin.posts)
     } catch (error) {
-      res.status(500).json({ message: 'Server error', error })
+      res.status(500).json({ message: 'Lỗi máy chủ', error })
     }
   },
+
   getConfirmedPosts: async (req, res) => {
     try {
       const admin = await Admin.findById(req.params.id).populate(
         'manage_post.confirmed'
       )
       if (!admin) {
-        return res.status(404).json({ message: 'Admin not found' })
+        return res.status(404).json({ message: 'Admin không tồn tại' })
       }
       res.status(200).json(admin.manage_post.confirmed)
     } catch (error) {
-      res.status(500).json({ message: 'Server error', error })
+      res.status(500).json({ message: 'Lỗi máy chủ', error })
     }
   },
+
   getPostedPosts: async (req, res) => {
     try {
       const admin = await Admin.findById(req.params.id).populate(
         'manage_post.posted'
       )
       if (!admin) {
-        return res.status(404).json({ message: 'Admin not found' })
+        return res.status(404).json({ message: 'Admin không tồn tại' })
       }
       res.status(200).json(admin.manage_post.posted)
     } catch (error) {
-      res.status(500).json({ message: 'Server error', error })
+      res.status(500).json({ message: 'Lỗi máy chủ', error })
     }
   }
 }

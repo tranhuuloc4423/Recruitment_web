@@ -71,7 +71,7 @@ const notiControllers = {
       }
 
       if (!updatedUser) {
-        return res.status(404).json({ message: 'Recipient not found' })
+        return res.status(404).json({ message: 'Người nhận không tìm thấy' })
       }
       res
         .status(201)
@@ -80,6 +80,7 @@ const notiControllers = {
       res.status(400).json({ message: error.message })
     }
   },
+
   getAllNotifications: async (req, res) => {
     try {
       const notifications = await Notification.find()
@@ -90,6 +91,7 @@ const notiControllers = {
         .json({ message: 'Lỗi khi lấy danh sách thông báo', error })
     }
   },
+
   getNotificationsBySender: async (req, res) => {
     try {
       const { senderId } = req.params
@@ -101,6 +103,7 @@ const notiControllers = {
         .json({ message: 'Lỗi khi lấy thông báo theo người gửi', error })
     }
   },
+
   getNotificationsByRecipient: async (req, res) => {
     try {
       const { recipientId } = req.params
