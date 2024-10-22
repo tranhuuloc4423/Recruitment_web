@@ -160,7 +160,7 @@ const recruiterControllers = {
   getDataByIdRole: async (req, res) => {
     const { recruiterId } = req.params
     try {
-      const recruiter = await Recruiter.findOne(recruiterId)
+      const recruiter = await Recruiter.findById(recruiterId)
 
       if (!recruiter) {
         return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })

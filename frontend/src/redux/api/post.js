@@ -23,8 +23,9 @@ const getAllPost = async () => {
 
 const getRoleData = async (role, id) => {
   try {
-    const res = await axios.get(`/${role}/${id}`)
-    return res.data
+    console.log(`/${role}/role/${id}`)
+    const res = await axios.get(`/${role}/role/${id}`)
+    return res
   } catch (error) {
     console.log(error)
   }

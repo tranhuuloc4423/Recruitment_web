@@ -150,10 +150,9 @@ const adminControllers = {
   },
 
   getDataByIdRole: async (req, res) => {
-    const { adminId } = req.params
+    const { id } = req.params
     try {
-      const admin = await Admin.findById(adminId)
-
+      const admin = await Admin.findById(id)
       if (!admin) {
         return res.status(404).json({ message: 'Admin không tồn tại' })
       }
