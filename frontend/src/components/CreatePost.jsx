@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Button, Dropdown, Input, RichText, Tag, UploadImages } from './'
 import { jobDescription, jobRequirements } from '../utils/RichTextTemplate'
 import { useSelector } from 'react-redux'
-import { convertFile, convertFiles } from '../utils/functions'
 
 const CreatePost = () => {
   const { currentUser } = useSelector((state) => state.auth)
@@ -17,7 +16,6 @@ const CreatePost = () => {
   })
   const [skillSelected, setSkillSelected] = useState(null)
   const [skills, setSkills] = useState([])
-  const [images, setImages] = useState([])
   const skillsStatic = [
     {
       value: 'reactjs',
@@ -55,14 +53,12 @@ const CreatePost = () => {
     if (currentUser.role === 'candidate') {
       return
     }
-    const imagesConvert = await convertFiles(images)
     let data
     data = {
       ...values,
-      images: imagesConvert,
       skills: skills,
-      userId: currentRole._id,
-      userType: currentUser.role
+      author: currentRole._id,
+      authorType: currentUser.role
     }
     console.log(data)
   }
@@ -160,8 +156,6 @@ const CreatePost = () => {
         onChange={HandleOnChange}
         template={jobRequirements}
       />
-
-      <UploadImages files={images} setFiles={setImages} />
 
       <div>
         <Button label={'Đăng'} onClick={handleCreatePost} />

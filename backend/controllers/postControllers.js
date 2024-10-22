@@ -56,7 +56,7 @@ const postController = {
     }
   },
   createPost: async (req, res) => {
-    const { userId, userType, postData } = req.body
+    const { postData } = req.body
 
     try {
       postData.location = { address: user.basic_info.address }
@@ -71,14 +71,14 @@ const postController = {
       postData.date_upload = `${day}/${month}/${year}`
 
       let user
-      if (userType === 'admin') {
-        user = await Admin.findById(userId)
+      if (postData.authorType === 'admin') {
+        user = await Admin.findById(postData.author)
         if (user) {
           // console.log(user.basic_info.address)
 
           postData.status = 'confirmed'
         }
-      } else if (userType === 'recruiter') {
+      } else if (postData.authorType === 'recruiter') {
         user = await Recruiter.findById(userId)
         if (user) {
           // console.log(user.basic_info.address)
