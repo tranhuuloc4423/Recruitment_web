@@ -5,7 +5,8 @@ const {
   getAllData,
   getPosts,
   getConfirmedPosts,
-  getPostedPosts
+  getPostedPosts,
+  getDataByIdRole
 } = require('../controllers/adminControllers')
 
 const router = require('express').Router()
@@ -13,6 +14,7 @@ const router = require('express').Router()
 router.put('/:adminId/basic_info', updateBasicInfo)
 router.put('/:adminId/other_info', updateOtherInfo)
 router.get('/:adminId/', getDataById)
+router.get('/:id/', getDataByIdRole)
 router.get('/', getAllData)
 router.get('/:id/posts', getPosts)
 router.get('/:id/manage_post/confirmed', getConfirmedPosts)

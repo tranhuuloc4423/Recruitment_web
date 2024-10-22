@@ -59,8 +59,6 @@ const postController = {
     const { postData } = req.body
 
     try {
-      postData.location = { address: user.basic_info.address }
-
       const currentDate = new Date()
 
       // Lấy ngày, tháng, năm hiện tại
@@ -75,13 +73,14 @@ const postController = {
         user = await Admin.findById(postData.author)
         if (user) {
           // console.log(user.basic_info.address)
-
+          postData.location = { address: user.basic_info.address }
           postData.status = 'confirmed'
         }
       } else if (postData.authorType === 'recruiter') {
-        user = await Recruiter.findById(userId)
+        user = await Recruiter.findById(postData.author)
         if (user) {
           // console.log(user.basic_info.address)
+          postData.location = { address: user.basic_info.address }
           postData.status = 'posted'
         }
       }
@@ -92,17 +91,17 @@ const postController = {
 
       const newPost = await Post.create(postData)
 
-      if (userType === 'admin') {
+      if (postData.authorType === 'admin') {
         await Admin.findByIdAndUpdate(
-          userId,
+          postData.author,
           {
             $push: { posts: newPost._id, 'manage_post.confirmed': newPost._id }
           },
           { new: true }
         )
-      } else if (userType === 'recruiter') {
+      } else if (postData.authorType === 'recruiter') {
         await Recruiter.findByIdAndUpdate(
-          userId,
+          postData.author,
           {
             $push: { posts: newPost._id, 'manage_post.posted': newPost._id }
           },

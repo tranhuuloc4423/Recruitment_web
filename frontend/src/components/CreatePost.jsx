@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Button, Dropdown, Input, RichText, Tag, UploadImages } from './'
 import { jobDescription, jobRequirements } from '../utils/RichTextTemplate'
 import { useSelector } from 'react-redux'
+import { createPost } from '../redux/api/post'
 
 const CreatePost = () => {
   const { currentUser } = useSelector((state) => state.auth)
@@ -11,7 +12,7 @@ const CreatePost = () => {
     salary: '',
     quantity: '',
     desc: '',
-    work_require: '',
+    request: '',
     date_expiration: ''
   })
   const [skillSelected, setSkillSelected] = useState(null)
@@ -34,7 +35,7 @@ const CreatePost = () => {
   const HandleOnChange = (e) => {
     const { name, value } = e.target
 
-    if (name === 'salary') {
+    if (name === 'salary' || name === 'quantity') {
       if (/^\d*\.?\d*$/.test(value) || value === '') {
         setValues((prevValues) => ({
           ...prevValues,
@@ -60,6 +61,7 @@ const CreatePost = () => {
       author: currentRole._id,
       authorType: currentUser.role
     }
+    createPost(data)
     console.log(data)
   }
 
@@ -151,8 +153,8 @@ const CreatePost = () => {
       />
       <RichText
         label={'Yêu cầu công việc'}
-        name="work_require"
-        value={values.work_require}
+        name="request"
+        value={values.request}
         onChange={HandleOnChange}
         template={jobRequirements}
       />

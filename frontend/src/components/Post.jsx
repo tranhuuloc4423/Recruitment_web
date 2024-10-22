@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Line from './Line'
 import Tag from './Tag'
 import Button from './Button'
@@ -9,35 +9,64 @@ import { IoLocationOutline } from 'react-icons/io5'
 import { PiBagBold } from 'react-icons/pi'
 import { FiClock } from 'react-icons/fi'
 import { HiOutlineEye } from 'react-icons/hi'
+import { useSelector } from 'react-redux'
+import { getRoleData } from '../redux/api/post'
 
-const Post = () => {
+const Post = ({ post }) => {
+  const { currentUser } = useSelector((state) => state.auth)
+  const { currentRole } = useSelector((state) => state.app)
+  const {
+    title,
+    skills,
+    salary,
+    quantity,
+    date,
+    date_expiration,
+    author,
+    authorType
+  } = post
+  const [name, setName] = useState('')
+  const [image, setImage] = useState('')
+
+  const getBasicData = async () => {
+    console.log(post)
+    const res = await getRoleData(authorType, author)
+    console.log(res)
+    // setName(res.basic_info?.name)
+    // setImage(res.basic_info?.image.url)
+  }
+
+  useEffect(() => {
+    getBasicData()
+  }, [])
+
   return (
     <div className="flex flex-col gap-2 bg-white shadow-md p-2 rounded">
       {/* state */}
-      <div className="flex-row-center gap-2">
+      {/* <div className="flex-row-center gap-2">
         <span>Trạng thái : </span>
         <span>Đã duyệt</span>
-      </div>
+      </div> */}
 
       {/* time and tag */}
       <div className="flex-row-center justify-between ">
-        <span className="para-3">Đăng ngày : 04/04/2024</span>
+        <span className="para-3">Hạn ứng tuyển : {date_expiration}</span>
         <span>Tag hot</span>
       </div>
 
       {/* title */}
-      <div className="heading-3">Title</div>
+      <div className="heading-3">{title}</div>
 
       {/* image */}
       <div className="flex-row-center gap-2">
         <div className="w-[60px] h-[60px]">
           <img
-            src="https://via.placeholder.com/300"
+            src={image || 'https://via.placeholder.com/300'}
             alt="avatar"
             className="w-full h-full"
           />
         </div>
-        <span>Tên công ty</span>
+        <span>{name || 'fpt'}</span>
       </div>
 
       <Line />
@@ -97,12 +126,12 @@ const Post = () => {
       </div>
 
       {/* manage buttons */}
-      <div className="w-full flex flex-row justify-end gap-2">
+      {/* <div className="w-full flex flex-row justify-end gap-2">
         <Button label="Xem" />
         <Button label="Gia hạn" />
         <Button label="Cập nhật" />
         <Button label="Xoá" />
-      </div>
+      </div> */}
     </div>
   )
 }

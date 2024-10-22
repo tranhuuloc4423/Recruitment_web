@@ -9,6 +9,7 @@ import {
   FilterFrame
 } from '../components'
 import Recruiter from '../pages/Recruiter'
+import { getAllPost } from '../redux/api/post'
 const Main = () => {
   const [posts, setPosts] = useState([])
   const [suggess, setsuggess] = useState([
@@ -28,7 +29,10 @@ const Main = () => {
   const [selectedPost, setSelectedPost] = useState(null)
   const [search, setSearch] = useState('')
 
-  useEffect(() => {}, [])
+  useEffect(async () => {
+    let data = await getAllPost()
+    setPosts(data)
+  }, [])
   return (
     <div className="flex flex-col gap-4 justify-center items-center mx-auto">
       <div className="w-2/3 flex flex-col gap-2">
@@ -66,17 +70,16 @@ const Main = () => {
           </span>
         </div>
         <div className="flex flex-row gap-4">
-          {/* <div className="w-1/3 flex flex-col gap-2 overflow-y-scroll">
-            <Post />
-            <Post />
-            <Post />
-            <Post />
+          <div className="w-1/3 flex flex-col gap-2 overflow-y-scroll">
+            {posts?.map((post, index) => (
+              <React.Fragment key={index}>
+                <Post post={post} />
+              </React.Fragment>
+            ))}
           </div>
           <div className="w-2/3">
             <PostDetails />
-          </div> */}
-
-          <Recruiter />
+          </div>
         </div>
       </div>
     </div>

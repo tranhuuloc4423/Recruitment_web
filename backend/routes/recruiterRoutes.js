@@ -5,7 +5,8 @@ const {
   updateOtherInfo,
   getPosts,
   getConfirmedPosts,
-  getPostedPosts
+  getPostedPosts,
+  getDataByIdRole
 } = require('../controllers/recruiterControllers')
 
 const router = require('express').Router()
@@ -13,6 +14,7 @@ const router = require('express').Router()
 router.put('/:recruiterId/basic_info', updateBasicInfo)
 router.put('/:recruiterId/other_info', updateOtherInfo)
 router.get('/:recruiterId/', getDataById)
+router.get('/:recruiterId/', getDataByIdRole)
 router.get('/', getAllData)
 router.get('/:userId', getPosts)
 router.get('/:userId/confirmed', getConfirmedPosts)

@@ -149,6 +149,20 @@ const adminControllers = {
     }
   },
 
+  getDataByIdRole: async (req, res) => {
+    const { adminId } = req.params
+    try {
+      const admin = await Admin.findById(adminId)
+
+      if (!admin) {
+        return res.status(404).json({ message: 'Admin không tồn tại' })
+      }
+      res.status(200).json(admin)
+    } catch (error) {
+      res.status(500).json({ message: 'Lỗi máy chủ: ' + error.message })
+    }
+  },
+
   getAllData: async (req, res) => {
     try {
       const admin = await Admin.find()

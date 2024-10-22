@@ -163,6 +163,16 @@ const candidateControllers = {
     }
   },
 
+  getDataByIdRole: async (req, res) => {
+    const { candidateId } = req.params
+    try {
+      const candidate = await Candidate.findById(candidateId)
+      res.status(200).json(candidate)
+    } catch (error) {
+      res.status(500).json(error)
+    }
+  },
+
   getAllData: async (req, res) => {
     try {
       const candidate = await Candidate.find()

@@ -157,6 +157,20 @@ const recruiterControllers = {
     }
   },
 
+  getDataByIdRole: async (req, res) => {
+    const { recruiterId } = req.params
+    try {
+      const recruiter = await Recruiter.findOne(recruiterId)
+
+      if (!recruiter) {
+        return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })
+      }
+      res.status(200).json(recruiter)
+    } catch (error) {
+      res.status(500).json(error)
+    }
+  },
+
   getAllData: async (req, res) => {
     try {
       const recruiter = await Recruiter.find()

@@ -25,6 +25,13 @@ const Input = (props) => {
     setSelectedValue(e.target.value)
     onChange(e)
   }
+
+  const handleDateChange = (e) => {
+    const date = new Date(e.target.value)
+    const formattedDate = date.toLocaleDateString('en-GB') // Formats to dd/mm/yyyy
+    e.target.value = formattedDate
+    onChange(e)
+  }
   const renderInput = () => {
     switch (type) {
       case 'select':
@@ -63,7 +70,7 @@ const Input = (props) => {
             type="date"
             {...inputProps}
             className="outline-none border-2 w-full p-2 rounded-md"
-            onChange={onChange}
+            onChange={handleDateChange}
             onBlur={handleFocus}
             onFocus={() => setFocused(true)}
             focused={focused.toString()}
