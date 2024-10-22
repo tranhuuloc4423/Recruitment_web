@@ -59,22 +59,29 @@ const postController = {
     const { userId, userType, postData } = req.body
 
     try {
-      postData.author = userId
-      postData.authorType = userType
+      postData.location = { address: user.basic_info.address }
+
+      const currentDate = new Date()
+
+      // Lấy ngày, tháng, năm hiện tại
+      const day = String(currentDate.getDate()).padStart(2, '0')
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0')
+      const year = currentDate.getFullYear()
+
+      postData.date_upload = `${day}/${month}/${year}`
 
       let user
       if (userType === 'admin') {
         user = await Admin.findById(userId)
         if (user) {
           // console.log(user.basic_info.address)
-          postData.location = { address: user.basic_info.address }
+
           postData.status = 'confirmed'
         }
       } else if (userType === 'recruiter') {
         user = await Recruiter.findById(userId)
         if (user) {
           // console.log(user.basic_info.address)
-          postData.location = { address: user.basic_info.address }
           postData.status = 'posted'
         }
       }

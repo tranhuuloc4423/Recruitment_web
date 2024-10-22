@@ -10,9 +10,10 @@ const CreatePost = () => {
   const [values, setValues] = useState({
     title: '',
     salary: '',
+    quantity: '',
     desc: '',
     work_require: '',
-    time: ''
+    date_expiration: ''
   })
   const [skillSelected, setSkillSelected] = useState(null)
   const [skills, setSkills] = useState([])
@@ -87,11 +88,19 @@ const CreatePost = () => {
       />
       <Input
         type={'date'}
-        name={'time'}
+        name={'date_expiration'}
         placeholder={'Thời hạn'}
         required
         label="Thời hạn"
-        value={values.time}
+        value={values.date_expiration}
+        onChange={HandleOnChange}
+      />
+      <Input
+        name={'quantity'}
+        placeholder={'Số lượng ứng viên'}
+        required
+        label="Số lượng ứng viên"
+        value={values.quantity}
         onChange={HandleOnChange}
       />
 

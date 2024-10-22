@@ -28,7 +28,8 @@ const postSchema = new mongoose.Schema(
     },
     skills: [
       {
-        type: String
+        name: { type: String },
+        value: { type: String }
       }
     ],
     desc: {
@@ -44,11 +45,11 @@ const postSchema = new mongoose.Schema(
           district: {
             name: { type: String },
             code: { type: String }
-          },
-          ward: {
-            name: { type: String },
-            code: { type: String }
           }
+          // ward: {
+          //   name: { type: String },
+          //   code: { type: String }
+          // }
         }
       ]
     },
