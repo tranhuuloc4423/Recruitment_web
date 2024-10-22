@@ -18,17 +18,11 @@ const validateAddress = async (address) => {
       return { success: false, message: 'Quận/Huyện không tồn tại' }
     }
 
-    const wardObj = districtObj.wards.find((ward) => ward.name === address.ward)
-    if (!wardObj) {
-      return { success: false, message: 'Phường/Xã không tồn tại' }
-    }
-
     return {
       success: true,
       validatedAddress: {
         province: { name: provinceObj.name, code: provinceObj.code },
-        district: { name: districtObj.name, code: districtObj.code },
-        ward: { name: wardObj.name, code: wardObj.code }
+        district: { name: districtObj.name, code: districtObj.code }
       }
     }
   }
@@ -43,6 +37,7 @@ const candidateControllers = {
   updateBasicInfo: async (req, res) => {
     const { candidateId } = req.params
     const { dob, phone, address, gender, name, email } = req.body
+    // const { dob, phone, address, gender, name, email, image } = req.body
 
     try {
       const currentCandidate = await Candidate.findById(candidateId)
@@ -73,10 +68,17 @@ const candidateControllers = {
         updatedAddress = validatedAddress
       }
 
+      // const imageResult = await uploadImage(
+      //   currentRecruiter,
+      //   image,
+      //   'candidate/basic'
+      // )
+
       const basic_info = await Candidate.findOneAndUpdate(
         { _id: candidateId },
         {
           $set: {
+            // 'basic_info.image': imageResult,
             'basic_info.dob': dob,
             'basic_info.phone': phone,
             'basic_info.gender': gender,

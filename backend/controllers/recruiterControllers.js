@@ -17,17 +17,11 @@ const validateAddress = async (address) => {
       return { success: false, message: 'Quận/Huyện không tồn tại' }
     }
 
-    const wardObj = districtObj.wards.find((ward) => ward.name === address.ward)
-    if (!wardObj) {
-      return { success: false, message: 'Phường/Xã không tồn tại' }
-    }
-
     return {
       success: true,
       validatedAddress: {
         province: { name: provinceObj.name, code: provinceObj.code },
-        district: { name: districtObj.name, code: districtObj.code },
-        ward: { name: wardObj.name, code: wardObj.code }
+        district: { name: districtObj.name, code: districtObj.code }
       }
     }
   }

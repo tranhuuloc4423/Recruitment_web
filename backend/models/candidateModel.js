@@ -35,11 +35,11 @@ const candidateSchema = new mongoose.Schema(
         district: {
           name: { type: String },
           code: { type: String }
-        },
-        ward: {
-          name: { type: String },
-          code: { type: String }
         }
+        // ward: {
+        //   name: { type: String },
+        //   code: { type: String }
+        // }
       },
       gender: {
         type: String
@@ -57,8 +57,7 @@ const candidateSchema = new mongoose.Schema(
       },
       skills: [
         {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Skill'
+          type: String
         }
       ],
       projects: {

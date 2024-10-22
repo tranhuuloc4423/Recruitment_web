@@ -36,11 +36,11 @@ const adminSchema = new mongoose.Schema(
         district: {
           name: { type: String },
           code: { type: String }
-        },
-        ward: {
-          name: { type: String },
-          code: { type: String }
         }
+        // ward: {
+        //   name: { type: String },
+        //   code: { type: String }
+        // }
       },
       phone: {
         type: String

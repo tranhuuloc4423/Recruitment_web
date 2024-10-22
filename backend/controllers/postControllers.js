@@ -66,14 +66,14 @@ const postController = {
       if (userType === 'admin') {
         user = await Admin.findById(userId)
         if (user) {
-          console.log(user.basic_info.address)
+          // console.log(user.basic_info.address)
           postData.location = { address: user.basic_info.address }
           postData.status = 'confirmed'
         }
       } else if (userType === 'recruiter') {
         user = await Recruiter.findById(userId)
         if (user) {
-          console.log(user.basic_info.address)
+          // console.log(user.basic_info.address)
           postData.location = { address: user.basic_info.address }
           postData.status = 'posted'
         }
