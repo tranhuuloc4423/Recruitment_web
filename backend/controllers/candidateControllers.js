@@ -1,43 +1,12 @@
 const Candidate = require('../models/candidateModel')
 const User = require('../models/userModel')
-const Address = require('../models/addressModel')
 const Post = require('../models/postModel')
-const { uploadImage } = require('../utils/funcs')
-
-const validateAddress = async (address) => {
-  if (address && address.province && address.district && address.ward) {
-    const provinceObj = await Address.findOne({ name: address.province })
-    if (!provinceObj) {
-      return { success: false, message: 'Tỉnh/Thành không tồn tại' }
-    }
-
-    const districtObj = provinceObj.districts.find(
-      (district) => district.name === address.district
-    )
-    if (!districtObj) {
-      return { success: false, message: 'Quận/Huyện không tồn tại' }
-    }
-
-    return {
-      success: true,
-      validatedAddress: {
-        province: { name: provinceObj.name, code: provinceObj.code },
-        district: { name: districtObj.name, code: districtObj.code }
-      }
-    }
-  }
-
-  return {
-    success: false,
-    message: 'Địa chỉ không hợp lệ hoặc thiếu thông tin'
-  }
-}
+const { uploadImage, validateAddress } = require('../utils/funcs')
 
 const candidateControllers = {
   updateBasicInfo: async (req, res) => {
     const { candidateId } = req.params
-    const { dob, phone, address, gender, name, email } = req.body
-    // const { dob, phone, address, gender, name, email, image } = req.body
+    const { dob, phone, address, gender, name, email, image } = req.body
 
     try {
       const currentCandidate = await Candidate.findById(candidateId)
@@ -68,17 +37,17 @@ const candidateControllers = {
         updatedAddress = validatedAddress
       }
 
-      // const imageResult = await uploadImage(
-      //   currentRecruiter,
-      //   image,
-      //   'candidate/basic'
-      // )
+      const imageResult = await uploadImage(
+        currentCandidate,
+        image,
+        'candidate/basic'
+      )
 
       const basic_info = await Candidate.findOneAndUpdate(
         { _id: candidateId },
         {
           $set: {
-            // 'basic_info.image': imageResult,
+            'basic_info.image': imageResult,
             'basic_info.dob': dob,
             'basic_info.phone': phone,
             'basic_info.gender': gender,

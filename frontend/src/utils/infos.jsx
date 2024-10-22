@@ -49,17 +49,6 @@ const info = [
         required: true
       },
       {
-        id: 3,
-        name: 'address',
-        type: 'text',
-        placeholder: 'Địa chỉ',
-        error: 'Địa chỉ ít nhất 6 ký tự',
-        pattern: '.{6,}',
-        label: 'Địa chỉ',
-        icon: <IoLocationOutline size={24} />,
-        required: true
-      },
-      {
         id: 4,
         name: 'tax_id',
         type: 'text',
@@ -96,27 +85,27 @@ const info = [
         options: [
           {
             value: 'Reactjs',
-            label: 'Reactjs'
+            name: 'Reactjs'
           },
           {
             value: 'MongoDB',
-            label: 'Reactjs'
+            name: 'Reactjs'
           },
           {
             value: 'Reactjs',
-            label: 'Reactjs'
+            name: 'Reactjs'
           },
           {
             value: 'Reactjs',
-            label: 'Reactjs'
+            name: 'Reactjs'
           },
           {
             value: 'Reactjs',
-            label: 'Reactjs'
+            name: 'Reactjs'
           },
           {
             value: 'Reactjs',
-            label: 'Reactjs'
+            name: 'Reactjs'
           }
         ]
       },
@@ -130,11 +119,11 @@ const info = [
         options: [
           {
             value: 'fulltime',
-            label: 'Bán thời gian'
+            name: 'Bán thời gian'
           },
           {
             value: 'parttime',
-            label: 'Toàn thời gian'
+            name: 'Toàn thời gian'
           }
         ]
       },
@@ -148,15 +137,15 @@ const info = [
         options: [
           {
             value: 'onsite',
-            label: 'Tại văn phòng'
+            name: 'Tại văn phòng'
           },
           {
             value: 'remote',
-            label: 'Từ xa'
+            name: 'Từ xa'
           },
           {
             value: 'hybrid',
-            label: 'Linh hoạt'
+            name: 'Linh hoạt'
           }
         ]
       }
@@ -195,17 +184,6 @@ const info = [
         pattern: '.{6,}',
         label: 'Lĩnh vực',
         icon: <FaCompass size={24} />,
-        required: true
-      },
-      {
-        id: 3,
-        name: 'address',
-        type: 'text',
-        placeholder: 'Địa chỉ',
-        error: 'Địa chỉ ít nhất 6 ký tự',
-        pattern: '.{6,}',
-        label: 'Địa chỉ',
-        icon: <IoLocationOutline size={24} />,
         required: true
       },
       {
@@ -253,11 +231,11 @@ const info = [
         options: [
           {
             value: 'fulltime',
-            label: 'Bán thời gian'
+            name: 'Bán thời gian'
           },
           {
             value: 'parttime',
-            label: 'Toàn thời gian'
+            name: 'Toàn thời gian'
           }
         ]
       },
@@ -271,15 +249,15 @@ const info = [
         options: [
           {
             value: 'onsite',
-            label: 'Tại văn phòng'
+            name: 'Tại văn phòng'
           },
           {
             value: 'remote',
-            label: 'Từ xa'
+            name: 'Từ xa'
           },
           {
             value: 'hybrid',
-            label: 'Linh hoạt'
+            name: 'Linh hoạt'
           }
         ]
       }
@@ -321,17 +299,6 @@ const info = [
         icon: <LuCake size={24} />
       },
       {
-        id: 5,
-        name: 'address',
-        type: 'text',
-        placeholder: 'Địa chỉ',
-        error: 'Địa chỉ không hợp lệ',
-        // pattern: '',
-        label: 'Địa chỉ',
-        required: true,
-        icon: <IoLocationOutline size={24} />
-      },
-      {
         id: 6,
         name: 'phone',
         type: 'phone',
@@ -351,11 +318,11 @@ const info = [
         options: [
           {
             value: 'male',
-            label: 'Nam'
+            name: 'Nam'
           },
           {
             value: 'female',
-            label: 'Nữ'
+            name: 'Nữ'
           }
         ],
         icon: <BsGenderAmbiguous size={24} />

@@ -20,19 +20,19 @@ const OtherInfo = () => {
   const [, forceUpdate] = useState(0)
   const staticSkills = [
     {
-      label: 'Java',
+      name: 'Java',
       value: 'java'
     },
     {
-      label: 'Javascript',
+      name: 'Javascript',
       value: 'javascript'
     },
     {
-      label: 'Reactjs',
+      name: 'Reactjs',
       value: 'reactjs'
     },
     {
-      label: 'Nodejs',
+      name: 'Nodejs',
       value: 'nodejs'
     }
   ]

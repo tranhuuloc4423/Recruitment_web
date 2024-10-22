@@ -13,14 +13,14 @@ const DropdownSearchAdd = ({ tags, setTags, items }) => {
     const value = e.target.value
     setSearch(value)
     const filtered = items?.filter((item) =>
-      item?.label.toLowerCase().includes(value.toLowerCase())
+      item?.name.toLowerCase().includes(value.toLowerCase())
     )
     setFilteredItems(filtered)
   }
 
   // Handle when an item is selected from dropdown
   const handleSelectItem = (item) => {
-    setSearch(item.label)
+    setSearch(item.name)
     setSelectedItem(item)
     setFocus(false) // Close dropdown when item is selected
   }
@@ -30,9 +30,9 @@ const DropdownSearchAdd = ({ tags, setTags, items }) => {
     if (selectedItem && !tags.some((tag) => tag.value === selectedItem.value)) {
       // Add selected item to the tags array
       setTags([...tags, selectedItem])
-    } else if (search && !tags.some((tag) => tag.label === search)) {
+    } else if (search && !tags.some((tag) => tag.name === search)) {
       // If search is not empty, add it as a new tag with custom label
-      setTags([...tags, { label: search, value: search.toLowerCase() }])
+      setTags([...tags, { name: search, value: search.toLowerCase() }])
     }
 
     setSearch('') // Clear search input
@@ -43,10 +43,6 @@ const DropdownSearchAdd = ({ tags, setTags, items }) => {
   const handleRemoveTag = (tagToRemove) => {
     setTags(tags.filter((tag) => tag.value !== tagToRemove.value)) // Remove tag by value
   }
-
-  useEffect(() => {
-    console.log(focus)
-  }, [focus])
 
   return (
     <div className="w-full gap-4 relative">
@@ -73,7 +69,7 @@ const DropdownSearchAdd = ({ tags, setTags, items }) => {
               className="p-2 cursor-pointer hover:bg-gray-200"
               onClick={() => handleSelectItem(item)}
             >
-              {item.label}
+              {item.name}
             </div>
           ))}
         </div>
@@ -86,7 +82,7 @@ const DropdownSearchAdd = ({ tags, setTags, items }) => {
           {tags?.map((tag, index) => (
             <Tag
               key={index}
-              label={tag.label} // Use the label property of the tag
+              label={tag.name} // Use the label property of the tag
               remove={true}
               onRemove={() => handleRemoveTag(tag)}
             />

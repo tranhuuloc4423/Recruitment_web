@@ -25,7 +25,7 @@ const InfoCard = (props) => {
           </div>
         </div>
         <Line />
-        <div>
+        <div className="w-full">
           {item?.type === 'richText' &&
             item?.name &&
             currentRole?.other_info?.[item?.name] && (
@@ -45,7 +45,7 @@ const InfoCard = (props) => {
             )}
           {item?.type === 'images' &&
             currentRole?.other_info?.[item.name]?.length > 0 && (
-              <div className="flex flex-wrap gap-2 justify-between">
+              <div className="flex flex-wrap gap-2 justify-between w-full">
                 {currentRole?.other_info[item?.name]?.map((item) => (
                   <img
                     key={item?.url}

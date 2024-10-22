@@ -11,25 +11,25 @@ const Target = () => {
   const [salarys, setSalarys] = useState([0, 100])
   const [skills, setSkills] = useState([])
   const [tags, setTags] = useState([
-    { label: 'Toàn thời gian', value: 'fulltime', checked: false },
-    { label: 'Bán thời gian', value: 'parttime', checked: false },
-    { label: 'Tại văn phòng', value: 'onsite', checked: false },
-    { label: 'Từ xa', value: 'remote', checked: false },
-    { label: 'Linh hoạt', value: 'hybrid', checked: false }
+    { name: 'Toàn thời gian', value: 'fulltime', checked: false },
+    { name: 'Bán thời gian', value: 'parttime', checked: false },
+    { name: 'Tại văn phòng', value: 'onsite', checked: false },
+    { name: 'Từ xa', value: 'remote', checked: false },
+    { name: 'Linh hoạt', value: 'hybrid', checked: false }
   ])
   const skillsstatic = [
-    { value: 'reactjs', label: 'ReactJS' },
-    { value: 'vuejs', label: 'VueJS' },
-    { value: 'mongodb', label: 'MongoDB' },
-    { value: 'angular', label: 'Angular' },
-    { value: 'html', label: 'HTML' },
-    { value: 'css', label: 'CSS' }
+    { value: 'reactjs', name: 'ReactJS' },
+    { value: 'vuejs', name: 'VueJS' },
+    { value: 'mongodb', name: 'MongoDB' },
+    { value: 'angular', name: 'Angular' },
+    { value: 'html', name: 'HTML' },
+    { value: 'css', name: 'CSS' }
   ]
   const addressstatic = [
-    { value: 'hochiminh', label: 'Tp Hồ Chí Minh' },
-    { value: 'hanoi', label: 'Hà Nội' },
-    { value: 'binhduong', label: 'Bình Dương' },
-    { value: 'dongnai', label: 'Đồng Nai' }
+    { value: 'hochiminh', name: 'Tp Hồ Chí Minh' },
+    { value: 'hanoi', name: 'Hà Nội' },
+    { value: 'binhduong', name: 'Bình Dương' },
+    { value: 'dongnai', name: 'Đồng Nai' }
   ]
 
   const handleSubmit = () => {

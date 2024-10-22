@@ -1,7 +1,12 @@
 import React, { useState } from 'react'
 import { Button, Dropdown, Input, RichText, Tag, UploadImages } from './'
+import { jobDescription, jobRequirements } from '../utils/RichTextTemplate'
+import { useSelector } from 'react-redux'
+import { convertFile, convertFiles } from '../utils/functions'
 
 const CreatePost = () => {
+  const { currentUser } = useSelector((state) => state.auth)
+  const { currentRole } = useSelector((state) => state.app)
   const [values, setValues] = useState({
     title: '',
     salary: '',
@@ -11,24 +16,54 @@ const CreatePost = () => {
   })
   const [skillSelected, setSkillSelected] = useState(null)
   const [skills, setSkills] = useState([])
-  const [time, setTime] = useState()
+  const [images, setImages] = useState([])
   const skillsStatic = [
     {
       value: 'reactjs',
-      label: 'ReactJS'
+      name: 'ReactJS'
     },
     {
       value: 'vuejs',
-      label: 'VueJS'
+      name: 'VueJS'
     },
     {
       value: 'MongoDB',
-      label: 'mongodb'
+      name: 'mongodb'
     }
   ]
 
   const HandleOnChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value })
+    const { name, value } = e.target
+
+    if (name === 'salary') {
+      if (/^\d*\.?\d*$/.test(value) || value === '') {
+        setValues((prevValues) => ({
+          ...prevValues,
+          [name]: value
+        }))
+      }
+    } else {
+      setValues((prevValues) => ({
+        ...prevValues,
+        [name]: value
+      }))
+    }
+  }
+
+  const handleCreatePost = async () => {
+    if (currentUser.role === 'candidate') {
+      return
+    }
+    const imagesConvert = await convertFiles(images)
+    let data
+    data = {
+      ...values,
+      images: imagesConvert,
+      skills: skills,
+      userId: currentRole._id,
+      userType: currentUser.role
+    }
+    console.log(data)
   }
 
   return (
@@ -90,7 +125,7 @@ const CreatePost = () => {
         <div className="flex items-center gap-2">
           {skills.map((item) => (
             <Tag
-              label={item.label}
+              label={item.name}
               remove={true}
               onRemove={() =>
                 setSkills((prev) =>
@@ -107,18 +142,20 @@ const CreatePost = () => {
         name="desc"
         value={values.desc}
         onChange={HandleOnChange} // Cập nhật đúng dạng mà HandleOnChange cần
+        template={jobDescription}
       />
       <RichText
         label={'Yêu cầu công việc'}
         name="work_require"
         value={values.work_require}
         onChange={HandleOnChange}
+        template={jobRequirements}
       />
 
-      <UploadImages />
+      <UploadImages files={images} setFiles={setImages} />
 
       <div>
-        <Button label={'Đăng'} />
+        <Button label={'Đăng'} onClick={handleCreatePost} />
       </div>
     </div>
   )

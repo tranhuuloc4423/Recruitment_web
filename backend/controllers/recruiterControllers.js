@@ -1,42 +1,11 @@
 const Recruiter = require('../models/recruiterModel')
-const Address = require('../models/addressModel')
 const User = require('../models/userModel')
-const { uploadImage, uploadImages } = require('../utils/funcs')
-
-const validateAddress = async (address) => {
-  if (address && address.province && address.district && address.ward) {
-    const provinceObj = await Address.findOne({ name: address.province })
-    if (!provinceObj) {
-      return { success: false, message: 'Tỉnh/Thành không tồn tại' }
-    }
-
-    const districtObj = provinceObj.districts.find(
-      (district) => district.name === address.district
-    )
-    if (!districtObj) {
-      return { success: false, message: 'Quận/Huyện không tồn tại' }
-    }
-
-    return {
-      success: true,
-      validatedAddress: {
-        province: { name: provinceObj.name, code: provinceObj.code },
-        district: { name: districtObj.name, code: districtObj.code }
-      }
-    }
-  }
-
-  return {
-    success: false,
-    message: 'Địa chỉ không hợp lệ hoặc thiếu thông tin'
-  }
-}
+const { uploadImage, uploadImages, validateAddress } = require('../utils/funcs')
 
 const recruiterControllers = {
   updateBasicInfo: async (req, res) => {
     const { recruiterId } = req.params
-    const { field, tax_id, address, name, email, phone } = req.body
-    // const { field, tax_id, address, name, email, phone, image } = req.body
+    const { field, tax_id, address, name, email, phone, image } = req.body
 
     try {
       const currentRecruiter = await Recruiter.findById(recruiterId)
@@ -67,17 +36,17 @@ const recruiterControllers = {
         updatedAddress = validatedAddress
       }
 
-      // const imageResult = await uploadImage(
-      //   currentRecruiter,
-      //   image,
-      //   'recruiter/basic'
-      // )
+      const imageResult = await uploadImage(
+        currentRecruiter,
+        image,
+        'recruiter/basic'
+      )
 
       const basic_info = await Recruiter.findOneAndUpdate(
         { _id: recruiterId },
         {
           $set: {
-            // 'basic_info.image': imageResult,
+            'basic_info.image': imageResult,
             'basic_info.field': field,
             'basic_info.tax_id': tax_id,
             'basic_info.address': updatedAddress,
@@ -129,13 +98,13 @@ const recruiterControllers = {
       }
       if (types) {
         updateFields['other_info.types'] = types.map((item) => ({
-          label: item.label,
+          name: item.name,
           value: item.value
         }))
       }
       if (wforms) {
         updateFields['other_info.wforms'] = wforms.map((item) => ({
-          label: item.label,
+          name: item.name,
           value: item.value
         }))
       }

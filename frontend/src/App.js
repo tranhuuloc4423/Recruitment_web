@@ -17,7 +17,7 @@ import { Bounce, ToastContainer } from 'react-toastify'
 import { useDispatch } from 'react-redux'
 import 'react-toastify/dist/ReactToastify.css'
 import { setCurrentUser } from './redux/slices/authSlice'
-import { getById } from './redux/api/app'
+import { getAddress, getById } from './redux/api/app'
 import { CreatePost } from './components'
 
 const { HOME, SIGNIN, SIGNUP, SETTINGS, INFO, POSTS, CV, TARGET, MANAGE } =
@@ -30,6 +30,7 @@ function App() {
 
   const fetchRoleData = async (user) => {
     await getById(user._id, dispatch, user.role)
+    await getAddress(dispatch)
   }
 
   useEffect(() => {

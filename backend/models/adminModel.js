@@ -68,13 +68,13 @@ const adminSchema = new mongoose.Schema(
       ],
       types: [
         {
-          label: String,
+          name: String,
           value: String
         }
       ],
       wforms: [
         {
-          label: String,
+          name: String,
           value: String
         }
       ]

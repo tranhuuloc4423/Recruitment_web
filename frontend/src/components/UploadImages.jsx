@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { IoClose } from 'react-icons/io5'
+import { toast } from 'react-toastify'
 
 const UploadImages = ({ files, setFiles }) => {
   const [images, setImages] = useState([])
@@ -12,7 +13,7 @@ const UploadImages = ({ files, setFiles }) => {
 
     // Nếu tổng số file vượt quá 5, chỉ giữ lại 5 file
     if (totalFiles > 5) {
-      alert('Bạn chỉ được chọn tối đa 5 hình ảnh!')
+      toast.info('Bạn chỉ được chọn tối đa 5 hình ảnh!')
       const limitedFiles = selectedFiles.slice(0, 5 - images.length) // Lấy các file mới sao cho không vượt quá giới hạn
       const newImages = limitedFiles.map((file) => URL.createObjectURL(file))
       setFiles((prevFiles) => [...prevFiles, ...limitedFiles])

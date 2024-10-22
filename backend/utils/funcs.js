@@ -1,3 +1,4 @@
+const Address = require('../models/addressModel')
 const cloudinary = require('./cloudinary')
 
 const uploadImage = async (currentRole, image, folder) => {
@@ -58,7 +59,37 @@ const uploadImages = async (currentRole, images, folder) => {
   }
 }
 
+const validateAddress = async (address) => {
+  if (address.province && address.district) {
+    const provinceObj = await Address.findOne({ name: address.province.name })
+    if (!provinceObj) {
+      return { success: false, message: 'Tỉnh/Thành không tồn tại' }
+    }
+
+    const districtObj = provinceObj.districts.find(
+      (district) => district.name === address.district.name
+    )
+    if (!districtObj) {
+      return { success: false, message: 'Quận/Huyện không tồn tại' }
+    }
+
+    return {
+      success: true,
+      validatedAddress: {
+        province: { name: provinceObj.name, code: provinceObj.code },
+        district: { name: districtObj.name, code: districtObj.code }
+      }
+    }
+  }
+
+  return {
+    success: false,
+    message: 'Địa chỉ không hợp lệ hoặc thiếu thông tin'
+  }
+}
+
 module.exports = {
   uploadImage,
-  uploadImages
+  uploadImages,
+  validateAddress
 }

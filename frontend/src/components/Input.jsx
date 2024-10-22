@@ -74,7 +74,7 @@ const Input = (props) => {
           <input
             {...inputProps}
             type={type}
-            className="outline-none border-2 w-full p-2 rounded-md"
+            className="outline-none border-2 w-full py-2 px-4 rounded-md"
             onChange={onChange}
             onBlur={handleFocus}
             onFocus={() =>

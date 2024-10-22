@@ -4,14 +4,14 @@ const skillControllers = {
   fetchAndSaveSkills: async (req, res) => {
     try {
       const skillsData = [
-        { value: 'reactjs', label: 'React JS' },
-        { value: 'nodejs', label: 'NodeJS' },
-        { value: 'mongodb', label: 'MongoDB' },
-        { value: 'javascript', label: 'JavaScript' },
-        { value: 'html', label: 'HTML' },
-        { value: 'css', label: 'CSS' },
-        { value: 'expressjs', label: 'ExpressJS' },
-        { value: 'python', label: 'Python' }
+        { value: 'reactjs', name: 'React JS' },
+        { value: 'nodejs', name: 'NodeJS' },
+        { value: 'mongodb', name: 'MongoDB' },
+        { value: 'javascript', name: 'JavaScript' },
+        { value: 'html', name: 'HTML' },
+        { value: 'css', name: 'CSS' },
+        { value: 'expressjs', name: 'ExpressJS' },
+        { value: 'python', name: 'Python' }
       ]
       const operations = skillsData.map((skill) => ({
         updateOne: {
@@ -60,9 +60,9 @@ const skillControllers = {
   },
 
   createSkill: async (req, res) => {
-    const { value, label } = req.body
+    const { value, name } = req.body
     try {
-      if (!value || !label) {
+      if (!value || !name) {
         return res.status(400).json({ message: 'Giá trị và nhãn là bắt buộc' })
       }
       const existingSkill = await Skill.findOne({ value })
@@ -70,7 +70,7 @@ const skillControllers = {
         return res.status(400).json({ message: 'Kỹ năng đã tồn tại' })
       }
 
-      const newSkill = new Skill({ value, label })
+      const newSkill = new Skill({ value, name })
       await newSkill.save()
       res.status(201).json(newSkill)
     } catch (error) {

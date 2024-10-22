@@ -20,7 +20,12 @@ const RichText = ({
   const handleInsertTemplate = () => {
     if (template) {
       const templateText = template // Nội dung mẫu
-      const newValue = value + templateText
+      let newValue
+      if (value) {
+        newValue = value + templateText
+      } else {
+        newValue = templateText
+      }
       onChange({ target: { name, value: newValue } })
       setCharCount(newValue.replace(/<[^>]+>/g, '').length)
     } else {

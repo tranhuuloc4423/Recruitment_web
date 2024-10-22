@@ -6,6 +6,7 @@ import {
   setOtherInfo,
   setTarget
 } from '../slices/appSlice'
+import { setAddress } from '../slices/addressSlice'
 
 const getById = async (id, dispatch, role) => {
   try {
@@ -54,4 +55,13 @@ const updateTarget = async (id, data, dispatch) => {
   }
 }
 
-export { updateBasicInfo, updateOtherInfo, updateTarget, getById }
+const getAddress = async (dispatch) => {
+  try {
+    const result = await axios.get(`/address/`)
+    dispatch(setAddress(result.data))
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export { updateBasicInfo, updateOtherInfo, updateTarget, getById, getAddress }

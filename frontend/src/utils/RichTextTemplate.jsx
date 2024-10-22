@@ -56,4 +56,34 @@ const experience = `
   </ul>
 `
 
-export { introduce, project, education, certificatesAchievements, experience }
+const jobDescription = `
+  <p><strong>Mô tả công việc:</strong></p>
+  <p>Chúng tôi đang tìm kiếm một ứng viên xuất sắc cho vị trí [Tên vị trí công việc] tại [Tên công ty]. Ứng viên sẽ chịu trách nhiệm về:</p>
+  <ul>
+    <li><strong>Nhiệm vụ chính 1:</strong> Mô tả chi tiết về nhiệm vụ này và ảnh hưởng của nó đến đội ngũ và công ty.</li>
+    <li><strong>Nhiệm vụ chính 2:</strong> Mô tả công việc này cùng với các kỹ năng cần thiết để thực hiện nó hiệu quả.</li>
+    <li><strong>Nhiệm vụ chính 3:</strong> Liệt kê bất kỳ nhiệm vụ bổ sung nào có thể phát sinh trong quá trình làm việc.</li>
+  </ul>
+  <p>Chúng tôi hy vọng ứng viên sẽ thể hiện sự sáng tạo và khả năng giải quyết vấn đề trong các nhiệm vụ được giao.</p>
+`
+
+const jobRequirements = `
+  <p><strong>Yêu cầu công việc:</strong></p>
+  <p>Để đảm bảo thành công trong vị trí này, ứng viên cần đáp ứng các yêu cầu sau:</p>
+  <ul>
+    <li><strong>Yêu cầu thứ nhất:</strong> Kinh nghiệm làm việc tối thiểu [Số năm] trong lĩnh vực liên quan.</li>
+    <li><strong>Yêu cầu thứ hai:</strong> Kiến thức vững về [Các kỹ năng hoặc công nghệ cụ thể].</li>
+    <li><strong>Yêu cầu thứ ba:</strong> Kỹ năng giao tiếp tốt và khả năng làm việc nhóm.</li>
+  </ul>
+  <p>Chúng tôi ưu tiên những ứng viên có tư duy sáng tạo và khả năng làm việc độc lập, đồng thời có thể thích nghi nhanh chóng với môi trường làm việc năng động.</p>
+`
+
+export {
+  introduce,
+  project,
+  education,
+  certificatesAchievements,
+  experience,
+  jobDescription,
+  jobRequirements
+}

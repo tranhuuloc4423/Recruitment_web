@@ -42,7 +42,12 @@ const candidateSchema = new mongoose.Schema(
         // }
       },
       gender: {
-        type: String
+        name: {
+          type: String
+        },
+        value: {
+          type: String
+        }
       }
     },
     other_info: {
@@ -71,7 +76,7 @@ const candidateSchema = new mongoose.Schema(
       skills: [
         {
           value: String,
-          label: String
+          name: String
         }
       ],
       target_money: {
@@ -85,7 +90,7 @@ const candidateSchema = new mongoose.Schema(
       types: [
         {
           value: String,
-          label: String
+          name: String
         }
       ],
       address: {
@@ -97,7 +102,7 @@ const candidateSchema = new mongoose.Schema(
       wforms: [
         {
           value: String,
-          label: String
+          name: String
         }
       ]
     },

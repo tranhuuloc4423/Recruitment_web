@@ -5,6 +5,7 @@ import BasicInfoForm from '../pages/BasicInfoForm'
 import { useSelector } from 'react-redux'
 import info from '../utils/infos'
 import defaultAvatar from '../assets/imgs/blank-profile-picture-973460_960_720.png'
+import { IoLocationOutline } from 'react-icons/io5'
 
 const BasicInfo = () => {
   const [open, setOpen] = useState(false)
@@ -46,11 +47,19 @@ const BasicInfo = () => {
               {icon && (
                 <div className="flex items-center gap-2 py-2 px-2">
                   <span>{icon}</span>
-                  <span>{currentRole?.basic_info[name]}</span>{' '}
+                  {name === 'gender' ? (
+                    <span>{currentRole?.basic_info.gender?.name}</span>
+                  ) : (
+                    <span>{currentRole?.basic_info[name]}</span>
+                  )}
                 </div>
               )}
             </React.Fragment>
           ))}
+          <div className="flex items-center gap-2 py-2 px-2">
+            <IoLocationOutline size={24} />
+            <span>{`${currentRole?.basic_info.address?.province?.name}, ${currentRole?.basic_info.address?.district?.name}`}</span>
+          </div>
         </div>
       </div>
       <Line />
