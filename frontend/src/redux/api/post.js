@@ -30,6 +30,15 @@ const getPost = async (id) => {
   }
 }
 
+const getAllPosted = async () => {
+  try {
+    const res = await axios.get(`/post/${id}`)
+    return res.data.post
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const getRoleData = async (role, id) => {
   try {
     const res = await axios.get(`/${role}/role/${id}`)

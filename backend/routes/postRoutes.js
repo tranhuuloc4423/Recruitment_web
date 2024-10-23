@@ -12,7 +12,8 @@ const {
   updateSaved,
   updateStatus,
   updateApproved,
-  searchPosts
+  searchPosts,
+  getAllPosted
 } = require('../controllers/postControllers')
 
 router.post('/create', createPost)
@@ -20,6 +21,7 @@ router.put('/:postId', updatePost)
 router.delete('/:postId', deletePost)
 router.get('/', getAllPosts)
 router.get('/confirmed', getAllConfirmedPosts)
+router.get('/posted', getAllPosted)
 router.get('/user/:userId/', getPostByUserId)
 router.get('/:postId', getPostById)
 router.put('/:postId/applied', updateApplied)

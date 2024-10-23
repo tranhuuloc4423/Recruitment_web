@@ -229,6 +229,16 @@ const postController = {
       res.status(500).json({ message: 'Không thể lấy các bài Post.' })
     }
   },
+  getAllPosted: async (req, res) => {
+    try {
+      const posts = await Post.find({ status: 'posted' })
+
+      res.status(200).json(posts)
+    } catch (error) {
+      console.error('Có lỗi xảy ra khi lấy các bài Post:', error)
+      res.status(500).json({ message: 'Không thể lấy các bài Post.' })
+    }
+  },
   getPostByUserId: async (req, res) => {
     const { userId } = req.params
 

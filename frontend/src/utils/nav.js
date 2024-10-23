@@ -98,14 +98,14 @@ const manageNav = [
     name: 'admin',
     nav: [
       {
-        name: 'Đã duyệt',
-        path: '/manage',
+        name: 'Đã đăng',
+        path: '/manage/',
         active: true,
         id: 0
       },
       {
-        name: 'Đã đăng',
-        path: '/manage/' + POSTED,
+        name: 'Đã duyệt',
+        path: '/manage/' + CONFIRMPOST,
         active: false,
         id: 1
       },
