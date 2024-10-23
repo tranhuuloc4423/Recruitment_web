@@ -10,7 +10,9 @@ import {
 } from '../components'
 import Recruiter from '../pages/Recruiter'
 import { getAllPost } from '../redux/api/post'
+import { useNavigate } from 'react-router-dom'
 const Main = () => {
+  const navigate = useNavigate()
   const [posts, setPosts] = useState([])
   const [suggess, setsuggess] = useState([
     {
@@ -26,13 +28,28 @@ const Main = () => {
       label: 'HTML'
     }
   ])
-  const [selectedPost, setSelectedPost] = useState(null)
+  const [selectedPost, setSelectedPost] = useState(posts[0]?._id)
   const [search, setSearch] = useState('')
 
-  useEffect(async () => {
-    let data = await getAllPost()
+  const getPosts = async () => {
+    const data = await getAllPost()
     setPosts(data)
+  }
+
+  const handlePostClick = (id) => {
+    setSelectedPost(id)
+  }
+
+  useEffect(() => {
+    getPosts()
   }, [])
+
+  useEffect(() => {
+    if (posts && posts.length > 0) {
+      setSelectedPost(posts[0])
+    }
+  }, [posts])
+
   return (
     <div className="flex flex-col gap-4 justify-center items-center mx-auto">
       <div className="w-2/3 flex flex-col gap-2">
@@ -70,15 +87,19 @@ const Main = () => {
           </span>
         </div>
         <div className="flex flex-row gap-4">
-          <div className="w-1/3 flex flex-col gap-2 overflow-y-scroll">
+          <div className="w-1/3 flex flex-col gap-2 overflow-y-auto">
             {posts?.map((post, index) => (
-              <React.Fragment key={index}>
-                <Post post={post} />
-              </React.Fragment>
+              <div
+                key={index}
+                onClick={() => handlePostClick(post._id)}
+                className="cursor-pointer"
+              >
+                <Post post={post} select={selectedPost} />
+              </div>
             ))}
           </div>
           <div className="w-2/3">
-            <PostDetails />
+            <PostDetails id={selectedPost} />
           </div>
         </div>
       </div>

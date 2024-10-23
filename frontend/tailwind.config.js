@@ -8,7 +8,8 @@ module.exports = {
         second: '#fbc73b',
         red: '#ED1B2F',
         overlay: 'rgba(0,0,0, 0.25)',
-        'black-100': '#414042'
+        'black-100': '#414042',
+        'gray-100': '#dedede'
       },
       fontFamily: {
         sans: ['Lexend', 'sans-serif']

@@ -3,7 +3,7 @@ import axios from '../../axios'
 
 const createPost = async (data) => {
   try {
-    const res = await axios.post(`/post/create`, { postData: data })
+    await axios.post(`/post/create`, { postData: data })
 
     toast.success('Đăng bài thành công!')
   } catch (error) {
@@ -21,14 +21,22 @@ const getAllPost = async () => {
   }
 }
 
-const getRoleData = async (role, id) => {
+const getPost = async (id) => {
   try {
-    console.log(`/${role}/role/${id}`)
-    const res = await axios.get(`/${role}/role/${id}`)
-    return res
+    const res = await axios.get(`/post/${id}`)
+    return res.data.post
   } catch (error) {
     console.log(error)
   }
 }
 
-export { createPost, getAllPost, getRoleData }
+const getRoleData = async (role, id) => {
+  try {
+    const res = await axios.get(`/${role}/role/${id}`)
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export { createPost, getAllPost, getRoleData, getPost }

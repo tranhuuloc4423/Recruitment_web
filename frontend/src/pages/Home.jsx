@@ -6,9 +6,9 @@ import { useEffect } from 'react'
 const Home = () => {
   const { currentRole } = useSelector((state) => state.app)
   useEffect(() => {
-    if (currentRole) {
-      console.log(currentRole)
-    }
+    // if (currentRole) {
+    //   // console.log(currentRole)
+    // }
   }, [currentRole])
   return (
     <div className="bg-[#f0f0f0]">

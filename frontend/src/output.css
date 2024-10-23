@@ -598,10 +598,6 @@ video {
   font-size: 16px;
 }
 
-.para-3 {
-  font-size: 12px;
-}
-
 .flex-row-center {
   display: flex;
   flex-direction: row;
@@ -733,6 +729,10 @@ video {
 
 .mt-4 {
   margin-top: 1rem;
+}
+
+.inline-block {
+  display: inline-block;
 }
 
 .flex {
@@ -1072,6 +1072,11 @@ video {
   border-radius: 0.375rem;
 }
 
+.rounded-l {
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
 .border {
   border-width: 1px;
 }
@@ -1088,6 +1093,22 @@ video {
   border-bottom-width: 2px;
 }
 
+.border-r-0 {
+  border-right-width: 0px;
+}
+
+.border-r-4 {
+  border-right-width: 4px;
+}
+
+.border-l-4 {
+  border-left-width: 4px;
+}
+
+.border-l-8 {
+  border-left-width: 8px;
+}
+
 .border-black {
   --tw-border-opacity: 1;
   border-color: rgb(0 0 0 / var(--tw-border-opacity));
@@ -1096,6 +1117,11 @@ video {
 .border-black-100 {
   --tw-border-opacity: 1;
   border-color: rgb(65 64 66 / var(--tw-border-opacity));
+}
+
+.border-gray-100 {
+  --tw-border-opacity: 1;
+  border-color: rgb(222 222 222 / var(--tw-border-opacity));
 }
 
 .border-primary {
@@ -1135,11 +1161,6 @@ video {
 .bg-black-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(65 64 66 / var(--tw-bg-opacity));
-}
-
-.bg-gray-200 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
 }
 
 .bg-gray-50 {
@@ -1213,6 +1234,11 @@ video {
 .px-20 {
   padding-left: 5rem;
   padding-right: 5rem;
+}
+
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
 
 .px-4 {
@@ -1309,6 +1335,11 @@ video {
 .text-black {
   --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
+.text-black-100 {
+  --tw-text-opacity: 1;
+  color: rgb(65 64 66 / var(--tw-text-opacity));
 }
 
 .text-blue-700 {
@@ -1424,11 +1455,4 @@ video {
 
 .active\:bg-\[rgba\(40\2c 79\2c 158\2c 0\.85\)\]:active {
   background-color: rgba(40,79,158,0.85);
-}
-
-@media (prefers-color-scheme: dark) {
-  .dark\:bg-gray-700 {
-    --tw-bg-opacity: 1;
-    background-color: rgb(55 65 81 / var(--tw-bg-opacity));
-  }
 }

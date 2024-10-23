@@ -29,7 +29,7 @@ const Address = ({
         items={provinces}
         selectedItem={selectedProvince}
         setSelectedItem={setSelectedProvince}
-        label="Chọn tỉnh"
+        label="Chọn Tỉnh/thành phố"
         required
       />
 
@@ -37,7 +37,7 @@ const Address = ({
         items={cities}
         selectedItem={selectedCity}
         setSelectedItem={setSelectedCity}
-        label="Chọn thành phố"
+        label="Chọn Quận/huyện/thành phố"
         required
         disabled={selectedProvince === null}
       />

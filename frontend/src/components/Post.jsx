@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Line from './Line'
 import Tag from './Tag'
 import Button from './Button'
+import StatusTag from './StatusTag'
 import { LuCircleDollarSign } from 'react-icons/lu'
 import { MdInfoOutline, MdOutlineFactCheck } from 'react-icons/md'
 import { IoMdPeople } from 'react-icons/io'
@@ -12,7 +13,7 @@ import { HiOutlineEye } from 'react-icons/hi'
 import { useSelector } from 'react-redux'
 import { getRoleData } from '../redux/api/post'
 
-const Post = ({ post }) => {
+const Post = ({ post, select }) => {
   const { currentUser } = useSelector((state) => state.auth)
   const { currentRole } = useSelector((state) => state.app)
   const {
@@ -20,20 +21,20 @@ const Post = ({ post }) => {
     skills,
     salary,
     quantity,
-    date,
     date_expiration,
     author,
-    authorType
+    authorType,
+    type
   } = post
-  const [name, setName] = useState('')
-  const [image, setImage] = useState('')
+  const [basicInfo, setBasicInfo] = useState()
+  const [otherInfo, setOtherInfo] = useState()
 
   const getBasicData = async () => {
     console.log(post)
     const res = await getRoleData(authorType, author)
     console.log(res)
-    // setName(res.basic_info?.name)
-    // setImage(res.basic_info?.image.url)
+    setBasicInfo(res.basic_info)
+    setOtherInfo(res.other_info)
   }
 
   useEffect(() => {
@@ -41,7 +42,11 @@ const Post = ({ post }) => {
   }, [])
 
   return (
-    <div className="flex flex-col gap-2 bg-white shadow-md p-2 rounded">
+    <div
+      className={`flex flex-col gap-2 bg-white shadow-md p-2 rounded ${
+        select === post._id ? 'border-2 border-l-8 border-second' : ''
+      }`}
+    >
       {/* state */}
       {/* <div className="flex-row-center gap-2">
         <span>Trạng thái : </span>
@@ -49,9 +54,13 @@ const Post = ({ post }) => {
       </div> */}
 
       {/* time and tag */}
-      <div className="flex-row-center justify-between ">
-        <span className="para-3">Hạn ứng tuyển : {date_expiration}</span>
-        <span>Tag hot</span>
+      <div className="flex-row-center justify-between w-full">
+        <span className="para-1">Hạn ứng tuyển : {date_expiration}</span>
+        {type !== 'normal' && (
+          <span className="relative right-[-8px]">
+            <StatusTag state={type} />
+          </span>
+        )}
       </div>
 
       {/* title */}
@@ -59,39 +68,37 @@ const Post = ({ post }) => {
 
       {/* image */}
       <div className="flex-row-center gap-2">
-        <div className="w-[60px] h-[60px]">
+        <div className="w-[60px] h-[60px] border border-gray-100">
           <img
-            src={image || 'https://via.placeholder.com/300'}
+            src={basicInfo?.image?.url || 'https://via.placeholder.com/300'}
             alt="avatar"
             className="w-full h-full"
           />
         </div>
-        <span>{name || 'fpt'}</span>
+        <span className="para-1">{basicInfo?.name}</span>
       </div>
 
       <Line />
       {/* infos */}
-      <div className="grid grid-cols-2 grid-flow-row gap-2">
-        <span>
-          <MdInfoOutline size={24} />
-        </span>
-        <span>
+      <div className="grid grid-cols-2 grid-flow-row gap-2 text-black-100">
+        <span className="flex flex-row items-center gap-2">
           <LuCircleDollarSign size={24} />
+          <span>{salary}</span>
         </span>
 
-        <span>
+        <span className="flex flex-row items-center gap-2">
           <IoMdPeople size={24} />
+          <span>{quantity} người</span>
         </span>
 
-        <span>
+        <span className="flex flex-row items-center gap-2">
           <IoLocationOutline size={24} />
+          <span>{`${basicInfo?.address?.province?.name}`}</span>
         </span>
 
-        <span>
+        <span className="flex flex-row items-center gap-2">
           <PiBagBold size={24} />
-        </span>
-        <span>
-          <FiClock size={24} />
+          {/* <span>{`${otherInfo.?.}`}</span> */}
         </span>
       </div>
 
@@ -99,9 +106,9 @@ const Post = ({ post }) => {
       <div className="flex-row-center gap-2">
         <span>Kỹ năng : </span>
         <div className="flex-row-center gap-2">
-          <Tag label={'react'} />
-          <Tag label={'html'} />
-          <Tag label={'css'} />
+          {skills.map((skill, index) => (
+            <Tag key={index} label={skill.name} />
+          ))}
         </div>
       </div>
       <Line />

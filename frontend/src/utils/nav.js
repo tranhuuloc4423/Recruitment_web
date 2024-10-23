@@ -1,6 +1,17 @@
 import paths from './paths'
 
-const { INFO, CV, TARGET, POSTS, MANAGE, CHART } = paths
+const {
+  INFO,
+  CV,
+  TARGET,
+  POSTS,
+  MANAGE,
+  CHART,
+  CHECKPOST,
+  CONFIRMPOST,
+  CREATEPOST,
+  POSTED
+} = paths
 
 const nav = [
   {
@@ -88,25 +99,25 @@ const manageNav = [
     nav: [
       {
         name: 'Đã duyệt',
-        path: '/confirmed',
+        path: '/manage',
         active: true,
         id: 0
       },
       {
         name: 'Đã đăng',
-        path: '/posted',
+        path: '/manage/' + POSTED,
         active: false,
         id: 1
       },
       {
         name: 'Duyệt bài',
-        path: '/confirm-posts',
+        path: '/manage/' + CHECKPOST,
         active: false,
         id: 2
       },
       {
         name: 'Đăng bài',
-        path: '/create-post',
+        path: '/manage/' + CREATEPOST,
         active: false,
         id: 3
       }

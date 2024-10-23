@@ -8,7 +8,6 @@ const {
   getAllConfirmedPosts,
   getPostByUserId,
   getPostById,
-  updateViews,
   updateApplied,
   updateSaved,
   updateStatus,
@@ -21,9 +20,8 @@ router.put('/:postId', updatePost)
 router.delete('/:postId', deletePost)
 router.get('/', getAllPosts)
 router.get('/confirmed', getAllConfirmedPosts)
-router.get('/:userId/', getPostByUserId)
+router.get('/user/:userId/', getPostByUserId)
 router.get('/:postId', getPostById)
-router.put('/:postId/views', updateViews)
 router.put('/:postId/applied', updateApplied)
 router.put('/:postId/approved', updateApproved)
 router.put('/:postId/saved', updateSaved)

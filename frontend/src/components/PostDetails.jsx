@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { LuCircleDollarSign, LuHeart } from 'react-icons/lu'
 import { MdInfoOutline } from 'react-icons/md'
 import { IoMdPeople } from 'react-icons/io'
@@ -8,23 +8,48 @@ import { FiClock } from 'react-icons/fi'
 import Line from './Line'
 import Tag from './Tag'
 import Button from './Button'
+import { getPost, getRoleData } from '../redux/api/post'
 
-const PostDetails = () => {
+const PostDetails = ({ id }) => {
+  const [post, setPost] = useState()
+  const [basicInfo, setBasicInfo] = useState()
+  const [otherInfo, setOtherInfo] = useState()
+
+  const getBasicData = async (post) => {
+    const res = await getRoleData(post?.authorType, post?.author)
+    setBasicInfo(res?.basic_info)
+    setOtherInfo(res?.other_info)
+  }
+
+  const getPostById = async (id) => {
+    const res = await getPost(id)
+    console.log(res)
+    setPost(res)
+  }
+
+  useEffect(() => {
+    getPostById(id)
+  }, [id])
+
+  useEffect(() => {
+    getBasicData(post)
+  }, [post])
+
   return (
     <div className="flex flex-col bg-white rounded p-4 gap-4 shadow-md">
       {/* title */}
-      <div className="heading-2">Title</div>
+      <div className="heading-2">{post?.title}</div>
 
       {/* image */}
       <div className="flex-row-center gap-2">
-        <div className="w-[60px] h-[60px]">
+        <div className="w-[60px] h-[60px] border border-gray-100">
           <img
-            src="https://via.placeholder.com/300"
+            src={basicInfo?.image?.url}
             alt="avatar"
             className="w-full h-full"
           />
         </div>
-        <span>Tên công ty</span>
+        <span>{basicInfo?.name}</span>
       </div>
 
       <div className="flex flex-row justify-between gap-2 items-center">
@@ -36,70 +61,56 @@ const PostDetails = () => {
       <Line />
       {/* infos */}
       <div className="grid grid-cols-2 grid-flow-row gap-2">
-        <span>
-          <MdInfoOutline size={24} />
-        </span>
-        <span>
+        <span className="flex flex-row items-center gap-2">
           <LuCircleDollarSign size={24} />
+          <span>{post?.salary} vnđ</span>
         </span>
 
-        <span>
+        <span className="flex flex-row items-center gap-2">
           <IoMdPeople size={24} />
+          <span>{post?.quantity} người</span>
         </span>
 
-        <span>
+        <span className="flex flex-row items-center gap-2">
           <IoLocationOutline size={24} />
+          <span>{`${basicInfo?.address?.province?.name}, ${basicInfo?.address?.district?.name}`}</span>
         </span>
 
         <span>
           <PiBagBold size={24} />
         </span>
-        <span>
-          <FiClock size={24} />
-        </span>
       </div>
 
-      <Line />
       {/* skills */}
       <div className="flex-row-center gap-2">
-        <span className="heading-3">Yêu cầu kỹ năng : </span>
+        <span className="para-1">Yêu cầu kỹ năng : </span>
         <div className="flex-row-center gap-2">
-          <Tag label={'react'} />
-          <Tag label={'html'} />
-          <Tag label={'css'} />
+          {post?.skills?.map((skill) => (
+            <Tag key={skill?.value} label={skill?.name} />
+          ))}
         </div>
       </div>
       <Line />
 
       {/* description */}
       <div className="flex flex-col gap-2">
-        <span className="heading-3">Mô tả công việc</span>
-        <div>
-          • Hot domain - Fintech - with very promising and challenging products.
-          • Dynamic working environment with solid and state of the art
-          technologies On the job you will: • Work with other team members to
-          understand the requirements, technical solutions and deliver
-          high-quality, well-tested code • Collaborate with other team members
-          (backend, product, marketing, design) for external web services,
-          operators who use internal operating services, and backendengineers
-          who provide API
-        </div>
+        <span className="heading-3">Mô tả công việc:</span>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: post?.desc
+          }}
+        ></div>
       </div>
 
       <Line />
       {/* work requirement */}
       <div className="flex flex-col gap-2">
-        <span className="heading-3">Yêu cầu công việc</span>
-        <div>
-          • Hot domain - Fintech - with very promising and challenging products.
-          • Dynamic working environment with solid and state of the art
-          technologies On the job you will: • Work with other team members to
-          understand the requirements, technical solutions and deliver
-          high-quality, well-tested code • Collaborate with other team members
-          (backend, product, marketing, design) for external web services,
-          operators who use internal operating services, and backendengineers
-          who provide API
-        </div>
+        <span className="heading-3">Yêu cầu công việc:</span>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: post?.request
+          }}
+        ></div>
       </div>
       <Line />
 

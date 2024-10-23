@@ -9,7 +9,11 @@ const paths = {
   CV: 'cv',
   TARGET: 'target',
   MANAGE: 'manage',
-  CHART: 'chart'
+  CHART: 'chart',
+  CREATEPOST: 'create-post',
+  CHECKPOST: 'check-posts',
+  CONFIRMPOST: 'confirmed-posts',
+  POSTED: 'posted'
 }
 
 export default paths

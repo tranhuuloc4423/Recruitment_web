@@ -246,29 +246,28 @@ const postController = {
       res.status(500).json({ message: error.message })
     }
   },
+  // getPostById: async (req, res) => {
+  //   const { postId } = req.params
+
+  //   try {
+  //     const post = await Post.findOne({
+  //       _id: postId,
+  //       author: userId,
+  //       authorType
+  //     })
+
+  //     if (!post) {
+  //       return res
+  //         .status(404)
+  //         .json({ message: 'Bài viết không tìm thấy hoặc bạn không có quyền' })
+  //     }
+
+  //     res.json(post)
+  //   } catch (error) {
+  //     res.status(500).json({ message: error.message })
+  //   }
+  // },
   getPostById: async (req, res) => {
-    const { postId } = req.params
-    const { userId, authorType } = req.body
-
-    try {
-      const post = await Post.findOne({
-        _id: postId,
-        author: userId,
-        authorType
-      })
-
-      if (!post) {
-        return res
-          .status(404)
-          .json({ message: 'Bài viết không tìm thấy hoặc bạn không có quyền' })
-      }
-
-      res.json(post)
-    } catch (error) {
-      res.status(500).json({ message: error.message })
-    }
-  },
-  updateViews: async (req, res) => {
     const { postId } = req.params
 
     try {

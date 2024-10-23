@@ -71,7 +71,7 @@ const info = [
       {
         title: 'Hình ảnh',
         desc: 'Các hình ảnh của công ty',
-        type: 'richText',
+        type: 'images',
         id: 2,
         name: 'images'
       },
