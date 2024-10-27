@@ -252,9 +252,29 @@ const postController = {
       res.status(500).json({ message: 'Không thể lấy các bài Post.' })
     }
   },
+  getAllPostedPosts: async (req, res) => {
+    try {
+      const posts = await Post.find({ status: 'posted' })
+
+      res.status(200).json(posts)
+    } catch (error) {
+      console.error('Có lỗi xảy ra khi lấy các bài Post:', error)
+      res.status(500).json({ message: 'Không thể lấy các bài Post.' })
+    }
+  },
   getAllConfirmedPosts: async (req, res) => {
     try {
       const posts = await Post.find({ status: 'confirmed' })
+
+      res.status(200).json(posts)
+    } catch (error) {
+      console.error('Có lỗi xảy ra khi lấy các bài Post:', error)
+      res.status(500).json({ message: 'Không thể lấy các bài Post.' })
+    }
+  },
+  getAllExpiredPosts: async (req, res) => {
+    try {
+      const posts = await Post.find({ status: 'expired' })
 
       res.status(200).json(posts)
     } catch (error) {
