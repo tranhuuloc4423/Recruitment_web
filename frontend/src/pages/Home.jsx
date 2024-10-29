@@ -13,7 +13,7 @@ const Home = () => {
   return (
     <div className="bg-[#f0f0f0]">
       <Header />
-      <div className="py-4 pb-8 px-20 mx-auto">
+      <div className="py-4 pb-8 px-20 mx-auto h-auto">
         <Outlet />
       </div>
       <Footer />

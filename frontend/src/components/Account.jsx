@@ -34,17 +34,24 @@ const Account = () => {
           active ? 'translate-y-0' : 'translate-y-0 hidden'
         } ${active ? 'duration-200' : 'duration-200'}`}
       >
-        <Link to={'/settings'} className="flex items-center gap-2 px-4 py-2">
-          <IoSettingsOutline />
-          Cài đặt
-        </Link>
-        <div
-          className="flex items-center gap-2 px-4 py-2"
-          onClick={() => console.log(1)}
-        >
-          <LuLogOut />
-          Đăng xuất
-        </div>
+        {currentUser?.role && (
+          <>
+            <Link
+              to={'/settings'}
+              className="flex items-center gap-2 px-4 py-2"
+            >
+              <IoSettingsOutline />
+              Cài đặt
+            </Link>
+            <div
+              className="flex items-center gap-2 px-4 py-2"
+              onClick={() => console.log(1)}
+            >
+              <LuLogOut />
+              Đăng xuất
+            </div>
+          </>
+        )}
       </div>
     </div>
   )

@@ -4,7 +4,6 @@ import axios from '../../axios'
 const createPost = async (data) => {
   try {
     await axios.post(`/post/create`, { postData: data })
-
     toast.success('Đăng bài thành công!')
   } catch (error) {
     console.log(error)
@@ -12,7 +11,7 @@ const createPost = async (data) => {
   }
 }
 
-const getAllPost = async () => {
+const getAllPostConfirmed = async () => {
   try {
     const res = await axios.get(`/post/confirmed`)
     return res.data
@@ -32,8 +31,8 @@ const getPost = async (id) => {
 
 const getAllPosted = async () => {
   try {
-    const res = await axios.get(`/post/${id}`)
-    return res.data.post
+    const res = await axios.get(`/post/posted`)
+    return res.data
   } catch (error) {
     console.log(error)
   }
@@ -48,4 +47,4 @@ const getRoleData = async (role, id) => {
   }
 }
 
-export { createPost, getAllPost, getRoleData, getPost }
+export { createPost, getAllPostConfirmed, getRoleData, getPost, getAllPosted }

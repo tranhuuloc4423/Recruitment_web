@@ -19,7 +19,7 @@ const nav = [
     nav: [
       {
         name: 'Tin tuyển dụng',
-        path: '/' + POSTS
+        path: '/' + POSTS + '/'
       },
       {
         name: 'Thông tin',
@@ -27,11 +27,11 @@ const nav = [
       },
       {
         name: 'Quản lý tin',
-        path: '/' + MANAGE
+        path: '/' + MANAGE + '/'
       },
       {
         name: 'Thống kê',
-        path: '/' + CHART
+        path: '/' + CHART + '/'
       }
     ],
     basic_info: {}
@@ -41,15 +41,15 @@ const nav = [
     nav: [
       {
         name: 'Tin tuyển dụng',
-        path: '/' + POSTS
+        path: '/' + POSTS + '/'
       },
       {
         name: 'Thông tin',
-        path: '/' + INFO
+        path: '/' + INFO + '/'
       },
       {
         name: 'Quản lý tin',
-        path: '/' + MANAGE
+        path: '/' + MANAGE + '/'
       }
     ]
   },
@@ -58,15 +58,15 @@ const nav = [
     nav: [
       {
         name: 'Tin tuyển dụng',
-        path: '/' + POSTS
+        path: '/' + POSTS + '/'
       },
       {
         name: 'Thông tin',
-        path: '/' + INFO
+        path: '/' + INFO + '/'
       },
       {
         name: 'Quản lý tin',
-        path: '/' + MANAGE
+        path: '/' + MANAGE + '/'
       }
     ]
   }
@@ -127,22 +127,22 @@ const manageNav = [
     name: 'recruiter',
     nav: [
       {
-        name: 'Đã duyệt',
-        path: '/confirmed',
+        name: 'Đã đăng',
+        path: '/manage/',
         active: true,
         id: 0
       },
       {
-        name: 'Đã đăng',
-        path: '/posted',
+        name: 'Đã duyệt',
+        path: '/manage/' + CONFIRMPOST,
         active: false,
         id: 1
       },
       {
         name: 'Đăng bài',
-        path: '/create-post',
+        path: '/manage/' + CREATEPOST,
         active: false,
-        id: 2
+        id: 3
       }
     ]
   },

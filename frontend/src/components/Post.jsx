@@ -13,9 +13,8 @@ import { HiOutlineEye } from 'react-icons/hi'
 import { useSelector } from 'react-redux'
 import { getRoleData } from '../redux/api/post'
 
-const Post = ({ post, select }) => {
+const Post = ({ post, select, manage }) => {
   const { currentUser } = useSelector((state) => state.auth)
-  const { currentRole } = useSelector((state) => state.app)
   const {
     title,
     skills,
@@ -24,8 +23,11 @@ const Post = ({ post, select }) => {
     date_expiration,
     author,
     authorType,
-    type
+    type,
+    views,
+    applied
   } = post
+  // const { view, confirm, remove, update, extend } = manage
   const [basicInfo, setBasicInfo] = useState()
   const [otherInfo, setOtherInfo] = useState()
 
@@ -33,8 +35,8 @@ const Post = ({ post, select }) => {
     console.log(post)
     const res = await getRoleData(authorType, author)
     console.log(res)
-    setBasicInfo(res.basic_info)
-    setOtherInfo(res.other_info)
+    setBasicInfo(res?.basic_info)
+    setOtherInfo(res?.other_info)
   }
 
   useEffect(() => {
@@ -103,9 +105,9 @@ const Post = ({ post, select }) => {
       </div>
 
       {/* skills */}
-      <div className="flex-row-center gap-2">
+      <div className="flex-col gap-2">
         <span>Kỹ năng : </span>
-        <div className="flex-row-center gap-2">
+        <div className="flex-row-center flex-wrap gap-2 mt-1">
           {skills.map((skill, index) => (
             <Tag key={index} label={skill.name} />
           ))}
@@ -117,11 +119,11 @@ const Post = ({ post, select }) => {
       <div className="flex flex-col">
         <div className="flex-row-center gap-2">
           <HiOutlineEye size={24} />
-          <span>Lượt xem : {44}</span>
+          <span>Lượt xem : {views}</span>
         </div>
         <div className="flex-row-center gap-2">
           <MdOutlineFactCheck size={24} />
-          <span>Lượt ứng tuyển : {44}</span>
+          <span>Lượt ứng tuyển : {applied?.length}</span>
         </div>
       </div>
 
@@ -129,16 +131,17 @@ const Post = ({ post, select }) => {
 
       {/* applied button */}
       <div className="flex flex-row justify-end">
-        <Button label="Ứng tuyển" className="w-fit" />
+        {currentUser.role === 'candidate' && <Button label="Ứng tuyển" />}
       </div>
 
       {/* manage buttons */}
-      {/* <div className="w-full flex flex-row justify-end gap-2">
-        <Button label="Xem" />
-        <Button label="Gia hạn" />
-        <Button label="Cập nhật" />
-        <Button label="Xoá" />
-      </div> */}
+      <div className="w-full grid grid-cols-2 grid-flow-row gap-2">
+        {manage?.view && <Button label="Xem" />}
+        {manage?.confirm && <Button label="Duyệt" />}
+        {manage?.remove && <Button label="Xoá" />}
+        {manage?.update && <Button label="Cập nhật" />}
+        {manage?.extend && <Button label="Gia hạn" />}
+      </div>
     </div>
   )
 }

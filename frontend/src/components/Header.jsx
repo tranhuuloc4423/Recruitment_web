@@ -20,7 +20,7 @@ const Header = () => {
           {currentRole &&
             nav
               .find((nav) => nav.name === currentUser?.role)
-              ?.nav.map((item, index) => (
+              ?.nav?.map((item, index) => (
                 <Link
                   key={index}
                   to={item.path}

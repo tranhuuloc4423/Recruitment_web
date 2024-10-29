@@ -9,10 +9,8 @@ import {
   FilterFrame
 } from '../components'
 import Recruiter from '../pages/Recruiter'
-import { getAllPost } from '../redux/api/post'
-import { useNavigate } from 'react-router-dom'
+import { getAllPostConfirmed } from '../redux/api/post'
 const Main = () => {
-  const navigate = useNavigate()
   const [posts, setPosts] = useState([])
   const [suggess, setsuggess] = useState([
     {
@@ -32,7 +30,7 @@ const Main = () => {
   const [search, setSearch] = useState('')
 
   const getPosts = async () => {
-    const data = await getAllPost()
+    const data = await getAllPostConfirmed()
     setPosts(data)
   }
 
@@ -86,8 +84,8 @@ const Main = () => {
             <FilterFrame />
           </span>
         </div>
-        <div className="flex flex-row gap-4">
-          <div className="w-1/3 flex flex-col gap-2 overflow-y-auto">
+        <div className="flex flex-row gap-4 h-[1440px] overflow-hidden">
+          <div className="w-1/3 flex flex-col gap-2">
             {posts?.map((post, index) => (
               <div
                 key={index}
