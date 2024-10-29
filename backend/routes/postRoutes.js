@@ -6,6 +6,8 @@ const {
   deletePost,
   getAllPosts,
   getAllConfirmedPosts,
+  getAllPostedPosts,
+  getAllExpiredPosts,
   getPostByUserId,
   getPostById,
   updateApplied,
@@ -21,7 +23,8 @@ router.put('/:postId', updatePost)
 router.delete('/:postId', deletePost)
 router.get('/', getAllPosts)
 router.get('/confirmed', getAllConfirmedPosts)
-router.get('/posted', getAllPosted)
+router.get('/posted', getAllPostedPosts)
+router.get('/expired', getAllExpiredPosts)
 router.get('/user/:userId/', getPostByUserId)
 router.get('/:postId', getPostById)
 router.put('/:postId/applied', updateApplied)

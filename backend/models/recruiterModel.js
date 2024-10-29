@@ -97,6 +97,12 @@ const recruiterSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Post'
         }
+      ],
+      expired: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Post'
+        }
       ]
     },
     notifications: [

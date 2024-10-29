@@ -2,7 +2,16 @@ const Post = require('../models/postModel')
 const Admin = require('../models/adminModel')
 const Recruiter = require('../models/recruiterModel')
 const Candidate = require('../models/candidateModel')
-
+const formatDate = (date) => {
+  const day = String(date.getDate()).padStart(2, '0')
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const year = date.getFullYear()
+  return `${day}/${month}/${year}`
+}
+const parseDate = (dateString) => {
+  const [day, month, year] = dateString.split('/').map(Number)
+  return new Date(year, month - 1, day) // Tháng trong JS bắt đầu từ 0
+}
 const postController = {
   updateAppliedJobs: async (candidateId, postId) => {
     try {
@@ -59,14 +68,13 @@ const postController = {
     const { postData } = req.body
 
     try {
-      const currentDate = new Date()
+      postData.date_upload = formatDate(new Date())
 
-      // Lấy ngày, tháng, năm hiện tại
-      const day = String(currentDate.getDate()).padStart(2, '0')
-      const month = String(currentDate.getMonth() + 1).padStart(2, '0')
-      const year = currentDate.getFullYear()
-
-      postData.date_upload = `${day}/${month}/${year}`
+      if (postData.date_expiration) {
+        postData.date_expiration = formatDate(
+          new Date(postData.date_expiration)
+        )
+      }
 
       let user
       if (postData.authorType === 'admin') {
@@ -134,6 +142,16 @@ const postController = {
           user = await Recruiter.findById(userId)
         }
 
+        if (updatedPost.date_upload) {
+          updatedPost.date_upload = formatDate(
+            new Date(updatedPost.date_upload)
+          )
+        }
+        if (updatedPost.date_expiration) {
+          updatedPost.date_expiration = formatDate(
+            new Date(updatedPost.date_expiration)
+          )
+        }
         if (user && user.basic_info && user.basic_info.address) {
           updatedPost.location = { address: user.basic_info.address }
         }
@@ -213,6 +231,31 @@ const postController = {
     try {
       const posts = await Post.find()
 
+      const currentDate = new Date()
+
+      const updatedPosts = await Promise.all(
+        posts.map(async (post) => {
+          const expirationDate = parseDate(post.date_expiration)
+
+          if (expirationDate < currentDate && post.status !== 'expired') {
+            post.status = 'expired'
+            await post.save()
+          }
+
+          return post
+        })
+      )
+
+      res.status(200).json(updatedPosts)
+    } catch (error) {
+      console.error('Có lỗi xảy ra khi lấy các bài Post:', error)
+      res.status(500).json({ message: 'Không thể lấy các bài Post.' })
+    }
+  },
+  getAllPostedPosts: async (req, res) => {
+    try {
+      const posts = await Post.find({ status: 'posted' })
+
       res.status(200).json(posts)
     } catch (error) {
       console.error('Có lỗi xảy ra khi lấy các bài Post:', error)
@@ -229,9 +272,9 @@ const postController = {
       res.status(500).json({ message: 'Không thể lấy các bài Post.' })
     }
   },
-  getAllPosted: async (req, res) => {
+  getAllExpiredPosts: async (req, res) => {
     try {
-      const posts = await Post.find({ status: 'posted' })
+      const posts = await Post.find({ status: 'expired' })
 
       res.status(200).json(posts)
     } catch (error) {
@@ -353,7 +396,8 @@ const postController = {
         return res.status(404).json({ message: 'Không tìm thấy bài viết' })
       }
 
-      if (post.quantity && post.approved.length >= post.quantity) {
+      if (post.quantity && post.approved.length + 1 >= post.quantity) {
+        post.status = 'completed' // Kiểm tra nếu số ứng viên đã duyệt đạt số lượng yêu cầu, cập nhật status thành 'completed'
         return res.status(400).json({ message: 'Đã đủ người được tuyển' })
       }
 

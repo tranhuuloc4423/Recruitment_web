@@ -5,11 +5,11 @@ const { uploadImage, validateAddress } = require('../utils/funcs')
 
 const candidateControllers = {
   updateBasicInfo: async (req, res) => {
-    const { candidateId } = req.params
+    const { id } = req.params
     const { dob, phone, address, gender, name, email, image } = req.body
 
     try {
-      const currentCandidate = await Candidate.findById(candidateId)
+      const currentCandidate = await Candidate.findById(id)
       if (!currentCandidate) {
         return res.status(404).json({ message: 'Ứng viên không tồn tại' })
       }
@@ -44,7 +44,7 @@ const candidateControllers = {
       )
 
       const basic_info = await Candidate.findOneAndUpdate(
-        { _id: candidateId },
+        { _id: id },
         {
           $set: {
             'basic_info.image': imageResult,
@@ -78,7 +78,7 @@ const candidateControllers = {
   },
 
   updateOtherInfo: async (req, res) => {
-    const { candidateId } = req.params
+    const { id } = req.params
     const { desc, education, exps, skills, projects, certificates } = req.body
     let updateFields = {}
 
@@ -101,7 +101,7 @@ const candidateControllers = {
       }
 
       const other_info = await Candidate.findOneAndUpdate(
-        { _id: candidateId },
+        { _id: id },
         { $set: updateFields },
         { new: true }
       )
@@ -115,7 +115,7 @@ const candidateControllers = {
   },
 
   updateTarget: async (req, res) => {
-    const { candidateId } = req.params
+    const { id } = req.params
     const { target_money, skills, types, address, wforms } = req.body
     let updateFields = {}
 
@@ -137,7 +137,7 @@ const candidateControllers = {
       if (wforms) updateFields['target.wforms'] = wforms
 
       const updatedTarget = await Candidate.findOneAndUpdate(
-        { _id: candidateId },
+        { _id: id },
         { $set: updateFields },
         { new: true }
       )
@@ -152,10 +152,10 @@ const candidateControllers = {
   },
 
   getDataById: async (req, res) => {
-    const { candidateId } = req.params
+    const { id } = req.params
     try {
       const candidate = await Candidate.findOne({
-        userId: candidateId
+        userId: id
       })
       res.status(200).json(candidate)
     } catch (error) {
@@ -164,9 +164,9 @@ const candidateControllers = {
   },
 
   getDataByIdRole: async (req, res) => {
-    const { candidateId } = req.params
+    const { id } = req.params
     try {
-      const candidate = await Candidate.findById(candidateId)
+      const candidate = await Candidate.findById(id)
       res.status(200).json(candidate)
     } catch (error) {
       res.status(500).json(error)
@@ -184,10 +184,8 @@ const candidateControllers = {
 
   getSavedJobs: async (req, res) => {
     try {
-      const candidateId = req.params.candidateId
-      const candidate = await Candidate.findById(candidateId).populate(
-        'jobs.saved'
-      )
+      const id = req.params.id
+      const candidate = await Candidate.findById(id).populate('jobs.saved')
       if (!candidate) {
         return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
       }
@@ -200,10 +198,8 @@ const candidateControllers = {
 
   getRecentJobs: async (req, res) => {
     try {
-      const candidateId = req.params.candidateId
-      const candidate = await Candidate.findById(candidateId).populate(
-        'jobs.recent'
-      )
+      const id = req.params.id
+      const candidate = await Candidate.findById(id).populate('jobs.recent')
       if (!candidate) {
         return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
       }
@@ -216,10 +212,8 @@ const candidateControllers = {
 
   getAppliedJobs: async (req, res) => {
     try {
-      const candidateId = req.params.candidateId
-      const candidate = await Candidate.findById(candidateId).populate(
-        'jobs.applied'
-      )
+      const id = req.params.id
+      const candidate = await Candidate.findById(id).populate('jobs.applied')
       if (!candidate) {
         return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
       }
@@ -232,8 +226,8 @@ const candidateControllers = {
 
   getFollowedJobs: async (req, res) => {
     try {
-      const candidateId = req.params.candidateId
-      const candidate = await Candidate.findById(candidateId)
+      const id = req.params.id
+      const candidate = await Candidate.findById(id)
       if (!candidate) {
         return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
       }
@@ -248,9 +242,9 @@ const candidateControllers = {
 
   followUser: async (req, res) => {
     try {
-      const { candidateId } = req.params
+      const { id } = req.params
       const { userIdToFollow } = req.body
-      const candidate = await Candidate.findById(candidateId)
+      const candidate = await Candidate.findById(id)
       if (!candidate) {
         return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
       }
@@ -276,10 +270,10 @@ const candidateControllers = {
 
   updateRecent: async (req, res) => {
     try {
-      const { candidateId } = req.params
+      const { id } = req.params
       const { postId } = req.body
 
-      const candidate = await Candidate.findById(candidateId)
+      const candidate = await Candidate.findById(id)
       if (!candidate) {
         return res.status(404).json({ message: 'Ứng viên không tồn tại' })
       }

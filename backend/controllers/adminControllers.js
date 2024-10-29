@@ -5,11 +5,11 @@ const { uploadImage, uploadImages, validateAddress } = require('../utils/funcs')
 
 const adminControllers = {
   updateBasicInfo: async (req, res) => {
-    const { adminId } = req.params
+    const { id } = req.params
     const { field, tax_id, address, name, email, phone, image } = req.body
 
     try {
-      const currentAdmin = await Admin.findById(adminId)
+      const currentAdmin = await Admin.findById(id)
       if (!currentAdmin) {
         return res.status(404).json({ message: 'Admin không tồn tại' })
       }
@@ -40,7 +40,7 @@ const adminControllers = {
       const imageResult = await uploadImage(currentAdmin, image, 'admin/basic')
 
       const basic_info = await Admin.findOneAndUpdate(
-        { _id: adminId },
+        { _id: id },
         {
           $set: {
             'basic_info.image': imageResult,
@@ -75,12 +75,12 @@ const adminControllers = {
   },
 
   updateOtherInfo: async (req, res) => {
-    const { adminId } = req.params
+    const { id } = req.params
     const { desc, speciality, types, wforms, images } = req.body
     let updateFields = {}
 
     try {
-      const currentAdmin = await Admin.findById(adminId)
+      const currentAdmin = await Admin.findById(id)
       if (!currentAdmin) {
         return res.status(404).json({ message: 'Admin không tồn tại' })
       }
@@ -120,7 +120,7 @@ const adminControllers = {
       }
 
       const other_info = await Admin.findOneAndUpdate(
-        { _id: adminId },
+        { _id: id },
         { $set: updateFields },
         { new: true }
       )
@@ -136,9 +136,9 @@ const adminControllers = {
   },
 
   getDataById: async (req, res) => {
-    const { adminId } = req.params
+    const { id } = req.params
     try {
-      const admin = await Admin.findOne({ userId: adminId })
+      const admin = await Admin.findOne({ userId: id })
 
       if (!admin) {
         return res.status(404).json({ message: 'Admin không tồn tại' })
@@ -201,6 +201,19 @@ const adminControllers = {
     try {
       const admin = await Admin.findById(req.params.id).populate(
         'manage_post.posted'
+      )
+      if (!admin) {
+        return res.status(404).json({ message: 'Admin không tồn tại' })
+      }
+      res.status(200).json(admin.manage_post.posted)
+    } catch (error) {
+      res.status(500).json({ message: 'Lỗi máy chủ', error })
+    }
+  },
+  getExpiredPosts: async (req, res) => {
+    try {
+      const admin = await Admin.findById(req.params.id).populate(
+        'manage_post.expired'
       )
       if (!admin) {
         return res.status(404).json({ message: 'Admin không tồn tại' })

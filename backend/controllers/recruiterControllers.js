@@ -1,14 +1,15 @@
+const { get } = require('mongoose')
 const Recruiter = require('../models/recruiterModel')
 const User = require('../models/userModel')
 const { uploadImage, uploadImages, validateAddress } = require('../utils/funcs')
 
 const recruiterControllers = {
   updateBasicInfo: async (req, res) => {
-    const { recruiterId } = req.params
+    const { id } = req.params
     const { field, tax_id, address, name, email, phone, image } = req.body
 
     try {
-      const currentRecruiter = await Recruiter.findById(recruiterId)
+      const currentRecruiter = await Recruiter.findById(id)
       if (!currentRecruiter) {
         return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })
       }
@@ -43,7 +44,7 @@ const recruiterControllers = {
       )
 
       const basic_info = await Recruiter.findOneAndUpdate(
-        { _id: recruiterId },
+        { _id: id },
         {
           $set: {
             'basic_info.image': imageResult,
@@ -80,12 +81,12 @@ const recruiterControllers = {
   },
 
   updateOtherInfo: async (req, res) => {
-    const { recruiterId } = req.params
+    const { id } = req.params
     const { desc, speciality, types, wforms, images } = req.body
     let updateFields = {}
 
     try {
-      const currentRecruiter = await Recruiter.findById(recruiterId)
+      const currentRecruiter = await Recruiter.findById(id)
       if (!currentRecruiter) {
         return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })
       }
@@ -126,7 +127,7 @@ const recruiterControllers = {
       }
 
       const other_info = await Recruiter.findOneAndUpdate(
-        { _id: recruiterId },
+        { _id: id },
         { $set: updateFields },
         { new: true }
       )
@@ -142,10 +143,10 @@ const recruiterControllers = {
   },
 
   getDataById: async (req, res) => {
-    const { recruiterId } = req.params
+    const { id } = req.params
     try {
       const recruiter = await Recruiter.findOne({
-        userId: recruiterId
+        userId: id
       })
 
       if (!recruiter) {
@@ -158,9 +159,9 @@ const recruiterControllers = {
   },
 
   getDataByIdRole: async (req, res) => {
-    const { recruiterId } = req.params
+    const { id } = req.params
     try {
-      const recruiter = await Recruiter.findById(recruiterId)
+      const recruiter = await Recruiter.findById(id)
 
       if (!recruiter) {
         return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })
@@ -212,6 +213,19 @@ const recruiterControllers = {
     try {
       const recruiter = await Recruiter.findById(req.params.id).populate(
         'manage_post.posted'
+      )
+      if (!recruiter) {
+        return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })
+      }
+      res.status(200).json(recruiter.manage_post.posted)
+    } catch (error) {
+      res.status(500).json({ message: 'Lỗi máy chủ', error })
+    }
+  },
+  getExpiredPosts: async (req, res) => {
+    try {
+      const recruiter = await Recruiter.findById(req.params.id).populate(
+        'manage_post.expired'
       )
       if (!recruiter) {
         return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })

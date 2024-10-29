@@ -10,8 +10,8 @@ const {
 
 router.get('/fetch-and-save', fetchAndSaveProvinces)
 router.get('/:code', getProvinceByCode)
-router.get('/:provinceCode/districts', getDistrictsByProvinceCode)
-router.get('/:provinceCode/:districtCode/wards', getWardsByDistrictCode)
+router.get('/districts/:provinceCode', getDistrictsByProvinceCode)
+router.get('/wards/:provinceCode/:districtCode', getWardsByDistrictCode)
 router.get('/', getAllProvinces)
 
 module.exports = router
