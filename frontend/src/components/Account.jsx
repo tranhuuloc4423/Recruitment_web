@@ -5,12 +5,19 @@ import { IoIosArrowDown } from 'react-icons/io'
 import { IoSettingsOutline } from 'react-icons/io5'
 import { LuLogOut } from 'react-icons/lu'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 const Account = () => {
   const [active, setActive] = useState(false)
   const { currentUser } = useSelector((state) => state.auth)
   const { currentRole } = useSelector((state) => state.app)
   const [avatar, setAvatar] = useState(defaultAvatar)
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    localStorage.removeItem('currentUser')
+    navigate('signin')
+  }
+
   useEffect(() => {
     if (currentUser) {
       let userImage = defaultAvatar
@@ -45,7 +52,7 @@ const Account = () => {
             </Link>
             <div
               className="flex items-center gap-2 px-4 py-2"
-              onClick={() => console.log(1)}
+              onClick={handleLogout}
             >
               <LuLogOut />
               Đăng xuất

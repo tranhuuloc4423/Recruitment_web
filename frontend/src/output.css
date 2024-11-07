@@ -723,16 +723,16 @@ video {
   margin-left: 0.75rem;
 }
 
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
 .mt-2 {
   margin-top: 0.5rem;
 }
 
 .mt-4 {
   margin-top: 1rem;
-}
-
-.mt-1 {
-  margin-top: 0.25rem;
 }
 
 .inline-block {
@@ -765,6 +765,10 @@ video {
 
 .h-\[100px\] {
   height: 100px;
+}
+
+.h-\[1440px\] {
+  height: 1440px;
 }
 
 .h-\[150px\] {
@@ -807,6 +811,10 @@ video {
   height: 931px;
 }
 
+.h-auto {
+  height: auto;
+}
+
 .h-fit {
   height: fit-content;
 }
@@ -823,12 +831,8 @@ video {
   height: 100vh;
 }
 
-.h-\[1440px\] {
-  height: 1440px;
-}
-
-.h-auto {
-  height: auto;
+.h-\[1000px\] {
+  height: 1000px;
 }
 
 .max-h-40 {
@@ -837,6 +841,18 @@ video {
 
 .max-h-\[350px\] {
   max-height: 350px;
+}
+
+.min-h-\[300px\] {
+  min-height: 300px;
+}
+
+.min-h-\[350px\] {
+  min-height: 350px;
+}
+
+.min-h-\[400px\] {
+  min-height: 400px;
 }
 
 .w-1\/2 {
@@ -959,6 +975,16 @@ video {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+.rotate-0 {
+  --tw-rotate: 0deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.rotate-180 {
+  --tw-rotate: 180deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
 .-skew-y-6 {
   --tw-skew-y: -6deg;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
@@ -1064,12 +1090,12 @@ video {
   overflow: hidden;
 }
 
-.overflow-y-auto {
-  overflow-y: auto;
+.overflow-scroll {
+  overflow: scroll;
 }
 
-.overflow-y-hidden {
-  overflow-y: hidden;
+.overflow-y-auto {
+  overflow-y: auto;
 }
 
 .overflow-y-scroll {
@@ -1082,10 +1108,6 @@ video {
 
 .whitespace-nowrap {
   white-space: nowrap;
-}
-
-.text-nowrap {
-  text-wrap: nowrap;
 }
 
 .rounded {
@@ -1325,6 +1347,16 @@ video {
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
 }
 
 .font-bold {

@@ -11,10 +11,11 @@ import { PiBagBold } from 'react-icons/pi'
 import { FiClock } from 'react-icons/fi'
 import { HiOutlineEye } from 'react-icons/hi'
 import { useSelector } from 'react-redux'
-import { getRoleData } from '../redux/api/post'
+import { getRoleData, removePost, updateConfirmed } from '../redux/api/post'
 
 const Post = ({ post, select, manage }) => {
   const { currentUser } = useSelector((state) => state.auth)
+  const { currentRole } = useSelector((state) => state.app)
   const {
     title,
     skills,
@@ -43,9 +44,16 @@ const Post = ({ post, select, manage }) => {
     getBasicData()
   }, [])
 
+  const handleConfirm = () => {
+    updateConfirmed(post._id, { userId: currentRole._id, authorId: author })
+  }
+  const handleRemove = () => {
+    removePost(post._id, { userId: currentRole._id, authorId: author })
+  }
+
   return (
     <div
-      className={`flex flex-col gap-2 bg-white shadow-md p-2 rounded ${
+      className={`flex min-h-[400px] flex-col gap-2 bg-white shadow-md p-2 rounded ${
         select === post._id ? 'border-2 border-l-8 border-second' : ''
       }`}
     >
@@ -85,7 +93,7 @@ const Post = ({ post, select, manage }) => {
       <div className="grid grid-cols-2 grid-flow-row gap-2 text-black-100">
         <span className="flex flex-row items-center gap-2">
           <LuCircleDollarSign size={24} />
-          <span>{salary}</span>
+          <span>{new Intl.NumberFormat('de-DE').format(salary)} vnđ</span>
         </span>
 
         <span className="flex flex-row items-center gap-2">
@@ -137,8 +145,8 @@ const Post = ({ post, select, manage }) => {
       {/* manage buttons */}
       <div className="w-full grid grid-cols-2 grid-flow-row gap-2">
         {manage?.view && <Button label="Xem" />}
-        {manage?.confirm && <Button label="Duyệt" />}
-        {manage?.remove && <Button label="Xoá" />}
+        {manage?.confirm && <Button label="Duyệt" onClick={handleConfirm} />}
+        {manage?.remove && <Button label="Xoá" onClick={handleRemove} />}
         {manage?.update && <Button label="Cập nhật" />}
         {manage?.extend && <Button label="Gia hạn" />}
       </div>

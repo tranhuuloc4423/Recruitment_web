@@ -6,7 +6,7 @@ import { createPost } from '../redux/api/post'
 
 const CreatePost = () => {
   const { currentUser } = useSelector((state) => state.auth)
-  const { currentRole } = useSelector((state) => state.app)
+  const { currentRole, skillsDB } = useSelector((state) => state.app)
   const [values, setValues] = useState({
     title: '',
     salary: '',
@@ -17,25 +17,29 @@ const CreatePost = () => {
   })
   const [skillSelected, setSkillSelected] = useState(null)
   const [skills, setSkills] = useState([])
-  const skillsStatic = [
-    {
-      value: 'reactjs',
-      name: 'ReactJS'
-    },
-    {
-      value: 'vuejs',
-      name: 'VueJS'
-    },
-    {
-      value: 'MongoDB',
-      name: 'mongodb'
-    }
-  ]
 
   const HandleOnChange = (e) => {
     const { name, value } = e.target
 
-    if (name === 'salary' || name === 'quantity') {
+    // Kiểm tra nếu trường là 'salary'
+    if (name === 'salary') {
+      if (/^\d*\.?\d*$/.test(value)) {
+        // Loại bỏ dấu chấm nếu có để chỉ giữ lại số
+        const numericValue = value.replace(/\./g, '')
+
+        // Định dạng lại số với dấu chấm mỗi 3 chữ số
+        const formattedValue = new Intl.NumberFormat('de-DE').format(
+          numericValue
+        )
+
+        // Cập nhật giá trị đã định dạng vào state
+        setValues((prevValues) => ({
+          ...prevValues,
+          [name]: formattedValue
+        }))
+      }
+    } else if (name === 'quantity') {
+      // Chỉ cho phép giá trị số hoặc rỗng cho 'quantity'
       if (/^\d*\.?\d*$/.test(value) || value === '') {
         setValues((prevValues) => ({
           ...prevValues,
@@ -43,6 +47,7 @@ const CreatePost = () => {
         }))
       }
     } else {
+      // Các trường khác
       setValues((prevValues) => ({
         ...prevValues,
         [name]: value
@@ -54,15 +59,25 @@ const CreatePost = () => {
     if (currentUser.role === 'candidate') {
       return
     }
+
     let data
     data = {
       ...values,
+      salary: parseInt(values.salary.replace(/\./g, ''), 10),
       skills: skills,
       author: currentRole._id,
       authorType: currentUser.role
     }
     createPost(data)
-    console.log(data)
+    // setValues({
+    //   title: '',
+    //   salary: '',
+    //   quantity: '',
+    //   desc: '',
+    //   request: '',
+    //   date_expiration: ''
+    // })
+    setSkills([])
   }
 
   return (
@@ -109,7 +124,7 @@ const CreatePost = () => {
             selectedOption={skillSelected}
             setSelectedOption={setSkillSelected}
             name={'skill'}
-            options={skillsStatic}
+            options={skillsDB}
           />
         </div>
         <Button

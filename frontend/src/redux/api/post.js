@@ -38,6 +38,54 @@ const getAllPosted = async () => {
   }
 }
 
+const updateConfirmed = async (id, data) => {
+  try {
+    const res = await axios.put(`/post/${id}/status`, data)
+    toast.success('Duyệt bài thành công')
+    return res.data
+  } catch (error) {
+    toast.error(error)
+    console.log(error)
+  }
+}
+
+const removePost = async (id, data) => {
+  try {
+    await axios.delete(`/post/${id}/`, data)
+    toast.success('Xoá bài thành công')
+  } catch (error) {
+    toast.error(error)
+    console.log(error)
+  }
+}
+
+const getAllPostConfirmedRole = async (id, role) => {
+  try {
+    const res = await axios.get(`${role}/confirmed/${id}`)
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const getAllPostedRole = async (id, role) => {
+  try {
+    const res = await axios.get(`${role}/posted/${id}`)
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const getAllPostsRole = async (id, role) => {
+  try {
+    const res = await axios.get(`${role}/posts/${id}`)
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const getRoleData = async (role, id) => {
   try {
     const res = await axios.get(`/${role}/role/${id}`)
@@ -47,4 +95,15 @@ const getRoleData = async (role, id) => {
   }
 }
 
-export { createPost, getAllPostConfirmed, getRoleData, getPost, getAllPosted }
+export {
+  createPost,
+  getAllPostConfirmed,
+  getRoleData,
+  getPost,
+  getAllPosted,
+  getAllPostedRole,
+  getAllPostsRole,
+  getAllPostConfirmedRole,
+  updateConfirmed,
+  removePost
+}

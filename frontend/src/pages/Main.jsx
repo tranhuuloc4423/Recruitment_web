@@ -12,6 +12,8 @@ import Recruiter from '../pages/Recruiter'
 import { getAllPostConfirmed } from '../redux/api/post'
 const Main = () => {
   const [posts, setPosts] = useState([])
+  const [filteredPosts, setFilteredPosts] = useState([])
+  const [jobs, setJobs] = useState()
   const [suggess, setsuggess] = useState([
     {
       value: 'reactjs',
@@ -32,6 +34,44 @@ const Main = () => {
   const getPosts = async () => {
     const data = await getAllPostConfirmed()
     setPosts(data)
+    setFilteredPosts(data)
+  }
+
+  // const handleSearch = () => {
+  //   console.log(search)
+  //   const searchTerm = search?.toLowerCase()
+  //   console.log(posts)
+  //   const filtered = posts?.filter(
+  //     (post) =>
+  //       post?.title?.toLowerCase().includes(searchTerm) ||
+  //       post?.skills?.some((skill) =>
+  //         skill?.name.toLowerCase().includes(searchTerm)
+  //       ) ||
+  //       post?.location?.address[0]?.province?.name
+  //         .toLowerCase()
+  //         .includes(searchTerm)
+  //   )
+  //   setFilteredPosts(filtered)
+  // }
+
+  const handleSearch = () => {
+    const searchTerm = search.toLowerCase()
+    const filtered = posts.filter((post) => {
+      const titleMatch = post.title.toLowerCase().includes(searchTerm)
+
+      const skillsMatch = post.skills?.some((skill) =>
+        skill.name?.toLowerCase().includes(searchTerm)
+      )
+
+      const locationMatch = post.location?.address?.[0]?.province?.name
+        ?.toLowerCase()
+        .includes(searchTerm)
+
+      return titleMatch || skillsMatch || locationMatch
+    })
+    setFilteredPosts(filtered)
+    setJobs(filtered.length)
+    console.log(filteredPosts)
   }
 
   const handlePostClick = (id) => {
@@ -43,10 +83,11 @@ const Main = () => {
   }, [])
 
   useEffect(() => {
-    if (posts && posts.length > 0) {
-      setSelectedPost(posts[0])
+    if (filteredPosts && filteredPosts.length > 0) {
+      setSelectedPost(filteredPosts[0]._id)
+      setJobs(filteredPosts.length)
     }
-  }, [posts])
+  }, [filteredPosts])
 
   return (
     <div className="flex flex-col gap-4 justify-center items-center mx-auto">
@@ -60,7 +101,7 @@ const Main = () => {
           />
           <Button
             label={'Tìm kiếm'}
-            onClick={() => {}}
+            onClick={handleSearch}
             icon={<FiSearch size={24} color="white" />}
             iconPosition="left"
             className="px-8"
@@ -72,21 +113,30 @@ const Main = () => {
           <span>Gợi ý cho bạn : </span>
           <div className="flex flex-row gap-2">
             {suggess?.map((tag) => (
-              <Tag key={tag.value} label={tag.label} />
+              <div
+                key={tag.value}
+                onClick={() => setSearch(tag.label)}
+                className="cursor-pointer"
+              >
+                <Tag label={tag.label} />
+              </div>
             ))}
           </div>
         </div>
       </div>
       <div className="w-full flex flex-col gap-4 justify-between">
         <div className="flex flex-row justify-between items-center">
-          <span className="heading-3">{44} công việc đã được tìm thấy</span>
+          <span className="heading-3">
+            <span className="text-primary font-semibold text-4xl">{jobs}</span>{' '}
+            công việc đã được tìm thấy
+          </span>
           <span>
             <FilterFrame />
           </span>
         </div>
-        <div className="flex flex-row gap-4 h-[1440px] overflow-hidden">
-          <div className="w-1/3 flex flex-col gap-2">
-            {posts?.map((post, index) => (
+        <div className="flex flex-row gap-4 ">
+          <div className="w-1/3 flex flex-col gap-2 h-[1000px] overflow-y-auto">
+            {filteredPosts?.map((post, index) => (
               <div
                 key={index}
                 onClick={() => handlePostClick(post._id)}

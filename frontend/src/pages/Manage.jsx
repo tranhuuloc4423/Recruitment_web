@@ -8,10 +8,16 @@ const Manage = () => {
   const { currentUser } = useSelector((state) => state.auth)
 
   useEffect(() => {
-    let currentNav = manageNav?.find(
-      (nav) => nav.name === currentUser?.role
-    ).nav
-    setNav(currentNav)
+    if (currentUser && currentUser.role) {
+      let currentNav = manageNav?.find(
+        (nav) => nav?.name === currentUser?.role
+      ).nav
+      if (currentNav) {
+        setNav(currentNav)
+      } else {
+        setNav([])
+      }
+    }
   }, [currentUser?.role])
 
   return (

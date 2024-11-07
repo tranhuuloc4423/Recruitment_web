@@ -19,7 +19,7 @@ export const signinUser = async (user, dispatch, navigate) => {
     toast.success('Đăng nhập thành công')
     const res2 = await axios.get(`/${res.data.user.role}/${res.data.user._id}`)
     dispatch(setData(res2.data))
-    navigate('/')
+    navigate('/posts')
   } catch (error) {
     toast.error('Đăng nhập thất bại! Lỗi : ' + error)
     dispatch(signinFailed())

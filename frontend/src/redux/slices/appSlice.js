@@ -18,7 +18,8 @@ const appSlice = createSlice({
       types: [],
       wforms: [],
       address: null
-    }
+    },
+    skillsDB: []
   },
   reducers: {
     setData: (state, action) => {
@@ -65,6 +66,9 @@ const appSlice = createSlice({
     },
     setWforms: (state, action) => {
       state.filter.wforms = action.payload
+    },
+    setSkillsDB: (state, action) => {
+      state.skillsDB = action.payload
     }
   }
 })
@@ -80,7 +84,8 @@ export const {
   setSkillSelected,
   setAddress,
   setTypes,
-  setWforms
+  setWforms,
+  setSkillsDB
 } = appSlice.actions
 
 export default appSlice.reducer

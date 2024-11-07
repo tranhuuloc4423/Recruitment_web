@@ -4,6 +4,7 @@ import {
   setBasicInfo,
   setData,
   setOtherInfo,
+  setSkillsDB,
   setTarget
 } from '../slices/appSlice'
 import { setAddress } from '../slices/addressSlice'
@@ -12,6 +13,15 @@ const getById = async (id, dispatch, role) => {
   try {
     const res = await axios.get(`${role}/${id}`)
     dispatch(setData(res.data))
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const getSkills = async (dispatch) => {
+  try {
+    const res = await axios.get(`/skill`)
+    dispatch(setSkillsDB(res.data))
   } catch (error) {
     console.log(error)
   }
@@ -64,4 +74,11 @@ const getAddress = async (dispatch) => {
   }
 }
 
-export { updateBasicInfo, updateOtherInfo, updateTarget, getById, getAddress }
+export {
+  updateBasicInfo,
+  updateOtherInfo,
+  updateTarget,
+  getById,
+  getAddress,
+  getSkills
+}
