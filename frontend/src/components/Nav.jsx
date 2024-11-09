@@ -1,14 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const Nav = ({ data }) => {
-  const [activeIndex, setActiveIndex] = useState(
-    data.findIndex((item) => item.active)
-  )
+  const [activeIndex, setActiveIndex] = useState(0)
 
   const handlePath = (index) => {
     setActiveIndex(index)
   }
+
   return (
     <div className={`flex justify-center items-center w-full bg-white rounded`}>
       {data.map((item, index) => (

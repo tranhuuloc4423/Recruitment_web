@@ -9,7 +9,8 @@ import {
   education,
   certificatesAchievements,
   introduce,
-  experience
+  experience,
+  introduceCompany
 } from './RichTextTemplate'
 const info = [
   {
@@ -66,7 +67,8 @@ const info = [
         desc: 'Giới thiệu về thông tin của công ty',
         type: 'richText',
         id: 1,
-        name: 'desc'
+        name: 'desc',
+        template: introduceCompany
       },
       {
         title: 'Hình ảnh',
@@ -81,33 +83,7 @@ const info = [
         type: 'dropdown',
         id: 3,
         name: 'skills',
-        placeholder: 'Tìm kiếm kỹ năng',
-        options: [
-          {
-            value: 'Reactjs',
-            name: 'Reactjs'
-          },
-          {
-            value: 'MongoDB',
-            name: 'Reactjs'
-          },
-          {
-            value: 'Reactjs',
-            name: 'Reactjs'
-          },
-          {
-            value: 'Reactjs',
-            name: 'Reactjs'
-          },
-          {
-            value: 'Reactjs',
-            name: 'Reactjs'
-          },
-          {
-            value: 'Reactjs',
-            name: 'Reactjs'
-          }
-        ]
+        placeholder: 'Tìm kiếm kỹ năng'
       },
       {
         title: 'Hình thức',
@@ -204,7 +180,8 @@ const info = [
         desc: 'Giới thiệu về thông tin của công ty',
         type: 'richText',
         id: 1,
-        name: 'desc'
+        name: 'desc',
+        template: introduceCompany
       },
       {
         title: 'Hình ảnh',

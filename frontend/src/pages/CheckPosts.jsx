@@ -32,11 +32,13 @@ const CheckPosts = () => {
       active: false
     }
   ])
+  const [pages, setPages] = useState(0)
 
   const getPosteds = async () => {
     const res = await getAllPosted()
     setPosts(res)
     setFilterPosts(res)
+    setPages(res?.length / 10)
   }
 
   const handleFilterClick = (index) => {
@@ -53,7 +55,7 @@ const CheckPosts = () => {
     if (currentUser.role === 'admin') {
       setManage({
         remove: true,
-        // confirm: true,
+        confirm: true,
         view: true
       })
     } else {
@@ -104,7 +106,7 @@ const CheckPosts = () => {
         ))}
       </div>
 
-      <BasicPagination />
+      {pages > 1 && <BasicPagination length={pages} />}
     </div>
   )
 }

@@ -33,11 +33,13 @@ const Posteds = () => {
       active: false
     }
   ])
+  const [pages, setPages] = useState(0)
 
   const getPosteds = async () => {
     // const res = await getAllPosted()
     const res = await getAllPostedRole(currentRole._id, currentUser.role)
     setPosts(res)
+    setPages(res?.length / 10)
   }
 
   const handleFilterClick = (index) => {
@@ -54,7 +56,13 @@ const Posteds = () => {
     if (currentUser.role === 'admin') {
       setManage({
         remove: true,
-        confirm: true
+        view: true
+      })
+    } else if (currentUser.role === 'recruiter') {
+      setManage({
+        remove: true,
+        view: true,
+        update: true
       })
     } else {
       setManage({})
@@ -103,7 +111,7 @@ const Posteds = () => {
           </div>
         ))}
       </div>
-      <BasicPagination />
+      {pages > 1 && <BasicPagination length={pages} />}
     </div>
   )
 }

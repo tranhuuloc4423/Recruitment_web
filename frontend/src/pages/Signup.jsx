@@ -14,11 +14,11 @@ const Signup = () => {
   const options = [
     {
       value: 'candidate',
-      label: 'Ứng viên'
+      name: 'Ứng viên'
     },
     {
       value: 'recruiter',
-      label: 'Nhà tuyển dụng'
+      name: 'Nhà tuyển dụng'
     }
   ]
   const [selectedOption, setSelectedOption] = useState(options[0])

@@ -1,4 +1,6 @@
 import { Routes, Route, useNavigate } from 'react-router-dom'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import paths from './utils/paths'
 import {
   Home,
@@ -65,7 +67,7 @@ function App() {
   }, [])
 
   return (
-    <div className="">
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Routes>
         <Route path={SIGNIN} element={<Signin />} />
         <Route path={SIGNUP} element={<Signup />} />
@@ -98,7 +100,7 @@ function App() {
         theme="light"
         transition={Bounce}
       />
-    </div>
+    </LocalizationProvider>
   )
 }
 

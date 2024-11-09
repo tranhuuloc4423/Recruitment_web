@@ -91,25 +91,22 @@ const adminControllers = {
           : [speciality]
       }
       if (types) {
-        updateFields['other_info.types'] = types.map((item) => ({
-          name: item.name,
-          value: item.value
-        }))
+        updateFields['other_info.types'] = Array.isArray(types)
+          ? types
+          : [types]
       }
       if (wforms) {
-        updateFields['other_info.wforms'] = wforms.map((item) => ({
-          name: item.name,
-          value: item.value
-        }))
+        updateFields['other_info.wforms'] = Array.isArray(wforms)
+          ? wforms
+          : [wforms]
       }
 
-      const imagesResult = await uploadImages(
-        currentAdmin,
-        images,
-        'admin/other'
-      )
-
       if (images) {
+        const imagesResult = await uploadImages(
+          currentAdmin,
+          images,
+          'admin/other'
+        )
         updateFields['other_info.images'] = imagesResult
       }
 

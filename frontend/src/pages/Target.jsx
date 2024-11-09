@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const Target = () => {
   const [skillSelected, setSkillSelected] = useState(null)
-  const { currentRole } = useSelector((state) => state.app)
+  const { currentRole, skillsDB } = useSelector((state) => state.app)
+  const { address } = useSelector((state) => state.address)
   const dispatch = useDispatch()
-  const [address, setAddress] = useState(null)
+  const [addressSelected, setAddressSelected] = useState(null)
   const [salarys, setSalarys] = useState([0, 100])
   const [skills, setSkills] = useState([])
   const [tags, setTags] = useState([
@@ -17,20 +18,6 @@ const Target = () => {
     { name: 'Từ xa', value: 'remote', checked: false },
     { name: 'Linh hoạt', value: 'hybrid', checked: false }
   ])
-  const skillsstatic = [
-    { value: 'reactjs', name: 'ReactJS' },
-    { value: 'vuejs', name: 'VueJS' },
-    { value: 'mongodb', name: 'MongoDB' },
-    { value: 'angular', name: 'Angular' },
-    { value: 'html', name: 'HTML' },
-    { value: 'css', name: 'CSS' }
-  ]
-  const addressstatic = [
-    { value: 'hochiminh', name: 'Tp Hồ Chí Minh' },
-    { value: 'hanoi', name: 'Hà Nội' },
-    { value: 'binhduong', name: 'Bình Dương' },
-    { value: 'dongnai', name: 'Đồng Nai' }
-  ]
 
   const handleSubmit = () => {
     const types = tags
@@ -61,7 +48,7 @@ const Target = () => {
     setSkills(skills)
     setSalarys(salarys)
     setTags(tags)
-    setAddress(address)
+    setAddressSelected(address)
     console.log(data)
   }
 
@@ -83,10 +70,10 @@ const Target = () => {
           setSkillSelected={setSkillSelected}
           setSkills={setSkills}
           skills={skills}
-          skillsstatic={skillsstatic}
-          addressstatic={addressstatic}
-          address={address}
-          setAddress={setAddress}
+          skillsStatic={skillsDB}
+          addressStatic={address}
+          addressSelected={addressSelected}
+          setAddressSelected={setAddressSelected}
           tags={tags}
           setTags={setTags}
           salarys={salarys}

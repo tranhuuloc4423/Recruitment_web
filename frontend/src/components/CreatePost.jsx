@@ -1,22 +1,38 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Dropdown, Input, RichText, Tag, UploadImages } from './'
 import { jobDescription, jobRequirements } from '../utils/RichTextTemplate'
 import { useSelector } from 'react-redux'
 import { createPost } from '../redux/api/post'
+import { useLocation } from 'react-router-dom'
+import { formatDate } from '../utils/functions'
+import DateTimePicker from './DateTimePicker'
 
 const CreatePost = () => {
   const { currentUser } = useSelector((state) => state.auth)
   const { currentRole, skillsDB } = useSelector((state) => state.app)
+  const location = useLocation()
+  const {
+    updateTitle,
+    updateSalary,
+    updateQuantity,
+    updateDesc,
+    updateRequest,
+    updateDate,
+    skillsUpdate
+  } = location?.state || {}
   const [values, setValues] = useState({
-    title: '',
-    salary: '',
-    quantity: '',
-    desc: '',
-    request: '',
-    date_expiration: ''
+    title: updateTitle || '',
+    salary:
+      (updateSalary && new Intl.NumberFormat('de-DE').format(updateSalary)) ||
+      '',
+    quantity: updateQuantity || '',
+    desc: updateDesc || '',
+    request: updateRequest || ''
   })
+  const [update, setUpdate] = useState(false)
+  const [date, setDate] = useState(updateDate || null)
   const [skillSelected, setSkillSelected] = useState(null)
-  const [skills, setSkills] = useState([])
+  const [skills, setSkills] = useState(skillsUpdate || [])
 
   const HandleOnChange = (e) => {
     const { name, value } = e.target
@@ -64,11 +80,13 @@ const CreatePost = () => {
     data = {
       ...values,
       salary: parseInt(values.salary.replace(/\./g, ''), 10),
+      date_expiration: `${date.$D}/${date.$M + 1}/${date.$y}`,
       skills: skills,
       author: currentRole._id,
       authorType: currentUser.role
     }
-    createPost(data)
+    console.log(data)
+    // createPost(data)
     // setValues({
     //   title: '',
     //   salary: '',
@@ -79,6 +97,16 @@ const CreatePost = () => {
     // })
     setSkills([])
   }
+
+  const handleUpdate = async () => {}
+
+  useEffect(() => {
+    if (location.state) {
+      setUpdate(true)
+    } else {
+      setUpdate(false)
+    }
+  }, [location])
 
   return (
     <div className="w-[65%] mx-auto bg-white rounded shadow-md flex flex-col gap-2 p-4">
@@ -99,15 +127,7 @@ const CreatePost = () => {
         value={values.salary}
         onChange={HandleOnChange}
       />
-      <Input
-        type={'date'}
-        name={'date_expiration'}
-        placeholder={'Thời hạn'}
-        required
-        label="Thời hạn"
-        value={values.date_expiration}
-        onChange={HandleOnChange}
-      />
+      <DateTimePicker date={date} setDate={setDate} validDate={true} />
       <Input
         name={'quantity'}
         placeholder={'Số lượng ứng viên'}
@@ -175,7 +195,11 @@ const CreatePost = () => {
       />
 
       <div>
-        <Button label={'Đăng'} onClick={handleCreatePost} />
+        {update ? (
+          <Button label={'Cập nhật'} onClick={handleUpdate} />
+        ) : (
+          <Button label={'Đăng'} onClick={handleCreatePost} />
+        )}
       </div>
     </div>
   )

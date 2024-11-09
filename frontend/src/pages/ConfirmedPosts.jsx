@@ -35,10 +35,12 @@ const ConfirmedPosts = () => {
       active: false
     }
   ])
+  const [pages, setPages] = useState(0)
 
   const getPosteds = async () => {
     const res = await getAllPostConfirmedRole(currentRole._id, currentUser.role)
     setPosts(res)
+    setPages(res?.length / 10)
   }
 
   const handleFilterClick = (index) => {
@@ -105,7 +107,7 @@ const ConfirmedPosts = () => {
         ))}
       </div>
 
-      <BasicPagination />
+      {pages > 1 && <BasicPagination length={pages} />}
     </div>
   )
 }

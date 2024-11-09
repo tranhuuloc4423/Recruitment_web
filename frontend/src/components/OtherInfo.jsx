@@ -7,10 +7,9 @@ import info from '../utils/infos'
 import { updateOtherInfo } from '../redux/api/app'
 import UploadImages from './UploadImages'
 import { convertFiles } from '../utils/functions'
-import Tag from './Tag'
 const OtherInfo = () => {
   const { currentUser } = useSelector((state) => state.auth)
-  const { currentRole } = useSelector((state) => state.app)
+  const { currentRole, skillsDB } = useSelector((state) => state.app)
   const dispatch = useDispatch()
   const [skills, setSkills] = useState([])
   const [images, setImages] = useState([])
@@ -18,24 +17,6 @@ const OtherInfo = () => {
 
   const [openStates, setOpenStates] = useState({})
   const [, forceUpdate] = useState(0)
-  const staticSkills = [
-    {
-      name: 'Java',
-      value: 'java'
-    },
-    {
-      name: 'Javascript',
-      value: 'javascript'
-    },
-    {
-      name: 'Reactjs',
-      value: 'reactjs'
-    },
-    {
-      name: 'Nodejs',
-      value: 'nodejs'
-    }
-  ]
 
   useEffect(() => {
     if (currentUser?.role === 'candidate') {
@@ -138,7 +119,7 @@ const OtherInfo = () => {
                       <DropdownSearchAdd
                         tags={skills}
                         setTags={setSkills}
-                        items={item.options || staticSkills}
+                        items={item.options || skillsDB}
                       />
                     </div>
                   </>

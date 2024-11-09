@@ -90,7 +90,6 @@ const recruiterControllers = {
       if (!currentRecruiter) {
         return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })
       }
-
       if (desc) updateFields['other_info.desc'] = desc
       if (speciality) {
         updateFields['other_info.speciality'] = Array.isArray(speciality)
@@ -98,25 +97,23 @@ const recruiterControllers = {
           : [speciality]
       }
       if (types) {
-        updateFields['other_info.types'] = types.map((item) => ({
-          name: item.name,
-          value: item.value
-        }))
+        updateFields['other_info.types'] = Array.isArray(types)
+          ? types
+          : [types]
       }
       if (wforms) {
-        updateFields['other_info.wforms'] = wforms.map((item) => ({
-          name: item.name,
-          value: item.value
-        }))
+        updateFields['other_info.wforms'] = Array.isArray(wforms)
+          ? wforms
+          : [wforms]
       }
 
-      const imagesResult = await uploadImages(
-        currentRecruiter,
-        images,
-        'recruiter/other'
-      )
-
       if (images) {
+        const imagesResult = await uploadImages(
+          currentRecruiter,
+          images,
+          'recruiter/other'
+        )
+
         updateFields['other_info.images'] = imagesResult
       }
 

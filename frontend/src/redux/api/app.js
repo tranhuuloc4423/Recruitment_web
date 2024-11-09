@@ -29,8 +29,8 @@ const getSkills = async (dispatch) => {
 
 const updateBasicInfo = async (id, data, dispatch, role) => {
   try {
-    await axios.put(`${role}/${id}/basic_info`, data)
-    const res = axios.get(`${role}/${id}`)
+    await axios.put(`${role}/basic_info/${id}`, data)
+    const res = axios.get(`${role}/role/${id}`)
     dispatch(setBasicInfo(res.data?.basic_info))
     toast.success('Cập nhật thông tin thành công!')
   } catch (error) {
@@ -42,8 +42,8 @@ const updateBasicInfo = async (id, data, dispatch, role) => {
 const updateOtherInfo = async (id, data, dispatch, role) => {
   try {
     console.log(data)
-    await axios.put(`${role}/${id}/other_info`, data)
-    // const res = await axios.get(`${role}/${id}`)
+    await axios.put(`${role}/other_info/${id}`, data)
+    // const res = await axios.get(`${role}/role/${id}`)
     dispatch(setOtherInfo(data))
     toast.success('Cập nhật thông tin thành công!')
   } catch (error) {
@@ -55,7 +55,7 @@ const updateOtherInfo = async (id, data, dispatch, role) => {
 const updateTarget = async (id, data, dispatch) => {
   try {
     console.log(data)
-    await axios.put(`/candidate/${id}/target`, data)
+    await axios.put(`/candidate/target/${id}`, data)
     const res = axios.get(`/candidate/${id}`)
     dispatch(setTarget(res.data?.target))
     toast.success('Cập nhật thông tin thành công!')

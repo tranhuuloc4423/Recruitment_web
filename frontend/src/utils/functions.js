@@ -44,4 +44,13 @@ const convertFileToURL = (file) => {
   })
 }
 
-export { convertFile, convertFileToURL, convertFiles }
+const formatDate = (date, format = 'dd/mm/yyyy') => {
+  const [day, month, year] = date?.split('/')
+  if (format === 'dd/mm/yyyy') {
+    return `${day}/${month}/${year}`
+  } else {
+    return `${year}/${month}/${day}`
+  }
+}
+
+export { convertFile, convertFileToURL, convertFiles, formatDate }

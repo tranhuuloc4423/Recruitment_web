@@ -36,7 +36,7 @@ const uploadImages = async (currentRole, images, folder) => {
   }
 
   // Giới hạn số lượng ảnh tối đa
-  const imagesToUpload = images.slice(0, 5) // Lấy tối đa 5 ảnh
+  const imagesToUpload = images?.slice(0, 5) // Lấy tối đa 5 ảnh
 
   // Tải các ảnh mới lên Cloudinary
   const uploadPromises = imagesToUpload.map((image) => {

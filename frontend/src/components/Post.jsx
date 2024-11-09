@@ -12,6 +12,7 @@ import { FiClock } from 'react-icons/fi'
 import { HiOutlineEye } from 'react-icons/hi'
 import { useSelector } from 'react-redux'
 import { getRoleData, removePost, updateConfirmed } from '../redux/api/post'
+import { useNavigate } from 'react-router-dom'
 
 const Post = ({ post, select, manage }) => {
   const { currentUser } = useSelector((state) => state.auth)
@@ -26,11 +27,14 @@ const Post = ({ post, select, manage }) => {
     authorType,
     type,
     views,
+    desc,
+    request,
     applied
   } = post
   // const { view, confirm, remove, update, extend } = manage
   const [basicInfo, setBasicInfo] = useState()
   const [otherInfo, setOtherInfo] = useState()
+  const navigate = useNavigate()
 
   const getBasicData = async () => {
     console.log(post)
@@ -49,6 +53,20 @@ const Post = ({ post, select, manage }) => {
   }
   const handleRemove = () => {
     removePost(post._id, { userId: currentRole._id, authorId: author })
+  }
+
+  const handleUpdate = () => {
+    navigate('/manage/create-post', {
+      state: {
+        updateTitle: title,
+        updateSalary: salary,
+        updateQuantity: quantity,
+        updateDesc: desc,
+        updateRequest: request,
+        updateDate: date_expiration,
+        skillsUpdate: skills
+      }
+    })
   }
 
   return (
@@ -147,7 +165,7 @@ const Post = ({ post, select, manage }) => {
         {manage?.view && <Button label="Xem" />}
         {manage?.confirm && <Button label="Duyệt" onClick={handleConfirm} />}
         {manage?.remove && <Button label="Xoá" onClick={handleRemove} />}
-        {manage?.update && <Button label="Cập nhật" />}
+        {manage?.update && <Button label="Cập nhật" onClick={handleUpdate} />}
         {manage?.extend && <Button label="Gia hạn" />}
       </div>
     </div>

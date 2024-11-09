@@ -78,6 +78,14 @@ const jobRequirements = `
   <p>Chúng tôi ưu tiên những ứng viên có tư duy sáng tạo và khả năng làm việc độc lập, đồng thời có thể thích nghi nhanh chóng với môi trường làm việc năng động.</p>
 `
 
+const introduceCompany = `
+<p><strong>Giới thiệu công ty:</strong></p>
+<p>[Tên công ty] là một đơn vị hàng đầu trong lĩnh vực [Lĩnh vực hoạt động của công ty] với sứ mệnh mang đến [Sứ mệnh của công ty: ví dụ "giải pháp sáng tạo", "dịch vụ chất lượng cao"] cho khách hàng. Thành lập vào [Năm thành lập], chúng tôi đã xây dựng và phát triển bền vững nhờ vào đội ngũ chuyên gia có kinh nghiệm và tâm huyết.</p>
+<p>Chúng tôi chuyên cung cấp [Các sản phẩm hoặc dịch vụ chính của công ty] cho các đối tác và khách hàng trong các ngành [Danh sách các ngành hoặc lĩnh vực phục vụ]. Với cam kết [Cam kết của công ty: ví dụ "luôn đổi mới", "hướng tới sự hài lòng của khách hàng"], [Tên công ty] tự hào là một trong những lựa chọn hàng đầu trong ngành.</p>
+<p>Với môi trường làm việc [Mô tả môi trường làm việc, ví dụ "chuyên nghiệp, năng động"], chúng tôi luôn chào đón những nhân tài có cùng chung đam mê và sẵn sàng cùng công ty đạt được [Mục tiêu hoặc giá trị công ty hướng tới: ví dụ "sự phát triển bền vững"].</p>
+
+`
+
 export {
   introduce,
   project,
@@ -85,5 +93,6 @@ export {
   certificatesAchievements,
   experience,
   jobDescription,
-  jobRequirements
+  jobRequirements,
+  introduceCompany
 }

@@ -6,7 +6,8 @@ const DropdownSearch = ({
   setSelectedItem,
   required = false,
   label = '',
-  disabled = false
+  disabled = false,
+  placeholder
 }) => {
   const [search, setSearch] = useState('')
   const [focus, setFocus] = useState(false)
@@ -61,10 +62,10 @@ const DropdownSearch = ({
         </div>
         <input
           type="text"
-          value={search}
+          value={search || label}
           onChange={handleSearchChange}
           onFocus={() => setFocus(true)}
-          placeholder={label}
+          placeholder={placeholder}
           className="outline-none border-2 px-4 py-2 rounded-md flex-1"
           disabled={disabled}
         />

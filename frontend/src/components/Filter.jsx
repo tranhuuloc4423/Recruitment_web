@@ -1,17 +1,18 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Dropdown, Button, Tag, RangeSlider, Line } from './'
+import DropdownSearch from './DropdownSearch'
 
 const Filter = (props) => {
   const {
     tags,
     setTags,
-    skillsstatic,
-    addressstatic,
+    skillsStatic,
+    addressStatic,
     skillSelected,
     setSkillSelected,
-    address,
-    setAddress,
+    addressSelected,
+    setAddressSelected,
     salarys,
     setSalarys,
     skills,
@@ -27,7 +28,7 @@ const Filter = (props) => {
       // Update the state based on the current role's target
       setSkills(skills || [])
       setSalarys([target_money?.min_money || 0, target_money?.max_money || 100])
-      setAddress(address || null)
+      setAddressSelected(address || null)
 
       // Update the tags based on types and wforms
       setTags((prevTags) => {
@@ -45,10 +46,10 @@ const Filter = (props) => {
     }
   }, [currentRole])
 
-  const handleTagChange = (label) => {
+  const handleTagChange = (name) => {
     setTags((prevTags) =>
       prevTags.map((tag) =>
-        tag.label === label ? { ...tag, checked: !tag.checked } : tag
+        tag.name === name ? { ...tag, checked: !tag.checked } : tag
       )
     )
   }
@@ -60,7 +61,7 @@ const Filter = (props) => {
           <div className="flex-1 flex flex-row gap-4">
             <Dropdown
               label={'Kỹ năng'}
-              options={skillsstatic}
+              options={skillsStatic}
               selectedOption={skillSelected}
               setSelectedOption={setSkillSelected}
             />
@@ -81,9 +82,10 @@ const Filter = (props) => {
         <div className="flex flex-row gap-4 items-center">
           <span className="para-1 py-2">{skills.length}/5 kỹ năng : </span>
           <div className="flex flex-wrap gap-2">
-            {skills.map((item) => (
+            {skills.map((item, index) => (
               <Tag
-                label={item.label}
+                key={index}
+                label={item.name}
                 remove={true}
                 onRemove={() =>
                   setSkills((prev) =>
@@ -109,10 +111,10 @@ const Filter = (props) => {
           {tags.slice(0, 2).map((tag) => (
             <Tag
               key={tag.value}
-              label={tag.label}
+              label={tag.name}
               plus
               checked={tag.checked}
-              setChecked={() => handleTagChange(tag.label)}
+              setChecked={() => handleTagChange(tag.name)}
             />
           ))}
         </div>
@@ -124,10 +126,10 @@ const Filter = (props) => {
           {tags.slice(2).map((tag) => (
             <Tag
               key={tag.value}
-              label={tag.label}
+              label={tag.name}
               plus
               checked={tag.checked}
-              setChecked={() => handleTagChange(tag.label)}
+              setChecked={() => handleTagChange(tag.name)}
             />
           ))}
         </div>
@@ -136,11 +138,11 @@ const Filter = (props) => {
       <div className="flex flex-row justify-between items-center">
         <span className="flex-1 heading-3">Địa điểm</span>
         <div className="flex-1">
-          <Dropdown
-            label={'Địa điểm'}
-            options={addressstatic}
-            selectedOption={address}
-            setSelectedOption={setAddress}
+          <DropdownSearch
+            items={addressStatic}
+            selectedItem={addressSelected}
+            setSelectedItem={setAddressSelected}
+            placeholder={'Địa điểm'}
           />
         </div>
       </div>

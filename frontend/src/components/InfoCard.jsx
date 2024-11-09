@@ -39,18 +39,18 @@ const InfoCard = (props) => {
             currentRole?.other_info?.[item.name]?.length > 0 && (
               <div className="flex flex-row gap-2">
                 {currentRole?.other_info[item?.name]?.map((item) => (
-                  <Tag key={item.value} label={item.label} />
+                  <Tag key={item.value} label={item.name} />
                 ))}
               </div>
             )}
           {item?.type === 'images' &&
             currentRole?.other_info?.[item.name]?.length > 0 && (
-              <div className="flex flex-wrap gap-2 justify-between w-full">
+              <div className="flex flex-wrap gap-2 w-full">
                 {currentRole?.other_info[item?.name]?.map((item) => (
                   <img
                     key={item?.url}
                     src={item?.url}
-                    className="w-[250px] h-[250px] object-cover"
+                    className="w-[150px] h-[150px] object-cover"
                     alt="company imgs"
                   />
                 ))}

@@ -83,6 +83,10 @@ const candidateControllers = {
     let updateFields = {}
 
     try {
+      const currentCandidate = await Candidate.findById(id)
+      if (!currentCandidate) {
+        return res.status(404).json({ message: 'Ứng viên không tồn tại' })
+      }
       if (desc) updateFields['other_info.desc'] = desc
       if (education) updateFields['other_info.education'] = education
       if (exps) updateFields['other_info.exps'] = exps

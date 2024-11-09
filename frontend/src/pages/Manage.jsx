@@ -21,7 +21,7 @@ const Manage = () => {
   }, [currentUser?.role])
 
   return (
-    <div className="w-full">
+    <div className="w-full min-h-[1000px]">
       <Nav data={nav}></Nav>
       <div className="mt-4">
         <Outlet />
