@@ -110,10 +110,39 @@ const recruiterSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Notification'
       }
-    ]
+    ],
+    isProfileComplete: {
+      type: Boolean,
+      default: false
+    }
   },
   { timestamps: true }
 )
+
+// Middleware để tính toán và cập nhật isProfileComplete trước khi lưu
+recruiterSchema.pre('save', function (next) {
+  const basicInfoComplete =
+    this.basic_info.image &&
+    this.basic_info.image.public_id &&
+    this.basic_info.image.url &&
+    this.basic_info.name &&
+    this.basic_info.field &&
+    this.basic_info.email &&
+    this.basic_info.phone &&
+    this.basic_info.tax_id &&
+    this.basic_info.address &&
+    this.basic_info.address.province &&
+    this.basic_info.address.district
+  const otherInfoComplete =
+    this.other_info.desc &&
+    this.other_info.images.length > 0 &&
+    this.other_info.speciality.length > 0 &&
+    this.other_info.types.length > 0 &&
+    this.other_info.wforms.length > 0
+
+  this.isProfileComplete = basicInfoComplete && otherInfoComplete
+  next()
+})
 
 const Recruiter = mongoose.model('Recruiter', recruiterSchema)
 module.exports = Recruiter
