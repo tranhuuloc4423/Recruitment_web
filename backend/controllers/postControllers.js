@@ -195,10 +195,6 @@ const postController = {
     const { postId } = req.params
     const { userId, authorType } = req.body
 
-    console.log(postId)
-    console.log(userId)
-    console.log(authorType)
-
     try {
       const post = await Post.findById(postId)
       if (!post) {
