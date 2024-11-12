@@ -29,7 +29,8 @@ const Post = ({ post, select, manage }) => {
     views,
     desc,
     request,
-    applied
+    applied,
+    location
   } = post
   // const { view, confirm, remove, update, extend } = manage
   const [basicInfo, setBasicInfo] = useState()
@@ -121,7 +122,7 @@ const Post = ({ post, select, manage }) => {
 
         <span className="flex flex-row items-center gap-2">
           <IoLocationOutline size={24} />
-          <span>{`${basicInfo?.address?.province?.name}`}</span>
+          <span>{`${location.address[0]?.province?.name}`}</span>
         </span>
 
         <span className="flex flex-row items-center gap-2">

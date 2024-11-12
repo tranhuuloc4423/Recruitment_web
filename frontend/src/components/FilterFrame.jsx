@@ -3,8 +3,9 @@ import { useSelector } from 'react-redux'
 import { Button, Filter, Line } from './'
 import { LuFilter } from 'react-icons/lu'
 import { IoClose } from 'react-icons/io5'
+import { toast } from 'react-toastify'
 
-const FilterFrame = () => {
+const FilterFrame = ({ isFilter, setIsFilter }) => {
   const [open, setOpen] = useState(false)
   const [skillSelected, setSkillSelected] = useState(null)
   const { currentRole, skillsDB } = useSelector((state) => state.app)
@@ -28,9 +29,36 @@ const FilterFrame = () => {
     setTags((prev) =>
       prev.map(({ checked, ...rest }) => ({ checked: false, ...rest }))
     )
+    localStorage.removeItem('filterFrame')
+    setIsFilter(false)
   }
 
-  const handleFilter = () => {}
+  const handleFilter = () => {
+    const types = tags
+      .slice(0, 2)
+      .filter((tag) => tag.checked)
+      .map(({ checked, ...tag }) => tag)
+    const wforms = tags
+      .slice(2)
+      .filter((tag) => tag.checked)
+      .map(({ checked, ...tag }) => tag)
+    const data = {
+      skills: skills,
+      target_money: {
+        min_money: salarys[0] * 1000000,
+        max_money: salarys[1] * 1000000
+      },
+      types: types,
+      address: {
+        name: addressSelected.name,
+        code: addressSelected?.code
+      },
+      wforms: wforms
+    }
+    localStorage.setItem('filterFrame', JSON.stringify(data))
+    setIsFilter(true)
+    setOpen(false)
+  }
 
   return (
     <div>
@@ -65,6 +93,7 @@ const FilterFrame = () => {
               setTags={setTags}
               salarys={salarys}
               setSalarys={setSalarys}
+              isTarget={false}
             />
             <Line />
             <div className="flex flex-row justify-between items-center p-4">

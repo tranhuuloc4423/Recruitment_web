@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Filter } from '../components/'
 import { updateTarget } from '../redux/api/app'
 import { useDispatch, useSelector } from 'react-redux'
@@ -30,20 +30,20 @@ const Target = () => {
       .map(({ checked, ...tag }) => tag)
 
     const data = {
-      target: {
-        skills: skills,
-        target_money: {
-          min_money: salarys[0],
-          max_money: salarys[1]
-        },
-        types: types,
-        address: address,
-        wforms: wforms
-      }
+      skills: skills,
+      target_money: {
+        min_money: salarys[0],
+        max_money: salarys[1]
+      },
+      types: types,
+      address: {
+        name: addressSelected.name,
+        code: addressSelected?.code
+      },
+      wforms: wforms
     }
 
     updateTarget(currentRole._id, data, dispatch)
-    console.log(currentRole._id, data, dispatch)
 
     setSkills(skills)
     setSalarys(salarys)
@@ -51,6 +51,11 @@ const Target = () => {
     setAddressSelected(address)
     console.log(data)
   }
+
+  useEffect(() => {
+    console.log(address)
+    console.log(skillsDB)
+  }, [])
 
   return (
     <div className="w-full flex justify-center">
@@ -78,6 +83,7 @@ const Target = () => {
           setTags={setTags}
           salarys={salarys}
           setSalarys={setSalarys}
+          isTarget={true}
         />
 
         {/* footer */}

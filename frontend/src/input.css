@@ -28,6 +28,20 @@
     font-size: 8px;
   }
 
+  .search-bar__input {
+    width: 100%;
+    border-radius: 4px;
+    padding: 4px 8px;
+    transition: all 0.2s;
+  }
+
+  .search-bar__history {
+    background-color: aqua !important;
+  }
+
+  .search-bar__history-item {
+  }
+
   .flex-row-center {
     @apply flex flex-row items-center;
   }

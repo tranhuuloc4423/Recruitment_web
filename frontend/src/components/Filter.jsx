@@ -16,14 +16,25 @@ const Filter = (props) => {
     salarys,
     setSalarys,
     skills,
-    setSkills
+    setSkills,
+    isTarget
   } = props
   const { currentRole } = useSelector((state) => state.app)
 
   useEffect(() => {
     if (currentRole?.target) {
-      const { skills, target_money, types, address, wforms } =
-        currentRole.target
+      let skills, target_money, types, address, wforms
+
+      if (isTarget) {
+        console.log('isTarget is true')
+        ;({ skills, target_money, types, address, wforms } = currentRole.target)
+      } else {
+        console.log('isTarget is false')
+        const filterFrame = localStorage.getItem('filterFrame')
+        console.log('filterFrame from localStorage:', filterFrame)
+        const parsedFrame = filterFrame ? JSON.parse(filterFrame) : {}
+        ;({ skills, target_money, types, address, wforms } = parsedFrame)
+      }
 
       // Update the state based on the current role's target
       setSkills(skills || [])
@@ -34,8 +45,8 @@ const Filter = (props) => {
       setTags((prevTags) => {
         const updatedTags = prevTags.map((tag) => {
           if (
-            types.some((type) => type.value === tag.value) ||
-            wforms.some((wform) => wform.value === tag.value)
+            types?.some((type) => type.value === tag.value) ||
+            wforms?.some((wform) => wform.value === tag.value)
           ) {
             return { ...tag, checked: true }
           }

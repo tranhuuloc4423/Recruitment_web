@@ -62,7 +62,7 @@ const DropdownSearch = ({
         </div>
         <input
           type="text"
-          value={search || label}
+          value={search || selectedItem?.name || label}
           onChange={handleSearchChange}
           onFocus={() => setFocus(true)}
           placeholder={placeholder}

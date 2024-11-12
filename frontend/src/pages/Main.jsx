@@ -1,33 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { FiSearch } from 'react-icons/fi'
-import {
-  PostDetails,
-  Input,
-  Button,
-  Tag,
-  Post,
-  FilterFrame
-} from '../components'
+import { PostDetails, Input, Button, Post, FilterFrame } from '../components'
 import Recruiter from '../pages/Recruiter'
 import { getAllPostConfirmed } from '../redux/api/post'
+import Search from '../components/Search'
 const Main = () => {
   const [posts, setPosts] = useState([])
   const [filteredPosts, setFilteredPosts] = useState([])
+  const [isFilter, setIsFilter] = useState(false)
   const [jobs, setJobs] = useState()
-  const [suggess, setsuggess] = useState([
-    {
-      value: 'reactjs',
-      label: 'ReactJS'
-    },
-    {
-      value: 'java',
-      label: 'Java'
-    },
-    {
-      value: 'html',
-      label: 'HTML'
-    }
-  ])
+
   const [selectedPost, setSelectedPost] = useState(posts[0]?._id)
   const [search, setSearch] = useState('')
 
@@ -36,23 +18,6 @@ const Main = () => {
     setPosts(data)
     setFilteredPosts(data)
   }
-
-  // const handleSearch = () => {
-  //   console.log(search)
-  //   const searchTerm = search?.toLowerCase()
-  //   console.log(posts)
-  //   const filtered = posts?.filter(
-  //     (post) =>
-  //       post?.title?.toLowerCase().includes(searchTerm) ||
-  //       post?.skills?.some((skill) =>
-  //         skill?.name.toLowerCase().includes(searchTerm)
-  //       ) ||
-  //       post?.location?.address[0]?.province?.name
-  //         .toLowerCase()
-  //         .includes(searchTerm)
-  //   )
-  //   setFilteredPosts(filtered)
-  // }
 
   const handleSearch = () => {
     const searchTerm = search.toLowerCase()
@@ -71,6 +36,58 @@ const Main = () => {
     })
     setFilteredPosts(filtered)
     setJobs(filtered.length)
+  }
+
+  const handleFilter = () => {
+    const { skills, target_money, types, address, wforms } = JSON.parse(
+      localStorage.getItem('filterFrame')
+    )
+    const filtered = filteredPosts.filter((post) => {
+      let addressMatch, skillsMatch, targetMoneyMatch, typesMatch, wformsMatch
+      if (address) {
+        addressMatch =
+          post?.location?.address[0]?.province?.code === address?.code
+      }
+
+      if (skills) {
+        skillsMatch = skills.every((skill) =>
+          post?.skills.some((postSkill) => postSkill?.value === skill?.value)
+        )
+      }
+
+      if (target_money) {
+        targetMoneyMatch =
+          post.salary >= target_money?.min_money &&
+          post.salary <= target_money?.max_money
+      }
+      // if (types !== null) {
+      //   typesMatch =
+      //     types && types?.length > 0
+      //       ? types?.every((type) =>
+      //           post.types.some((postType) => postType?.name === type?.name)
+      //         )
+      //       : true
+      // }
+
+      // if (wforms !== null) {
+      //   wformsMatch =
+      //     wforms && wforms.length > 0
+      //       ? wforms.every((wform) =>
+      //           post.wforms.some((postWform) => postWform?.name === wform?.name)
+      //         )
+      //       : true
+      // }
+
+      // Return true only if all criteria match
+      return (
+        addressMatch && skillsMatch && targetMoneyMatch
+        // typesMatch ||
+        // wformsMatch
+      )
+    })
+
+    setFilteredPosts(filtered)
+    setJobs(filtered.length)
     console.log(filteredPosts)
   }
 
@@ -81,6 +98,12 @@ const Main = () => {
   useEffect(() => {
     getPosts()
   }, [])
+
+  useEffect(() => {
+    if (isFilter) {
+      handleFilter()
+    }
+  }, [isFilter])
 
   useEffect(() => {
     if (filteredPosts && filteredPosts.length > 0) {
@@ -94,6 +117,7 @@ const Main = () => {
       <div className="w-2/3 flex flex-col gap-2">
         {/* Search */}
         <div className="flex flex-row gap-4 w-full items-center">
+          {/* <Search /> */}
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -107,22 +131,6 @@ const Main = () => {
             className="px-8"
           />
         </div>
-
-        {/* suggestion */}
-        <div className="flex flex-row items-center gap-2">
-          <span>Gợi ý cho bạn : </span>
-          <div className="flex flex-row gap-2">
-            {suggess?.map((tag) => (
-              <div
-                key={tag.value}
-                onClick={() => setSearch(tag.label)}
-                className="cursor-pointer"
-              >
-                <Tag label={tag.label} />
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
       <div className="w-full flex flex-col gap-4 justify-between">
         <div className="flex flex-row justify-between items-center">
@@ -131,7 +139,7 @@ const Main = () => {
             công việc đã được tìm thấy
           </span>
           <span>
-            <FilterFrame />
+            <FilterFrame isFilter={isFilter} setIsFilter={setIsFilter} />
           </span>
         </div>
         <div className="flex flex-row gap-4 ">

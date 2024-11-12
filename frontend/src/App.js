@@ -61,9 +61,9 @@ function App() {
     if (user === null) {
       navigate(SIGNIN)
     } else {
-      fetchRoleData(user)
       navigate(HOME + '/' + POSTS)
     }
+    fetchRoleData(user)
   }, [])
 
   return (
