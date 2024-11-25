@@ -70,12 +70,6 @@ const postController = {
     try {
       postData.date_upload = formatDate(new Date())
 
-      if (postData.date_expiration) {
-        postData.date_expiration = formatDate(
-          new Date(postData.date_expiration)
-        )
-      }
-
       let user
       if (postData.authorType === 'admin') {
         user = await Admin.findById(postData.author)
@@ -122,6 +116,7 @@ const postController = {
       res.status(500).json({ message: error.message })
     }
   },
+
   updatePost: async (req, res) => {
     const { postId } = req.params
     const { userId, authorType, updatedPost } = req.body

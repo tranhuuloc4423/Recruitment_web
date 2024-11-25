@@ -1,6 +1,5 @@
 const Address = require('../models/addressModel')
 const cloudinary = require('./cloudinary')
-
 const uploadImage = async (currentRole, image, folder) => {
   // Xóa ảnh cũ nếu tồn tại
   if (
