@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { getAllPosted, getAllPostedRole } from '../redux/api/post'
+import {
+  getAllPosted,
+  getAllPostedByOwner,
+  getAllPostedRole
+} from '../redux/api/post'
 import { Post } from '../components'
 import FilterRowBar from '../components/FilterRowBar'
 import { useSelector } from 'react-redux'
@@ -37,7 +41,7 @@ const Posteds = () => {
 
   const getPosteds = async () => {
     // const res = await getAllPosted()
-    const res = await getAllPostedRole(currentRole._id, currentUser.role)
+    const res = await getAllPostedByOwner(currentRole._id)
     setPosts(res)
     setPages(res?.length / 10)
   }
@@ -53,20 +57,18 @@ const Posteds = () => {
   }
 
   useEffect(() => {
-    if (currentUser.role === 'admin') {
-      setManage({
-        remove: true,
-        view: true
-      })
-    } else if (currentUser.role === 'recruiter') {
-      setManage({
-        remove: true,
-        view: true,
-        update: true
-      })
-    } else {
-      setManage({})
+    const rolePermissions = {
+      admin: { remove: true, view: true },
+      recruiter: { remove: true, view: true, update: true },
+      default: {}
     }
+
+    let manage = rolePermissions[currentUser.role] || rolePermissions.default
+
+    if (currentUser?._id === currentRole?.userId) {
+      manage = { ...manage, update: true }
+    }
+    setManage(manage)
   }, [currentUser.role])
 
   useEffect(() => {
@@ -75,8 +77,8 @@ const Posteds = () => {
 
   useEffect(() => {
     const activeFilter = filter.find((f) => f.active)
-    if (activeFilter) {
-      const sortedPosts = [...posts].sort((a, b) => {
+    if (activeFilter && posts) {
+      const sortedPosts = [...posts]?.sort((a, b) => {
         const sortOrder = activeFilter.increase ? 1 : -1
         switch (activeFilter.label) {
           case 'Theo ngày đăng':

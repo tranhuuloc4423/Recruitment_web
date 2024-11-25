@@ -1,7 +1,6 @@
 import React from 'react'
 
-const StatusTag = (props) => {
-  const { state } = props
+const StatusTag = ({ state }) => {
   return (
     <div className="relative inline-block">
       {state === 'superhot' ? (

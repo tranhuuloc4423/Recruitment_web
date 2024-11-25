@@ -13,7 +13,10 @@ const paths = {
   CREATEPOST: 'create-post',
   CHECKPOST: 'check-posts',
   CONFIRMPOST: 'confirmed-posts',
-  POSTED: 'posted'
+  POSTED: 'posted',
+  SAVEDPOSTS: 'saved-posts',
+  RECENTPOSTS: 'recent-posts',
+  APPLIEDPOSTS: 'applied-posts'
 }
 
 export default paths

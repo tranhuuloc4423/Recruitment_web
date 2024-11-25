@@ -4,8 +4,13 @@ import { jobDescription, jobRequirements } from '../utils/RichTextTemplate'
 import { useSelector } from 'react-redux'
 import { createPost } from '../redux/api/post'
 import { useLocation } from 'react-router-dom'
-import { formatDate } from '../utils/functions'
+import {
+  convertDatetoString,
+  convertStringtoDate,
+  formatDate
+} from '../utils/functions'
 import DateTimePicker from './DateTimePicker'
+import Slider from './Slider'
 
 const CreatePost = () => {
   const { currentUser } = useSelector((state) => state.auth)
@@ -22,53 +27,22 @@ const CreatePost = () => {
   } = location?.state || {}
   const [values, setValues] = useState({
     title: updateTitle || '',
-    salary:
-      (updateSalary && new Intl.NumberFormat('de-DE').format(updateSalary)) ||
-      '',
-    quantity: updateQuantity || '',
     desc: updateDesc || '',
     request: updateRequest || ''
   })
   const [update, setUpdate] = useState(false)
-  const [date, setDate] = useState(updateDate || null)
+  const [date, setDate] = useState(convertStringtoDate(updateDate) || null)
   const [skillSelected, setSkillSelected] = useState(null)
   const [skills, setSkills] = useState(skillsUpdate || [])
+  const [salary, setSalary] = useState(parseInt(updateSalary) / 1000000 || 0)
+  const [quantity, setQuantity] = useState(updateQuantity || 0)
 
   const HandleOnChange = (e) => {
     const { name, value } = e.target
-
-    // Kiểm tra nếu trường là 'salary'
-    if (name === 'salary') {
-      if (/^\d*\.?\d*$/.test(value)) {
-        // Loại bỏ dấu chấm nếu có để chỉ giữ lại số
-        const numericValue = value.replace(/\./g, '')
-
-        // Định dạng lại số với dấu chấm mỗi 3 chữ số
-        const formattedValue = new Intl.NumberFormat('de-DE').format(
-          numericValue
-        )
-
-        // Cập nhật giá trị đã định dạng vào state
-        setValues((prevValues) => ({
-          ...prevValues,
-          [name]: formattedValue
-        }))
-      }
-    } else if (name === 'quantity') {
-      // Chỉ cho phép giá trị số hoặc rỗng cho 'quantity'
-      if (/^\d*\.?\d*$/.test(value) || value === '') {
-        setValues((prevValues) => ({
-          ...prevValues,
-          [name]: value
-        }))
-      }
-    } else {
-      // Các trường khác
-      setValues((prevValues) => ({
-        ...prevValues,
-        [name]: value
-      }))
-    }
+    setValues((prevValues) => ({
+      ...prevValues,
+      [name]: value
+    }))
   }
 
   const handleCreatePost = async () => {
@@ -79,14 +53,15 @@ const CreatePost = () => {
     let data
     data = {
       ...values,
-      salary: parseInt(values.salary.replace(/\./g, ''), 10),
-      date_expiration: `${date.$D}/${date.$M + 1}/${date.$y}`,
+      salary: parseInt(salary * 1000000),
+      quantity: quantity,
+      date_expiration: convertDatetoString(date),
       skills: skills,
       author: currentRole._id,
       authorType: currentUser.role
     }
     console.log(data)
-    // createPost(data)
+    createPost(data)
     // setValues({
     //   title: '',
     //   salary: '',
@@ -102,6 +77,7 @@ const CreatePost = () => {
 
   useEffect(() => {
     if (location.state) {
+      console.log(location?.state)
       setUpdate(true)
     } else {
       setUpdate(false)
@@ -119,22 +95,19 @@ const CreatePost = () => {
         onChange={HandleOnChange}
         label={'Tiêu đề'}
       />
-      <Input
-        placeholder={'Mức lương'}
-        label={'Mức lương'}
-        name={'salary'}
-        required
-        value={values.salary}
-        onChange={HandleOnChange}
+      <Slider
+        value={salary}
+        setValue={setSalary}
+        step={5}
+        label={'Mức Lương'}
       />
       <DateTimePicker date={date} setDate={setDate} validDate={true} />
-      <Input
-        name={'quantity'}
-        placeholder={'Số lượng ứng viên'}
-        required
-        label="Số lượng ứng viên"
-        value={values.quantity}
-        onChange={HandleOnChange}
+      <Slider
+        value={quantity}
+        setValue={setQuantity}
+        step={1}
+        label={'Số lượng ứng viên'}
+        max={30}
       />
 
       <div className="flex flex-row items-center gap-4">

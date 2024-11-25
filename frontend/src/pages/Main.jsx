@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { FiSearch } from 'react-icons/fi'
 import { PostDetails, Input, Button, Post, FilterFrame } from '../components'
 import Recruiter from '../pages/Recruiter'
 import { getAllPostConfirmed } from '../redux/api/post'
-import Search from '../components/Search'
 const Main = () => {
   const [posts, setPosts] = useState([])
   const [filteredPosts, setFilteredPosts] = useState([])
@@ -12,11 +11,32 @@ const Main = () => {
 
   const [selectedPost, setSelectedPost] = useState(posts[0]?._id)
   const [search, setSearch] = useState('')
+  const [history, setHistory] = useState([])
+  const [filteredSuggestions, setFilteredSuggestions] = useState([])
+  const [isFocused, setIsFocused] = useState(false)
+  const searchRef = useRef(null)
 
   const getPosts = async () => {
     const data = await getAllPostConfirmed()
     setPosts(data)
     setFilteredPosts(data)
+  }
+
+  const saveToHistory = (searchTerm) => {
+    const updatedHistory = [...new Set([searchTerm, ...history])].slice(0, 10) // Giới hạn 10 lịch sử
+    setHistory(updatedHistory)
+    localStorage.setItem('searchHistory', JSON.stringify(updatedHistory))
+  }
+
+  const handleKeySearch = (e) => {
+    if (e.key === 'Tab' && filteredSuggestions.length > 0) {
+      e.preventDefault()
+      setSearch(filteredSuggestions[0]) // Điền gợi ý đầu tiên
+      setIsFocused(false)
+    }
+    if (e.key === 'Enter') {
+      handleSearch()
+    }
   }
 
   const handleSearch = () => {
@@ -36,29 +56,43 @@ const Main = () => {
     })
     setFilteredPosts(filtered)
     setJobs(filtered.length)
+    if (search.trim() !== '') {
+      saveToHistory(search.trim())
+      setSearch('') // Reset input
+    }
+    setIsFocused(false)
+    searchRef.current.blur()
   }
 
   const handleFilter = () => {
     const { skills, target_money, types, address, wforms } = JSON.parse(
       localStorage.getItem('filterFrame')
     )
-    const filtered = filteredPosts.filter((post) => {
+    const filtered = posts.filter((post) => {
       let addressMatch, skillsMatch, targetMoneyMatch, typesMatch, wformsMatch
       if (address) {
-        addressMatch =
-          post?.location?.address[0]?.province?.code === address?.code
+        addressMatch = address?.code
+          ? post?.location?.address[0]?.province?.code === address?.code
+          : true
       }
 
       if (skills) {
-        skillsMatch = skills.every((skill) =>
-          post?.skills.some((postSkill) => postSkill?.value === skill?.value)
-        )
+        skillsMatch =
+          skills?.length > 0
+            ? skills.every((skill) =>
+                post?.skills.some(
+                  (postSkill) => postSkill?.value === skill?.value
+                )
+              )
+            : true
       }
 
       if (target_money) {
         targetMoneyMatch =
-          post.salary >= target_money?.min_money &&
-          post.salary <= target_money?.max_money
+          target_money.length > 0
+            ? post.salary % 1000000 >= target_money?.min_money &&
+              post.salary % 1000000 <= target_money?.max_money
+            : true
       }
       // if (types !== null) {
       //   typesMatch =
@@ -80,7 +114,8 @@ const Main = () => {
 
       // Return true only if all criteria match
       return (
-        addressMatch && skillsMatch && targetMoneyMatch
+        addressMatch && skillsMatch
+        //  && targetMoneyMatch
         // typesMatch ||
         // wformsMatch
       )
@@ -88,7 +123,7 @@ const Main = () => {
 
     setFilteredPosts(filtered)
     setJobs(filtered.length)
-    console.log(filteredPosts)
+    console.log(filtered)
   }
 
   const handlePostClick = (id) => {
@@ -112,17 +147,56 @@ const Main = () => {
     }
   }, [filteredPosts])
 
+  useEffect(() => {
+    const storedHistory =
+      JSON.parse(localStorage.getItem('searchHistory')) || []
+    setHistory(storedHistory)
+  }, [])
+
+  useEffect(() => {
+    setFilteredSuggestions(
+      history.filter((item) =>
+        item.toLowerCase().includes(search.toLowerCase())
+      )
+    )
+  }, [search, history])
+
   return (
     <div className="flex flex-col gap-4 justify-center items-center mx-auto">
       <div className="w-2/3 flex flex-col gap-2">
         {/* Search */}
         <div className="flex flex-row gap-4 w-full items-center">
           {/* <Search /> */}
-          <Input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Tìm kiếm theo từ khoá"
-          />
+          <div className="w-full relative">
+            <input
+              ref={searchRef}
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Tìm kiếm theo từ khoá"
+              className="w-full  focus:outline-none focus:border-blue-500 px-4 py-2 rounded"
+              onKeyDown={(e) => handleKeySearch(e)}
+              onFocus={() => {
+                setIsFocused(true)
+                console.log(filteredSuggestions)
+              }}
+              onBlur={() => setTimeout(() => setIsFocused(false), 200)}
+            />
+
+            {isFocused && filteredSuggestions && (
+              <ul className="absolute top-[100%] left-0 right-0 bg-white shadow-md rounded mt-2 z-50">
+                {filteredSuggestions.map((suggestion, index) => (
+                  <li
+                    key={index}
+                    onClick={() => setSearch(suggestion)}
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {suggestion}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
           <Button
             label={'Tìm kiếm'}
             onClick={handleSearch}

@@ -10,7 +10,9 @@ const {
   CHECKPOST,
   CONFIRMPOST,
   CREATEPOST,
-  POSTED
+  POSTED,
+  RECENTPOSTS,
+  APPLIEDPOSTS
 } = paths
 
 const nav = [
@@ -150,20 +152,21 @@ const manageNav = [
     name: 'candidate',
     nav: [
       {
-        name: 'Đã xem',
-        path: '/post-viewed',
+        name: 'Đã lưu',
+        path: '/manage/',
         active: true,
         id: 0
       },
       {
-        name: 'Đã lưu',
-        path: '/post-saved',
+        name: 'Xem gần đây',
+        path: '/manage/' + RECENTPOSTS,
         active: false,
         id: 1
       },
+
       {
         name: 'Đã ứng tuyển',
-        path: '/posts-applied',
+        path: '/manage/' + APPLIEDPOSTS,
         active: false,
         id: 2
       }

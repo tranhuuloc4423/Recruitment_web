@@ -77,6 +77,15 @@ const getAllPostedRole = async (id, role) => {
   }
 }
 
+const getAllPostedByOwner = async (id) => {
+  try {
+    const res = await axios.get(`post/user/${id}`)
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const getAllPostsRole = async (id, role) => {
   try {
     const res = await axios.get(`${role}/posts/${id}`)
@@ -95,6 +104,19 @@ const getRoleData = async (role, id) => {
   }
 }
 
+const updateCandidateApplied = async (id, candidateId) => {
+  try {
+    const res = await axios.put(`/post/${id}/applied`, {
+      candidateId
+    })
+    toast.success('Ứng tuyển thành công!')
+    return res.data
+  } catch (error) {
+    console.log(error)
+    toast.error('Ứng tuyển thất bại!')
+  }
+}
+
 export {
   createPost,
   getAllPostConfirmed,
@@ -105,5 +127,7 @@ export {
   getAllPostsRole,
   getAllPostConfirmedRole,
   updateConfirmed,
-  removePost
+  removePost,
+  getAllPostedByOwner,
+  updateCandidateApplied
 }

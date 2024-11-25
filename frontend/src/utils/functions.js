@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 const convertFile = (file) => {
   return new Promise((resolve, reject) => {
     const fileReader = new FileReader()
@@ -53,4 +55,19 @@ const formatDate = (date, format = 'dd/mm/yyyy') => {
   }
 }
 
-export { convertFile, convertFileToURL, convertFiles, formatDate }
+const convertDatetoString = (date) => {
+  return `${date.$D}/${date.$M + 1}/${date.$y}`
+}
+
+const convertStringtoDate = (string) => {
+  return dayjs(string, 'DD/MM/YYYY')
+}
+
+export {
+  convertFile,
+  convertFileToURL,
+  convertFiles,
+  formatDate,
+  convertStringtoDate,
+  convertDatetoString
+}

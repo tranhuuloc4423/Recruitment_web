@@ -54,19 +54,22 @@ const ConfirmedPosts = () => {
   }
 
   useEffect(() => {
-    if (currentUser.role === 'admin') {
-      setManage({
-        remove: true,
-        view: true
-      })
-    } else {
-      setManage({})
+    const rolePermissions = {
+      admin: { remove: true, view: true },
+      recruiter: { remove: true, view: true },
+      default: {}
     }
+
+    let manage = rolePermissions[currentUser.role] || rolePermissions.default
+    if (currentUser?._id === currentRole?.userId) {
+      manage = { ...manage, update: true }
+    }
+    setManage(manage)
   }, [currentUser.role])
 
   useEffect(() => {
     getPosteds()
-  }, [])
+  }, [filterPosts])
 
   useEffect(() => {
     const activeFilter = filter.find((f) => f.active)

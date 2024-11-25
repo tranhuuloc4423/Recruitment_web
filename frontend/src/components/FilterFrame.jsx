@@ -45,8 +45,8 @@ const FilterFrame = ({ isFilter, setIsFilter }) => {
     const data = {
       skills: skills,
       target_money: {
-        min_money: salarys[0] * 1000000,
-        max_money: salarys[1] * 1000000
+        min_money: salarys[0],
+        max_money: salarys[1]
       },
       types: types,
       address: {

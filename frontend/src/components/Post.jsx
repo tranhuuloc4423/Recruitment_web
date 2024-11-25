@@ -11,7 +11,12 @@ import { PiBagBold } from 'react-icons/pi'
 import { FiClock } from 'react-icons/fi'
 import { HiOutlineEye } from 'react-icons/hi'
 import { useSelector } from 'react-redux'
-import { getRoleData, removePost, updateConfirmed } from '../redux/api/post'
+import {
+  getRoleData,
+  removePost,
+  updateCandidateApplied,
+  updateConfirmed
+} from '../redux/api/post'
 import { useNavigate } from 'react-router-dom'
 
 const Post = ({ post, select, manage }) => {
@@ -70,6 +75,10 @@ const Post = ({ post, select, manage }) => {
     })
   }
 
+  const handleApply = () => {
+    updateCandidateApplied(post?._id, currentRole._id)
+  }
+
   return (
     <div
       className={`flex min-h-[400px] flex-col gap-2 bg-white shadow-md p-2 rounded ${
@@ -85,7 +94,7 @@ const Post = ({ post, select, manage }) => {
       {/* time and tag */}
       <div className="flex-row-center justify-between w-full">
         <span className="para-1">Hạn ứng tuyển : {date_expiration}</span>
-        {type !== 'normal' && (
+        {type && (
           <span className="relative right-[-8px]">
             <StatusTag state={type} />
           </span>
@@ -158,7 +167,9 @@ const Post = ({ post, select, manage }) => {
 
       {/* applied button */}
       <div className="flex flex-row justify-end">
-        {currentUser.role === 'candidate' && <Button label="Ứng tuyển" />}
+        {currentUser.role === 'candidate' && (
+          <Button label="Ứng tuyển" onClick={handleApply} />
+        )}
       </div>
 
       {/* manage buttons */}

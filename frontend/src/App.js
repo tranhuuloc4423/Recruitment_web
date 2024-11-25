@@ -15,11 +15,14 @@ import {
   Manage,
   Posteds,
   ConfirmedPosts,
-  CheckPosts
+  CheckPosts,
+  RecentPosts,
+  SavedPosts,
+  AppliedPosts
 } from './pages'
 import { useEffect } from 'react'
 import { Bounce, ToastContainer } from 'react-toastify'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import 'react-toastify/dist/ReactToastify.css'
 import { setCurrentUser } from './redux/slices/authSlice'
 import { getAddress, getById, getSkills } from './redux/api/app'
@@ -38,13 +41,16 @@ const {
   CREATEPOST,
   CONFIRMPOST,
   CHECKPOST,
-  POSTED
+  POSTED,
+  SAVEDPOSTS,
+  RECENTPOSTS,
+  APPLIEDPOSTS
 } = paths
 
 function App() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  // const { currentUser } = useSelector((state) => state.auth)
+  const { currentUser } = useSelector((state) => state.auth)
 
   const fetchRoleData = async (user) => {
     await getById(user._id, dispatch, user.role)
@@ -80,10 +86,18 @@ function App() {
             <Route path={TARGET} element={<Target />} />
           </Route>
           <Route path={MANAGE} element={<Manage />}>
-            <Route path={''} element={<Posteds />} />
+            <Route
+              path={''}
+              element={
+                currentUser === 'candidate' ? <SavedPosts /> : <Posteds />
+              }
+            />
             <Route path={CONFIRMPOST} element={<ConfirmedPosts />} />
             <Route path={CHECKPOST} element={<CheckPosts />} />
             <Route path={CREATEPOST} element={<CreatePost />} />
+            <Route path={APPLIEDPOSTS} element={<AppliedPosts />} />
+            <Route path={RECENTPOSTS} element={<RecentPosts />} />
+            {/* <Route path={SAVEDPOSTS} element={} /> */}
           </Route>
         </Route>
       </Routes>

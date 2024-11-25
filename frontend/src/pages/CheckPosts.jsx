@@ -65,7 +65,7 @@ const CheckPosts = () => {
 
   useEffect(() => {
     getPosteds()
-  }, [])
+  }, [filterPosts])
 
   useEffect(() => {
     const activeFilter = filter.find((f) => f.active)
