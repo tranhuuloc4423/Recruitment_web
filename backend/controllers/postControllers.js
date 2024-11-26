@@ -346,15 +346,19 @@ const postController = {
         return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
       }
 
-      const post = await Post.findByIdAndUpdate(
-        postId,
-        { $push: { applied: candidateId } },
-        { new: true }
-      )
-
+      const post = await Post.findById(postId)
       if (!post) {
         return res.status(404).json({ message: 'Không tìm thấy bài viết' })
       }
+
+      if (post.applied.includes(candidateId)) {
+        return res
+          .status(400)
+          .json({ message: 'Ứng viên đã ứng tuyển vào bài viết này' })
+      }
+
+      post.applied.push(candidateId)
+      await post.save()
 
       await updateAppliedJobs(candidateId, postId)
 
@@ -378,14 +382,26 @@ const postController = {
         return res.status(404).json({ message: 'Không tìm thấy bài viết' })
       }
 
-      if (post.quantity && post.approved.length + 1 >= post.quantity) {
-        post.status = 'completed' // Kiểm tra nếu số ứng viên đã duyệt đạt số lượng yêu cầu, cập nhật status thành 'completed'
+      if (post.approved.includes(candidateId)) {
+        return res
+          .status(400)
+          .json({ message: 'Ứng viên đã được duyệt cho bài viết này' })
+      }
+
+      if (post.quantity && post.approved.length >= post.quantity) {
+        post.status = 'completed'
+        await post.save()
         return res.status(400).json({ message: 'Đã đủ người được tuyển' })
       }
 
       post.approved.push(candidateId)
-      await post.save()
 
+      const appliedIndex = post.applied.indexOf(candidateId)
+      if (appliedIndex !== -1) {
+        post.applied.splice(appliedIndex, 1)
+      }
+
+      await post.save()
       await updateApprovedJobs(candidateId, postId)
 
       res.json({ message: 'Cập nhật duyệt ứng viên thành công', post })
