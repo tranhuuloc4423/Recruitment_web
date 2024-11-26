@@ -3,6 +3,35 @@ const User = require('../models/userModel')
 const Post = require('../models/postModel')
 const { uploadImage, validateAddress } = require('../utils/funcs')
 
+const calculateProfileStatus = (admin) => {
+  const basicInfoFields = [
+    this.basic_info.image?.public_id,
+    this.basic_info.image?.url,
+    this.basic_info.name,
+    this.basic_info.dob,
+    this.basic_info.phone,
+    this.basic_info.email,
+    this.basic_info.address?.province,
+    this.basic_info.address?.district
+  ]
+
+  const otherInfoFields = [
+    this.other_info.desc,
+    this.other_info.education,
+    this.other_info.exps,
+    this.other_info.projects,
+    this.other_info.certificates,
+    this.other_info.skills?.length > 0
+  ]
+
+  const basicInfoCompleted =
+    basicInfoFields.filter(Boolean).length / basicInfoFields.length
+  const otherInfoCompleted =
+    otherInfoFields.filter(Boolean).length / otherInfoFields.length
+
+  return Math.round(basicInfoCompleted * 50 + otherInfoCompleted * 50)
+}
+
 const candidateControllers = {
   updateBasicInfo: async (req, res) => {
     const { id } = req.params
@@ -71,7 +100,13 @@ const candidateControllers = {
       if (!updatedUser)
         return res.status(404).json({ message: 'Người dùng không tồn tại' })
 
-      res.json({ candidate: basic_info, user: updatedUser })
+      const profileStatus = calculateProfileStatus(basic_info) // Tính toán profileStatus
+      await Candidate.updateOne({ _id: id }, { profileStatus })
+
+      res.json({
+        message: 'Cập nhật thành công!',
+        data: basic_info
+      })
     } catch (error) {
       res.status(500).json({ message: error.message })
     }

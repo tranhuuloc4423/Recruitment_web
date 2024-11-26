@@ -87,8 +87,22 @@ const validateAddress = async (address) => {
   }
 }
 
+const formatDate = (date) => {
+  const day = String(date.getDate()).padStart(2, '0')
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const year = date.getFullYear()
+  return `${day}/${month}/${year}`
+}
+
+const parseDate = (dateString) => {
+  const [day, month, year] = dateString.split('/').map(Number)
+  return new Date(year, month - 1, day) // Tháng trong JS bắt đầu từ 0
+}
+
 module.exports = {
   uploadImage,
   uploadImages,
-  validateAddress
+  validateAddress,
+  formatDate,
+  parseDate
 }
