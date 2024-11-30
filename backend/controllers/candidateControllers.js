@@ -3,25 +3,25 @@ const User = require('../models/userModel')
 const Post = require('../models/postModel')
 const { uploadImage, validateAddress } = require('../utils/funcs')
 
-const calculateProfileStatus = (admin) => {
+const calculateProfileStatus = (candidate) => {
   const basicInfoFields = [
-    this.basic_info.image?.public_id,
-    this.basic_info.image?.url,
-    this.basic_info.name,
-    this.basic_info.dob,
-    this.basic_info.phone,
-    this.basic_info.email,
-    this.basic_info.address?.province,
-    this.basic_info.address?.district
+    candidate.basic_info.image?.public_id,
+    candidate.basic_info.image?.url,
+    candidate.basic_info.name,
+    candidate.basic_info.dob,
+    candidate.basic_info.phone,
+    candidate.basic_info.email,
+    candidate.basic_info.address?.province,
+    candidate.basic_info.address?.district
   ]
 
   const otherInfoFields = [
-    this.other_info.desc,
-    this.other_info.education,
-    this.other_info.exps,
-    this.other_info.projects,
-    this.other_info.certificates,
-    this.other_info.skills?.length > 0
+    candidate.other_info.desc,
+    candidate.other_info.education,
+    candidate.other_info.exps,
+    candidate.other_info.projects,
+    candidate.other_info.certificates,
+    candidate.other_info.skills?.length > 0
   ]
 
   const basicInfoCompleted =
