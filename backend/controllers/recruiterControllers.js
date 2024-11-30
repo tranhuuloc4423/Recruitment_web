@@ -2,25 +2,25 @@ const Recruiter = require('../models/recruiterModel')
 const User = require('../models/userModel')
 const { uploadImage, uploadImages, validateAddress } = require('../utils/funcs')
 
-const calculateProfileStatus = (admin) => {
+const calculateProfileStatus = (recruiter) => {
   const basicInfoFields = [
-    admin.basic_info.image?.public_id,
-    admin.basic_info.image?.url,
-    admin.basic_info.name,
-    admin.basic_info.field,
-    admin.basic_info.email,
-    admin.basic_info.phone,
-    admin.basic_info.tax_id,
-    admin.basic_info.address?.province,
-    admin.basic_info.address?.district
+    recruiter.basic_info.image?.public_id,
+    recruiter.basic_info.image?.url,
+    recruiter.basic_info.name,
+    recruiter.basic_info.field,
+    recruiter.basic_info.email,
+    recruiter.basic_info.phone,
+    recruiter.basic_info.tax_id,
+    recruiter.basic_info.address?.province,
+    recruiter.basic_info.address?.district
   ]
 
   const otherInfoFields = [
-    admin.other_info.desc,
-    admin.other_info.images?.length > 0,
-    admin.other_info.speciality?.length > 0,
-    admin.other_info.types?.length > 0,
-    admin.other_info.wforms?.length > 0
+    recruiter.other_info.desc,
+    recruiter.other_info.images?.length > 0,
+    recruiter.other_info.speciality?.length > 0,
+    recruiter.other_info.types?.length > 0,
+    recruiter.other_info.wforms?.length > 0
   ]
 
   const basicInfoCompleted =
@@ -160,6 +160,9 @@ const recruiterControllers = {
         { $set: updateFields },
         { new: true }
       )
+
+      const profileStatus = calculateProfileStatus(other_info) // Tính toán profileStatus
+      await Recruiter.updateOne({ _id: id }, { profileStatus })
 
       if (!other_info) {
         return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })

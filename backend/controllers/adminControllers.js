@@ -156,6 +156,9 @@ const adminControllers = {
         { new: true }
       )
 
+      const profileStatus = calculateProfileStatus(other_info)
+      await Admin.updateOne({ _id: id }, { profileStatus })
+
       if (!other_info) {
         return res.status(404).json({ message: 'Admin không tồn tại' })
       }

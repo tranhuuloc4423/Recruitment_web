@@ -145,6 +145,9 @@ const candidateControllers = {
         { new: true }
       )
 
+      const profileStatus = calculateProfileStatus(other_info)
+      await Candidate.updateOne({ _id: id }, { profileStatus })
+
       if (!other_info)
         return res.status(404).json({ message: 'Ứng viên không tồn tại' })
       res.json(other_info)
