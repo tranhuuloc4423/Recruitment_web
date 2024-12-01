@@ -35,8 +35,8 @@ const adminSchema = new mongoose.Schema(
       desc: { type: String },
       speciality: [
         {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Skill'
+          name: String,
+          value: String
         }
       ],
       images: [

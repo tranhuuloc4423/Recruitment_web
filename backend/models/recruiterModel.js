@@ -52,8 +52,8 @@ const recruiterSchema = new mongoose.Schema(
       },
       speciality: [
         {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Skill'
+          name: String,
+          value: String
         }
       ],
       images: [
