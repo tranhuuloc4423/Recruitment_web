@@ -27,25 +27,27 @@ const getSkills = async (dispatch) => {
   }
 }
 
-const updateBasicInfo = async (id, data, dispatch, role) => {
+const updateBasicInfo = async (id, data, dispatch, role, navigate) => {
   try {
     await axios.put(`${role}/basic_info/${id}`, data)
     const res = axios.get(`${role}/role/${id}`)
     dispatch(setBasicInfo(res.data?.basic_info))
     toast.success('Cập nhật thông tin thành công!')
+    navigate('/posts')
   } catch (error) {
     console.log(error)
     toast.error('Cập nhật thông tin không thành công!')
   }
 }
 
-const updateOtherInfo = async (id, data, dispatch, role) => {
+const updateOtherInfo = async (id, data, dispatch, role, navigate) => {
   try {
     console.log(data)
     await axios.put(`${role}/other_info/${id}`, data)
     // const res = await axios.get(`${role}/role/${id}`)
     dispatch(setOtherInfo(data))
     toast.success('Cập nhật thông tin thành công!')
+    navigate('/posts')
   } catch (error) {
     console.log(error)
     toast.error('Cập nhật thông tin không thành công!')

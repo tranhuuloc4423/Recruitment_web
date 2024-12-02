@@ -10,6 +10,7 @@ import { IoClose } from 'react-icons/io5'
 import Dropdown from '../components/Dropdown'
 import info from '../utils/infos'
 import Address from '../components/Address'
+import { useNavigate } from 'react-router-dom'
 
 const BasicInfoForm = ({ open, setOpen }) => {
   const { currentUser } = useSelector((state) => state.auth)
@@ -17,6 +18,7 @@ const BasicInfoForm = ({ open, setOpen }) => {
   const { address } = useSelector((state) => state.address)
   const { basicInfo } = info.find((info) => info.name === currentUser?.role)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [image, setImage] = useState(null)
   const [values, setValues] = useState({})
   const [gender, setGender] = useState('')
@@ -58,7 +60,7 @@ const BasicInfoForm = ({ open, setOpen }) => {
         })
 
     console.log(data)
-    updateBasicInfo(currentRole._id, data, dispatch, currentUser.role)
+    updateBasicInfo(currentRole._id, data, dispatch, currentUser.role, navigate)
     // getById(currentUser._id, dispatch, currentUser.role)
     setOpen(false)
   }

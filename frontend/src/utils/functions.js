@@ -63,11 +63,64 @@ const convertStringtoDate = (string) => {
   return dayjs(string, 'DD/MM/YYYY')
 }
 
+const renderBasicCV = (items, currentRole) => {
+  return items?.map((item, index) => (
+    <div key={index}>
+      {item?.icon && (
+        <div className="flex items-center gap-2 py-2 flex-1">
+          <span>{item?.icon}</span>
+          <span>
+            {item?.name === 'gender'
+              ? currentRole?.basic_info[item?.name]?.name
+              : currentRole?.basic_info[item?.name]}
+          </span>
+        </div>
+      )}
+    </div>
+  ))
+}
+const renderOtherCV = (items, currentRole, options = {}) => {
+  const { lineComponent = null, color } = options
+
+  return items?.map((item, index) => (
+    <div key={index} className={`flex flex-col gap-4`}>
+      <div className="flex flex-col items-start justify-between">
+        <span className={`text-xl font-semibold uppercase`} style={{ color }}>
+          {item?.title}
+        </span>
+        <div className="flex-1">
+          {item?.name === 'skills' ? (
+            <div>
+              {currentRole?.other_info?.[item?.name]?.map((skill) => (
+                <div
+                  key={skill?.value}
+                  className="flex items-center gap-2 py-2"
+                >
+                  <span>{skill?.name}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div
+              dangerouslySetInnerHTML={{
+                __html: currentRole?.other_info?.[item?.name]
+              }}
+            ></div>
+          )}
+        </div>
+      </div>
+      {index !== items.length - 1 && lineComponent}
+    </div>
+  ))
+}
+
 export {
   convertFile,
   convertFileToURL,
   convertFiles,
   formatDate,
   convertStringtoDate,
-  convertDatetoString
+  convertDatetoString,
+  renderBasicCV,
+  renderOtherCV
 }

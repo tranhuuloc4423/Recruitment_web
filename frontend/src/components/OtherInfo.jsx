@@ -7,10 +7,12 @@ import info from '../utils/infos'
 import { updateOtherInfo } from '../redux/api/app'
 import UploadImages from './UploadImages'
 import { convertFiles } from '../utils/functions'
+import { useNavigate } from 'react-router-dom'
 const OtherInfo = () => {
   const { currentUser } = useSelector((state) => state.auth)
   const { currentRole, skillsDB } = useSelector((state) => state.app)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [skills, setSkills] = useState([])
   const [images, setImages] = useState([])
   const [values, setValues] = useState({})
@@ -66,7 +68,8 @@ const OtherInfo = () => {
       currentRole?._id,
       { [item.name]: newValue },
       dispatch,
-      currentUser.role
+      currentUser.role,
+      navigate
     ).then(() => {
       setValues((prev) => ({
         ...prev,

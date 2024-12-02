@@ -11,7 +11,7 @@ const InfoCard = (props) => {
   const { title, desc, children, childTitle, onClick, open, setOpen, item } =
     props
 
-  useEffect(() => {}, [currentRole.other_info, item])
+  useEffect(() => {}, [children, currentRole.other_info, item])
   return (
     <>
       <div className="flex flex-col bg-white rounded p-4 gap-2">
@@ -50,7 +50,7 @@ const InfoCard = (props) => {
                   <img
                     key={item?.url}
                     src={item?.url}
-                    className="w-[150px] h-[150px] object-cover"
+                    className="w-[150px] h-[150px] object-contain"
                     alt="company imgs"
                   />
                 ))}

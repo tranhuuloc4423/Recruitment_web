@@ -38,11 +38,11 @@ const InfoCardToggle = ({ title, children }) => {
         return (
           <div className="w-full flex flex-wrap gap-4 rounded">
             {children.map((item, index) => (
-              <div key={index} className="w-1/4">
+              <div key={index} className="">
                 <img
                   src={item?.url}
                   alt={`Image ${index}`}
-                  className="w-full h-auto"
+                  className="w-[200px] h-[200px] object-cover rounded"
                 />
               </div>
             ))}

@@ -5,6 +5,7 @@ import Line from '../components/Line'
 import avatar from '../assets/imgs/blank-profile-picture-973460_960_720.png'
 
 import info from '../utils/infos'
+import { renderBasicCV, renderOtherCV } from '../utils/functions'
 
 const CVTheme_1 = ({ color }) => {
   const { currentRole } = useSelector((state) => state.app)
@@ -33,9 +34,9 @@ const CVTheme_1 = ({ color }) => {
 
         <div className="bg-cover w-[150px] h-[150px] rounded-full overflow-hidden border-2 border-white">
           <img
-            src={currentRole?.basic_info.image || avatar}
+            src={currentRole?.basic_info?.image?.url || avatar}
             alt="avatar"
-            className={`w-full h-full bg-cover bg-center`}
+            className={`w-full h-full bg-cover bg-center object-cover`}
           />
         </div>
       </div>
@@ -46,88 +47,17 @@ const CVTheme_1 = ({ color }) => {
             <span className={`uppercase text-lg font-medium`} style={{ color }}>
               Thông tin cá nhân
             </span>
-            {basicInfo?.map(({ name, icon }) => (
-              <div key={name}>
-                {icon && (
-                  <div className="flex items-center gap-2 py-2">
-                    <span>{icon}</span>
-                    <span>{currentRole?.basic_info[name]}</span>
-                  </div>
-                )}
-              </div>
-            ))}
+            {renderBasicCV(basicInfo, currentRole)}
           </div>
 
-          {otherInfo?.slice(0, 3).map((item, index) => {
-            return (
-              <div key={index} className="flex flex-col">
-                <div className="flex flex-col items-start justify-between gap-4">
-                  <span
-                    className={`uppercase text-lg font-medium`}
-                    style={{ color }}
-                  >
-                    {item.title}
-                  </span>
-                  <div className="flex-1">
-                    {item?.name === 'skills' ? (
-                      <div>
-                        {currentRole?.other_info?.[item?.name]?.map((skill) => (
-                          <div
-                            key={skill.value}
-                            className="flex items-center gap-2"
-                          >
-                            <span>{skill?.label}</span>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: currentRole?.other_info?.[item.name]
-                        }}
-                      ></div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )
+          {renderOtherCV(otherInfo?.slice(0, 3), currentRole, {
+            color: color
           })}
         </div>
         <Line direction="y" />
         <div className="flex flex-col w-[65%]">
-          {otherInfo?.slice(3, 6).map((item, index) => {
-            return (
-              <div key={index} className="flex flex-col w-full">
-                <div className="flex flex-col items-start justify-between">
-                  <span
-                    className={`uppercase text-lg font-medium`}
-                    style={{ color }}
-                  >
-                    {item.title}
-                  </span>
-                  <div className="flex-1">
-                    {item?.name === 'skills' ? (
-                      <div>
-                        {currentRole?.other_info?.[item?.name]?.map((skill) => (
-                          <div
-                            key={skill.value}
-                            className="flex items-center gap-2 py-2"
-                          >
-                            <span>{skill?.label}</span>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: currentRole?.other_info?.[item.name]
-                        }}
-                      ></div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )
+          {renderOtherCV(otherInfo?.slice(3, 6), currentRole, {
+            color: color
           })}
         </div>
       </div>
