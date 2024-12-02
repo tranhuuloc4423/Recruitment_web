@@ -79,6 +79,10 @@ const Post = ({ post, select, manage }) => {
     updateCandidateApplied(post?._id, currentRole._id)
   }
 
+  const handleView = () => {
+    navigate('/manage/manage-applied')
+  }
+
   return (
     <div
       className={`flex min-h-[400px] flex-col gap-2 bg-white shadow-md p-2 rounded ${
@@ -131,7 +135,7 @@ const Post = ({ post, select, manage }) => {
 
         <span className="flex flex-row items-center gap-2">
           <IoLocationOutline size={24} />
-          <span>{`${location.address[0]?.province?.name}`}</span>
+          <span>{`${location?.address[0]?.province?.name}`}</span>
         </span>
 
         <span className="flex flex-row items-center gap-2">
@@ -174,7 +178,7 @@ const Post = ({ post, select, manage }) => {
 
       {/* manage buttons */}
       <div className="w-full grid grid-cols-2 grid-flow-row gap-2">
-        {manage?.view && <Button label="Xem" />}
+        {manage?.view && <Button label="Xem" onClick={handleView} />}
         {manage?.confirm && <Button label="Duyệt" onClick={handleConfirm} />}
         {manage?.remove && <Button label="Xoá" onClick={handleRemove} />}
         {manage?.update && <Button label="Cập nhật" onClick={handleUpdate} />}

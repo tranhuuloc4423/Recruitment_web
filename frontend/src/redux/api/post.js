@@ -7,7 +7,7 @@ const createPost = async (data) => {
     toast.success('Đăng bài thành công!')
   } catch (error) {
     console.log(error)
-    toast.error('Đăng bài thất bại!')
+    toast.error(error.response.data.message)
   }
 }
 
@@ -44,7 +44,7 @@ const updateConfirmed = async (id, data) => {
     toast.success('Duyệt bài thành công')
     return res.data
   } catch (error) {
-    toast.error(error)
+    toast.error(error.response.data.message)
     console.log(error)
   }
 }
@@ -54,7 +54,7 @@ const removePost = async (id, data) => {
     await axios.delete(`/post/${id}/`, data)
     toast.success('Xoá bài thành công')
   } catch (error) {
-    toast.error(error)
+    toast.error(error.response.data.message)
     console.log(error)
   }
 }
@@ -113,7 +113,7 @@ const updateCandidateApplied = async (id, candidateId) => {
     return res.data
   } catch (error) {
     console.log(error)
-    toast.error('Ứng tuyển thất bại!')
+    toast.error(error.response.data.message)
   }
 }
 

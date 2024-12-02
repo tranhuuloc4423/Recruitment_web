@@ -18,7 +18,8 @@ import {
   CheckPosts,
   RecentPosts,
   SavedPosts,
-  AppliedPosts
+  AppliedPosts,
+  Recruiter
 } from './pages'
 import { useEffect } from 'react'
 import { Bounce, ToastContainer } from 'react-toastify'
@@ -27,6 +28,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { setCurrentUser } from './redux/slices/authSlice'
 import { getAddress, getById, getSkills } from './redux/api/app'
 import { CreatePost } from './components'
+import ManagePostApplied from './pages/ManagePostApplied'
 
 const {
   HOME,
@@ -44,13 +46,18 @@ const {
   POSTED,
   SAVEDPOSTS,
   RECENTPOSTS,
-  APPLIEDPOSTS
+  APPLIEDPOSTS,
+  COMPANY,
+  MANAGEAPPLIED
 } = paths
 
 function App() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { currentUser } = useSelector((state) => state.auth)
+
+  const handleBack = () => alert('Quay lại')
+  const handleConfirm = () => alert('Xác nhận')
 
   const fetchRoleData = async (user) => {
     await getById(user._id, dispatch, user.role)
@@ -80,6 +87,7 @@ function App() {
         <Route path={HOME} element={<Home />}>
           <Route path={POSTS} element={<Main />} />
           <Route path={SETTINGS} element={<Settings />} />
+          <Route path={`${COMPANY}/:type/:id`} element={<Recruiter />} />
           <Route path={INFO} element={<Info />}>
             <Route path={''} element={<InfoProfile />} />
             <Route path={CV} element={<CVprofile />} />
@@ -97,7 +105,7 @@ function App() {
             <Route path={CREATEPOST} element={<CreatePost />} />
             <Route path={APPLIEDPOSTS} element={<AppliedPosts />} />
             <Route path={RECENTPOSTS} element={<RecentPosts />} />
-            {/* <Route path={SAVEDPOSTS} element={} /> */}
+            <Route path={MANAGEAPPLIED} element={<ManagePostApplied />} />
           </Route>
         </Route>
       </Routes>

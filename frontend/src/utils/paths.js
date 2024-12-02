@@ -16,7 +16,9 @@ const paths = {
   POSTED: 'posted',
   SAVEDPOSTS: 'saved-posts',
   RECENTPOSTS: 'recent-posts',
-  APPLIEDPOSTS: 'applied-posts'
+  APPLIEDPOSTS: 'applied-posts',
+  COMPANY: 'company',
+  MANAGEAPPLIED: 'manage-applied'
 }
 
 export default paths

@@ -9,11 +9,13 @@ import Line from './Line'
 import Tag from './Tag'
 import Button from './Button'
 import { getPost, getRoleData } from '../redux/api/post'
+import { useNavigate } from 'react-router-dom'
 
 const PostDetails = ({ id }) => {
   const [post, setPost] = useState()
   const [basicInfo, setBasicInfo] = useState()
   const [otherInfo, setOtherInfo] = useState()
+  const navigate = useNavigate()
 
   const getBasicData = async (post) => {
     const res = await getRoleData(post?.authorType, post?.author)
@@ -54,7 +56,12 @@ const PostDetails = ({ id }) => {
 
       <div className="flex flex-row justify-between gap-2 items-center">
         <Button label={'Ứng tuyển'} className="flex-1" />
-        <Button label={'Theo dõi'} />
+        <Button
+          label={'Xem công ty'}
+          onClick={() =>
+            navigate(`/company/${post?.authorType}/${post?.author}`)
+          }
+        />
         <LuHeart size={32} />
       </div>
 

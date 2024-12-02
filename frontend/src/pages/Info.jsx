@@ -14,7 +14,7 @@ const Info = () => {
   return (
     <div className="flex flex-col gap-4">
       {currentUser.role === 'candidate' && <Nav data={candidateNavInfo} />}
-      <div className="flex flex-row gap-4 h-screen">
+      <div className="flex flex-row gap-4">
         <Outlet />
       </div>
     </div>

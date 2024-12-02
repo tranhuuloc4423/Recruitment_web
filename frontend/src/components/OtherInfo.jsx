@@ -80,6 +80,7 @@ const OtherInfo = () => {
 
       forceUpdate((prev) => prev + 1)
     })
+    console.log({ [item.name]: newValue })
   }
 
   const toggleOpen = (id) => {

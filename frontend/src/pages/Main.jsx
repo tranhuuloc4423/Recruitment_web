@@ -209,11 +209,8 @@ const Main = () => {
       <div className="w-full flex flex-col gap-4 justify-between">
         <div className="flex flex-row justify-between items-center">
           <span className="heading-3">
-            <span className="text-primary font-semibold text-4xl">{jobs}</span>{' '}
+            <span className="text-primary font-semibold text-3xl">{jobs}</span>{' '}
             công việc đã được tìm thấy
-          </span>
-          <span>
-            <FilterFrame isFilter={isFilter} setIsFilter={setIsFilter} />
           </span>
         </div>
         <div className="flex flex-row gap-4 ">

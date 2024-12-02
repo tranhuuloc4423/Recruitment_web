@@ -7,6 +7,7 @@ import info from '../utils/infos'
 import defaultAvatar from '../assets/imgs/blank-profile-picture-973460_960_720.png'
 import { IoLocationOutline } from 'react-icons/io5'
 import CircleProgress from './CircleProgress'
+import ProgressBar from './ProgressBar'
 
 const BasicInfo = () => {
   const [open, setOpen] = useState(false)
@@ -76,8 +77,8 @@ const BasicInfo = () => {
           {open && <BasicInfoForm open={open} setOpen={setOpen} />}
         </div>
       </div>
-      <div className="bg-white round w-full">
-        <CircleProgress percentage={25} />
+      <div className="bg-white rounded shadow-md w-full flex justify-center items-center">
+        <ProgressBar progress={currentRole.profileStatus} />
       </div>
     </div>
   )
