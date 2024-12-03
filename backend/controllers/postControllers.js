@@ -133,11 +133,11 @@ const postController = {
             new Date(updatedPost.date_upload)
           )
         }
-        if (updatedPost.date_expiration) {
-          updatedPost.date_expiration = formatDate(
-            new Date(updatedPost.date_expiration)
-          )
-        }
+        // if (updatedPost.date_expiration) {
+        //   updatedPost.date_expiration = formatDate(
+        //     new Date(updatedPost.date_expiration)
+        //   )
+        // }
         if (user && user.basic_info && user.basic_info.address) {
           updatedPost.location = { address: user.basic_info.address }
         }

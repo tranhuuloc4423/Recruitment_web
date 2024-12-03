@@ -1,20 +1,26 @@
 import React, { useRef, useState } from 'react'
 import ReactQuill from 'react-quill'
 import '../customQuill.css'
+import { toast } from 'react-toastify'
 const RichText = ({
   value,
   onChange,
   label,
   name,
   template = false,
-  hasImage = false
+  hasImage = false,
+  max = 500
 }) => {
   const [charCount, setCharCount] = useState(0)
   const richRef = useRef(null)
   const handleChange = (newValue) => {
-    onChange({ target: { name, value: newValue } })
     const plainText = newValue.replace(/<[^>]+>/g, '')
+    if (plainText.length > max) {
+      toast.error(`Vui lòng nhập ít hơn ${max} ký tự`)
+      return
+    }
     setCharCount(plainText.length)
+    onChange({ target: { name, value: newValue } })
   }
 
   const handleInsertTemplate = () => {

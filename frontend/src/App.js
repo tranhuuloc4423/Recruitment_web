@@ -93,6 +93,7 @@ function App() {
             <Route path={CV} element={<CVprofile />} />
             <Route path={TARGET} element={<Target />} />
           </Route>
+          <Route path={MANAGEAPPLIED} element={<ManagePostApplied />} />
           <Route path={MANAGE} element={<Manage />}>
             <Route
               path={''}
@@ -105,7 +106,6 @@ function App() {
             <Route path={CREATEPOST} element={<CreatePost />} />
             <Route path={APPLIEDPOSTS} element={<AppliedPosts />} />
             <Route path={RECENTPOSTS} element={<RecentPosts />} />
-            <Route path={MANAGEAPPLIED} element={<ManagePostApplied />} />
           </Route>
         </Route>
       </Routes>

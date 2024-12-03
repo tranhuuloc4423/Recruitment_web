@@ -89,7 +89,6 @@ const BasicInfoForm = ({ open, setOpen }) => {
               return (
                 <div key={index} className="flex gap-4">
                   {' '}
-                  {/* Grouping two items per row */}
                   {basicInfo
                     .slice(index, index + 2)
                     .map((subItem, subIndex) => {
@@ -118,7 +117,7 @@ const BasicInfoForm = ({ open, setOpen }) => {
                 </div>
               )
             }
-            return null // Do not render individual item outside of pair
+            return null
           })}
           <Address
             provincesData={address}

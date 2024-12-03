@@ -11,6 +11,16 @@ const createPost = async (data) => {
   }
 }
 
+const updatePost = async (data, id) => {
+  try {
+    await axios.put(`/post/${id}`, data)
+    toast.success('Cập nhật bài thành công!')
+  } catch (error) {
+    console.log(error)
+    toast.error(error.response.data.message)
+  }
+}
+
 const getAllPostConfirmed = async () => {
   try {
     const res = await axios.get(`/post/confirmed`)
@@ -119,6 +129,7 @@ const updateCandidateApplied = async (id, candidateId) => {
 
 export {
   createPost,
+  updatePost,
   getAllPostConfirmed,
   getRoleData,
   getPost,

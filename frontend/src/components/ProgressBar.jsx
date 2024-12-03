@@ -13,7 +13,7 @@ const ProgressBar = ({ progress }) => {
           return prev
         }
       })
-    }, 35)
+    }, 15)
 
     return () => clearInterval(interval)
   }, [progress])
@@ -39,7 +39,7 @@ const ProgressBar = ({ progress }) => {
             strokeDasharray="251.2"
             strokeDashoffset={251.2 - (251.2 * currentProgress) / 100}
             style={{
-              transition: 'stroke-dashoffset 0.3s ease'
+              transition: 'stroke-dashoffset 0.2s ease'
             }}
           />
         </svg>

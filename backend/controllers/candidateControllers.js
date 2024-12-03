@@ -214,6 +214,20 @@ const candidateControllers = {
       res.status(500).json(error)
     }
   },
+  getDatasByIdRole: async (req, res) => {
+    const { ids } = req.body
+    try {
+      if (!ids || !Array.isArray(ids) || ids.length === 0) {
+        return res.status(400).json({ message: 'Danh sách không hợp lệ!' })
+      }
+
+      const candidates = await Candidate.find({ _id: { $in: ids } })
+
+      res.status(200).json(candidates)
+    } catch (error) {
+      res.status(500).json(error)
+    }
+  },
 
   getAllData: async (req, res) => {
     try {

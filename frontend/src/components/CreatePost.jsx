@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, Dropdown, Input, RichText, Tag, UploadImages } from './'
 import { jobDescription, jobRequirements } from '../utils/RichTextTemplate'
 import { useSelector } from 'react-redux'
-import { createPost } from '../redux/api/post'
+import { createPost, updatePost } from '../redux/api/post'
 import { useLocation } from 'react-router-dom'
 import {
   convertDatetoString,
@@ -11,6 +11,7 @@ import {
 } from '../utils/functions'
 import DateTimePicker from './DateTimePicker'
 import Slider from './Slider'
+import { toast } from 'react-toastify'
 
 const CreatePost = () => {
   const { currentUser } = useSelector((state) => state.auth)
@@ -46,6 +47,11 @@ const CreatePost = () => {
   }
 
   const handleCreatePost = async () => {
+    if (currentRole.profileStatus < 80) {
+      toast.error('Vui lòng cập nhật thông tin trước khi đăng tin!')
+      return
+    }
+
     if (currentUser.role === 'candidate') {
       return
     }
@@ -62,18 +68,45 @@ const CreatePost = () => {
     }
     console.log(data)
     createPost(data)
-    // setValues({
-    //   title: '',
-    //   salary: '',
-    //   quantity: '',
-    //   desc: '',
-    //   request: '',
-    //   date_expiration: ''
-    // })
+    setValues({
+      title: '',
+      desc: '',
+      request: ''
+    })
+    setSalary(0)
+    setQuantity(0)
+    setDate(null)
     setSkills([])
   }
 
-  const handleUpdate = async () => {}
+  const handleUpdate = async () => {
+    let post
+    post = {
+      ...values,
+      salary: parseInt(salary * 1000000),
+      quantity: quantity,
+      date_expiration: convertDatetoString(date),
+      skills: skills,
+      author: currentRole._id,
+      authorType: currentUser.role
+    }
+    const data = {
+      userId: currentUser._id,
+      authorType: currentUser.role,
+      updatedPost: post
+    }
+    updatePost(data, location.state.id)
+    setValues({
+      title: '',
+      desc: '',
+      request: ''
+    })
+    setSalary(0)
+    setQuantity(0)
+    setDate(null)
+    setSkills([])
+    setUpdate(false)
+  }
 
   useEffect(() => {
     if (location.state) {
@@ -85,7 +118,7 @@ const CreatePost = () => {
   }, [location])
 
   return (
-    <div className="w-[65%] mx-auto bg-white rounded shadow-md flex flex-col gap-2 p-4">
+    <div className="w-1/2 mx-auto bg-white rounded shadow-md flex flex-col gap-2 p-4">
       <div className="text-center heading-2">Đăng Tin</div>
       <Input
         placeholder={'Tiêu đề'}
@@ -98,7 +131,7 @@ const CreatePost = () => {
       <Slider
         value={salary}
         setValue={setSalary}
-        step={5}
+        step={1}
         label={'Mức Lương'}
       />
       <DateTimePicker date={date} setDate={setDate} validDate={true} />

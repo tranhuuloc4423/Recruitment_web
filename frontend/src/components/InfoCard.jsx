@@ -11,7 +11,7 @@ const InfoCard = (props) => {
   const { title, desc, children, childTitle, onClick, open, setOpen, item } =
     props
 
-  useEffect(() => {}, [children, currentRole.other_info, item])
+  useEffect(() => {}, [currentRole.other_info, item])
   return (
     <>
       <div className="flex flex-col bg-white rounded p-4 gap-2">

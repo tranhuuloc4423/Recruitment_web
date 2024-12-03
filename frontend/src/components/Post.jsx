@@ -18,6 +18,7 @@ import {
   updateConfirmed
 } from '../redux/api/post'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const Post = ({ post, select, manage }) => {
   const { currentUser } = useSelector((state) => state.auth)
@@ -64,6 +65,7 @@ const Post = ({ post, select, manage }) => {
   const handleUpdate = () => {
     navigate('/manage/create-post', {
       state: {
+        id: post._id,
         updateTitle: title,
         updateSalary: salary,
         updateQuantity: quantity,
@@ -76,11 +78,19 @@ const Post = ({ post, select, manage }) => {
   }
 
   const handleApply = () => {
+    if (currentRole.profileStatus < 100) {
+      toast.error('Vui lòng cập nhật thông tin cá nhân trước khi ứng tuyển!')
+      return
+    }
     updateCandidateApplied(post?._id, currentRole._id)
   }
 
   const handleView = () => {
-    navigate('/manage/manage-applied')
+    navigate('/manage-applied', {
+      state: {
+        id: post._id
+      }
+    })
   }
 
   return (

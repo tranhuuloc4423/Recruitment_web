@@ -1,60 +1,84 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import { getPost } from '../redux/api/post'
+import { getCandidate, getCandidates } from '../redux/api/app'
 
 const ManagePostApplied = () => {
-  const postInfo = {
-    title: 'Senior FullStack Developer (NodeJS, ReactJS)',
-    salary: '12.000.000',
-    workForm: 'Làm việc từ xa',
-    address: 'Hồ Chí Minh',
-    deadline: '09/09/2024',
-    position: 'Front-end',
-    number: 10
+  const location = useLocation()
+  const [post, setPost] = useState(null)
+  const [candidates, setCandidates] = useState([])
+
+  // const candidates = [
+  //   {
+  //     avatar: 'https://via.placeholder.com/64',
+  //     name: 'Trần Hữu Lộc',
+  //     role: 'UX/UI Design',
+  //     description:
+  //       'Collaborate with other team members (backend, product, marketing, design) for external web services.',
+  //     skills: ['ReactJS', 'Javascript', 'HTML5']
+  //   },
+  //   {
+  //     avatar: 'https://via.placeholder.com/64',
+  //     name: 'Nguyễn Văn A',
+  //     role: 'Backend Developer',
+  //     description:
+  //       'Experience in NodeJS, MongoDB, RESTful APIs, and microservices.',
+  //     skills: ['NodeJS', 'Express', 'MongoDB']
+  //   }
+  // ]
+
+  const handleGetPost = async () => {
+    const res = await getPost(location.state.id)
+    setPost(res)
+    console.log(res)
+  }
+  const handleGetCandidates = async () => {
+    if (post) {
+      console.log({ ids: post?.applied })
+      const res = await getCandidates({ ids: post?.applied })
+      setCandidates(res)
+      console.log(res)
+    }
   }
 
-  const candidates = [
-    {
-      avatar: 'https://via.placeholder.com/64',
-      name: 'Trần Hữu Lộc',
-      role: 'UX/UI Design',
-      description:
-        'Collaborate with other team members (backend, product, marketing, design) for external web services.',
-      skills: ['ReactJS', 'Javascript', 'HTML5']
-    },
-    {
-      avatar: 'https://via.placeholder.com/64',
-      name: 'Nguyễn Văn A',
-      role: 'Backend Developer',
-      description:
-        'Experience in NodeJS, MongoDB, RESTful APIs, and microservices.',
-      skills: ['NodeJS', 'Express', 'MongoDB']
+  useEffect(() => {
+    if (location.state.id) {
+      console.log(location.state.id)
+      handleGetPost()
     }
-  ]
+    if (post) {
+      handleGetCandidates()
+    }
+  }, [location.state.id])
+
   return (
     <div className="w-full bg-white rounded shadow p-4">
       {/* Header */}
       <header className="border-b pb-4">
-        <h1 className="text-xl font-bold mb-2">{postInfo?.title}</h1>
+        <h1 className="text-xl font-bold mb-2">{post?.title}</h1>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <p>
-              <strong>Lương:</strong> {postInfo?.salary} VND
+              <strong>Lương:</strong> {post?.salary} VND
             </p>
             <p>
-              <strong>Hình thức:</strong> {postInfo?.workForm}
+              <strong>Hình thức:</strong> {post?.workForm}
             </p>
             <p>
-              <strong>Địa chỉ:</strong> {postInfo?.address}
+              <strong>Địa chỉ:</strong>{' '}
+              {post?.location.address[0].province.name},{' '}
+              {post?.location.address[0].district.name}
             </p>
           </div>
           <div>
             <p>
-              <strong>Thời hạn:</strong> {postInfo?.deadline}
+              <strong>Thời hạn:</strong> {post?.date_expiration}
             </p>
             <p>
-              <strong>Vị trí:</strong> {postInfo?.position}
+              <strong>Vị trí:</strong> {post?.position}
             </p>
             <p>
-              <strong>Số lượng người:</strong> {postInfo?.number}
+              <strong>Số lượng người:</strong> {post?.quantity}
             </p>
           </div>
         </div>

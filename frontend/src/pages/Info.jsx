@@ -7,9 +7,7 @@ const Info = () => {
   const { currentUser } = useSelector((state) => state.auth)
   const { currentRole } = useSelector((state) => state.app)
 
-  useEffect(() => {
-    console.log(currentRole)
-  }, [currentRole.basic_info, currentRole.other_info])
+  useEffect(() => {}, [currentRole])
 
   return (
     <div className="flex flex-col gap-4">

@@ -10,7 +10,8 @@ const {
   getFollowedJobs,
   followUser,
   updateRecent,
-  getDataByIdRole
+  getDataByIdRole,
+  getDatasByIdRole
 } = require('../controllers/candidateControllers')
 
 const router = require('express').Router()
@@ -22,6 +23,7 @@ router.post('/followed_jobs/:id', followUser)
 router.put('/recent_jobs/:id', updateRecent)
 router.get('/:id', getDataById)
 router.get('/role/:id', getDataByIdRole)
+router.get('/list/', getDatasByIdRole)
 router.get('/', getAllData)
 router.get('/saved_jobs/:id', getSavedJobs)
 router.get('/applied_jobs/:id', getAppliedJobs)

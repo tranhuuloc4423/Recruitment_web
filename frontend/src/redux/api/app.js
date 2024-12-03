@@ -76,11 +76,31 @@ const getAddress = async (dispatch) => {
   }
 }
 
+const getCandidate = async (id) => {
+  try {
+    const result = await axios.get(`/candidate/role/${id}`)
+    return result.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const getCandidates = async (data) => {
+  try {
+    const result = await axios.get(`/candidate/list/`, data)
+    return result.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export {
   updateBasicInfo,
   updateOtherInfo,
   updateTarget,
   getById,
   getAddress,
-  getSkills
+  getSkills,
+  getCandidate,
+  getCandidates
 }

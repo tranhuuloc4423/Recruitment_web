@@ -20,7 +20,7 @@ const Slider = ({ value, setValue, label, step = 1, max = 100 }) => {
         </span>
       </div>
       <ReactSlider
-        className="slider"
+        className="slider w-1/2 mx-auto"
         thumbClassName="thumb"
         trackClassName="example-track"
         value={value}
