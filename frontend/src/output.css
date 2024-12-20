@@ -867,6 +867,10 @@ video {
   min-height: 400px;
 }
 
+.min-h-screen {
+  min-height: 100vh;
+}
+
 .w-1\/2 {
   width: 50%;
 }
@@ -961,18 +965,6 @@ video {
 
 .w-full {
   width: 100%;
-}
-
-.w-\[100\%\] {
-  width: 100%;
-}
-
-.w-\[75\%\] {
-  width: 75%;
-}
-
-.w-\[50\%\] {
-  width: 50%;
 }
 
 .flex-1 {
