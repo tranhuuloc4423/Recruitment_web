@@ -27,13 +27,12 @@ const getSkills = async (dispatch) => {
   }
 }
 
-const updateBasicInfo = async (id, data, dispatch, role, navigate) => {
+const updateBasicInfo = async (id, data, dispatch, role) => {
   try {
     await axios.put(`${role}/basic_info/${id}`, data)
     const res = axios.get(`${role}/role/${id}`)
     dispatch(setBasicInfo(res.data?.basic_info))
     toast.success('Cập nhật thông tin thành công!')
-    navigate('/posts')
   } catch (error) {
     console.log(error)
     toast.error('Cập nhật thông tin không thành công!')

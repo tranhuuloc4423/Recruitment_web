@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getAddress, updateBasicInfo } from '../redux/api/app'
+import { getAddress, getById, updateBasicInfo } from '../redux/api/app'
 import { convertFile } from '../utils/functions'
 import Avatar from '../components/Avatar'
 import Input from '../components/Input'
@@ -60,8 +60,8 @@ const BasicInfoForm = ({ open, setOpen }) => {
         })
 
     console.log(data)
-    updateBasicInfo(currentRole._id, data, dispatch, currentUser.role, navigate)
-    // getById(currentUser._id, dispatch, currentUser.role)
+    updateBasicInfo(currentRole._id, data, dispatch, currentUser.role)
+    getById(currentUser._id, dispatch, currentUser.role)
     setOpen(false)
   }
 

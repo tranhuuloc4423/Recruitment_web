@@ -89,7 +89,9 @@ const Recruiter = () => {
 
         {/* company's posst */}
         <div className="w-[30%] flex flex-col gap-4">
-          <span className="heading-3">{14} công việc đang tuyển</span>
+          <span className="heading-3">
+            {posts?.length} công việc đang tuyển
+          </span>
           <div className="flex flex-col gap-2 overflow-scroll">
             {posts?.map((post) => (
               <Post key={post._id} post={post} />
