@@ -14,8 +14,7 @@ const {
   updateSaved,
   updateStatus,
   updateApproved,
-  searchPosts,
-  getAllPosted
+  getAppliedCandidatesByPostId
 } = require('../controllers/postControllers')
 
 router.post('/create', createPost)
@@ -27,10 +26,10 @@ router.get('/posted', getAllPostedPosts)
 router.get('/expired', getAllExpiredPosts)
 router.get('/user/:userId/', getPostByUserId)
 router.get('/:postId', getPostById)
+router.get('/:postId/applied', getAppliedCandidatesByPostId)
 router.put('/:postId/applied', updateApplied)
 router.put('/:postId/approved', updateApproved)
 router.put('/:postId/saved', updateSaved)
 router.put('/:postId/status', updateStatus)
-router.get('/search', searchPosts)
 
 module.exports = router
