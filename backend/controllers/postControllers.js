@@ -317,9 +317,9 @@ const postController = {
       }
 
       let updateType = null
-      if (post.views >= 200 && post.type !== 'superhot') {
+      if (post.views >= 200) {
         updateType = 'superhot'
-      } else if (post.views >= 100 && post.type !== 'hot') {
+      } else if (post.views >= 100) {
         updateType = 'hot'
       }
 
