@@ -317,9 +317,9 @@ const postController = {
       }
 
       let updateType = null
-      if (post.views >= 200 && post.type !== 'superhot') {
+      if (post.views >= 200) {
         updateType = 'superhot'
-      } else if (post.views >= 100 && post.type !== 'hot') {
+      } else if (post.views >= 100) {
         updateType = 'hot'
       }
 
@@ -489,22 +489,19 @@ const postController = {
       res.status(500).json({ message: error.message })
     }
   },
-  searchPosts: async (req, res) => {
+  getAppliedCandidatesByPostId: async (req, res) => {
+    const { postId } = req.params
+
     try {
-      const { value } = req.query // Lấy giá trị tìm kiếm từ query parameter
+      const post = await Post.findById(postId).populate('applied', 'name email')
 
-      // Sử dụng regex để tìm kiếm không phân biệt hoa/thường
-      const posts = await Post.find({
-        $or: [
-          { title: { $regex: value, $options: 'i' } },
-          { skills: { $regex: value, $options: 'i' } },
-          { 'location.address': { $regex: value, $options: 'i' } }
-        ]
-      })
+      if (!post) {
+        return res.status(404).json({ message: 'Không tìm thấy bài viết' })
+      }
 
-      res.status(200).json(posts)
+      res.status(200).json({ applied: post.applied })
     } catch (error) {
-      res.status(500).json({ message: 'Lỗi khi tìm kiếm bài post', error })
+      res.status(500).json({ message: error.message })
     }
   }
 }
