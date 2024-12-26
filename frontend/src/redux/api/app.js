@@ -87,15 +87,6 @@ const getCandidate = async (id) => {
   }
 }
 
-const getCandidates = async (data) => {
-  try {
-    const result = await axios.get(`/candidate/list/`, data)
-    return result.data
-  } catch (error) {
-    console.log(error)
-  }
-}
-
 export {
   updateBasicInfo,
   updateOtherInfo,
@@ -103,6 +94,5 @@ export {
   getById,
   getAddress,
   getSkills,
-  getCandidate,
-  getCandidates
+  getCandidate
 }

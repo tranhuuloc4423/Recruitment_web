@@ -38,7 +38,7 @@ const BasicInfo = () => {
           <img
             src={avatar}
             alt="avatar"
-            className="w-[100px] h-[100px] rounded-full"
+            className="w-[100px] h-[100px] rounded-full object-cover"
           />
           <span className="heading-3">{currentRole?.basic_info?.name}</span>
         </div>

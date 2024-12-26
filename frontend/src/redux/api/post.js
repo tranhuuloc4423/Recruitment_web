@@ -127,6 +127,16 @@ const updateCandidateApplied = async (id, candidateId) => {
   }
 }
 
+const getCandidatesByPost = async (id) => {
+  try {
+    const res = await axios.get(`/post/${id}/applied`)
+    return res.data
+  } catch (error) {
+    console.log(error)
+    toast.error(error.response.data.message)
+  }
+}
+
 export {
   createPost,
   updatePost,
@@ -140,5 +150,6 @@ export {
   updateConfirmed,
   removePost,
   getAllPostedByOwner,
-  updateCandidateApplied
+  updateCandidateApplied,
+  getCandidatesByPost
 }

@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { getPost } from '../redux/api/post'
+import { getCandidatesByPost, getPost } from '../redux/api/post'
 import { getCandidate, getCandidates } from '../redux/api/app'
+import { useSelector } from 'react-redux'
+import { Button } from '../components'
 
 const ManagePostApplied = () => {
+  const { skillsDB } = useSelector((state) => state.app)
+  console.log(skillsDB)
   const location = useLocation()
   const [post, setPost] = useState(null)
   const [candidates, setCandidates] = useState([])
@@ -33,20 +37,15 @@ const ManagePostApplied = () => {
     console.log(res)
   }
   const handleGetCandidates = async () => {
-    if (post) {
-      console.log({ ids: post?.applied })
-      const res = await getCandidates({ ids: post?.applied })
-      setCandidates(res)
-      console.log(res)
-    }
+    const res = await getCandidatesByPost(location.state.id)
+    console.log(res.applied)
+    setCandidates(res.applied)
   }
 
   useEffect(() => {
     if (location.state.id) {
       console.log(location.state.id)
       handleGetPost()
-    }
-    if (post) {
       handleGetCandidates()
     }
   }, [location.state.id])
@@ -94,34 +93,32 @@ const ManagePostApplied = () => {
               className="bg-blue-100 p-4 rounded shadow flex flex-col items-center gap-2"
             >
               <img
-                src={candidate.avatar}
-                alt={candidate.name}
-                className="w-1/3 rounded-full mb-2"
+                src={candidate.basic_info.image.url}
+                alt={candidate.basic_info.name}
+                className="w-[70px] h-[70px] rounded-full mb-2 object-cover"
               />
-              <h3 className="text-center font-semibold">{candidate.name}</h3>
-              <p className="text-center text-sm text-gray-700">
+              <h3 className="text-center font-semibold">
+                {candidate.basic_info.name}
+              </h3>
+              {/* <p className="text-center text-sm text-gray-700">
                 {candidate.role}
-              </p>
+              </p> */}
               <p className="text-sm text-center mt-2">
-                {candidate.description}
+                {candidate.other_info.description}
               </p>
               <div className="flex gap-2 mt-2">
-                {candidate.skills.map((skill, idx) => (
+                {candidate.other_info.skills.map((skill, idx) => (
                   <span
                     key={idx}
                     className="px-2 py-1 bg-gray-200 rounded text-sm"
                   >
-                    {skill}
+                    {skillsDB.find((s) => s._id === skill)?.name}
                   </span>
                 ))}
               </div>
-              <div className="flex gap-2 mt-4">
-                <button className="bg-blue-500 text-white px-3 py-1 rounded">
-                  Xem hồ sơ
-                </button>
-                <button className="bg-green-500 text-white px-3 py-1 rounded">
-                  Duyệt
-                </button>
+              <div className="flex gap-2 mt-4 flex-col">
+                <Button label={'Xem hồ sơ CV'} />
+                <Button label={'Duyệt'} />
               </div>
             </div>
           ))}
@@ -130,12 +127,8 @@ const ManagePostApplied = () => {
 
       {/* Footer */}
       <footer className="flex justify-between border-t pt-4">
-        <button className="bg-gray-300 text-black px-4 py-2 rounded">
-          Quay lại
-        </button>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded">
-          Xác nhận
-        </button>
+        <Button label={'Quay lại'} />
+        <Button label={'Xác nhận'} />
       </footer>
     </div>
   )

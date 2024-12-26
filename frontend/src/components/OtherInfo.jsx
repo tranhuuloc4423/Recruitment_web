@@ -17,7 +17,8 @@ const OtherInfo = () => {
   const [formData, setFormData] = useState({
     speciality: [],
     types: [],
-    wforms: []
+    wforms: [],
+    skills: []
   })
   const [images, setImages] = useState([])
   const [values, setValues] = useState({})

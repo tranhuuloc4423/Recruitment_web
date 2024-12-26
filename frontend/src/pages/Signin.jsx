@@ -7,6 +7,7 @@ import bg from '../assets/imgs/business-background-design_1200-57.png'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { signinUser } from '../redux/api/auth'
+import { toast } from 'react-toastify'
 const Signin = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -14,6 +15,7 @@ const Signin = () => {
     email: '',
     password: ''
   })
+  const [errors, setErrors] = useState({})
 
   const inputs = [
     {
@@ -22,7 +24,7 @@ const Signin = () => {
       type: 'email',
       placeholder: 'Email',
       error: 'Địa chỉ email không hợp lệ',
-      pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
+      pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
       label: 'Email',
       required: true
     },
@@ -32,19 +34,64 @@ const Signin = () => {
       type: 'password',
       placeholder: 'Mật khẩu',
       error: 'Mật khẩu chứa ít nhất 3 ký tự',
-      pattern: '.{3,}',
+      pattern: /^.{3,}$/,
       label: 'Mật khẩu',
       required: true
     }
   ]
 
+  // const onChange = (e) => {
+  //   setValues({ ...values, [e.target.name]: e.target.value })
+  // }
+
   const onChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value })
+    const { name, value } = e.target
+    setValues({ ...values, [name]: value })
+
+    // Validate ngay khi người dùng nhập
+    const input = inputs.find((input) => input.name === name)
+    if (input?.pattern && !input.pattern.test(value)) {
+      setErrors({ ...errors, [name]: input.error })
+    } else {
+      const { [name]: removedError, ...rest } = errors
+      setErrors(rest)
+    }
   }
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault()
+  //   console.log(values)
+  //   // signinUser({ ...values }, dispatch, navigate)
+  // }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    signinUser({ ...values }, dispatch, navigate)
+
+    // Validate toàn bộ form trước khi submit
+    let formIsValid = true
+    const newErrors = {}
+
+    inputs.forEach((input) => {
+      if (input.required && !values[input.name]) {
+        newErrors[input.name] = `${input.label} là bắt buộc.`
+        formIsValid = false
+      } else if (
+        input.pattern &&
+        !input.pattern.test(values[input.name] || '')
+      ) {
+        newErrors[input.name] = input.error
+        formIsValid = false
+      }
+    })
+
+    setErrors(newErrors)
+
+    if (formIsValid) {
+      console.log('Form submitted successfully:', values)
+      signinUser({ ...values }, dispatch, navigate)
+    } else {
+      toast.warn('Vui lòng nhập thông tin hợp lệ')
+    }
   }
 
   return (
@@ -63,6 +110,7 @@ const Signin = () => {
                 {...input}
                 value={values[input.name]}
                 onChange={onChange}
+                error={errors[input.name]}
               />
             ))}
             <Button

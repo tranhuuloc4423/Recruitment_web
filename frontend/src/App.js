@@ -60,9 +60,11 @@ function App() {
   const handleConfirm = () => alert('Xác nhận')
 
   const fetchRoleData = async (user) => {
-    await getById(user._id, dispatch, user.role)
-    await getAddress(dispatch)
-    await getSkills(dispatch)
+    if (user) {
+      await getById(user._id, dispatch, user.role)
+      await getAddress(dispatch)
+      await getSkills(dispatch)
+    }
   }
 
   useEffect(() => {

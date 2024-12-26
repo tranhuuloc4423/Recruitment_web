@@ -107,8 +107,8 @@ const Posteds = () => {
         onChange={handleFilterClick}
       />
       <div className="grid grid-cols-5 gap-4">
-        {filterPosts?.map((post) => (
-          <div>
+        {filterPosts?.map((post, index) => (
+          <div key={index}>
             <Post post={post} manage={manage} />
           </div>
         ))}
