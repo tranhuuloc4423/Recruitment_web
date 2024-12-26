@@ -19,7 +19,8 @@ const appSlice = createSlice({
       wforms: [],
       address: null
     },
-    skillsDB: []
+    skillsDB: [],
+    loading: false
   },
   reducers: {
     setData: (state, action) => {
@@ -34,7 +35,8 @@ const appSlice = createSlice({
     setOtherInfo: (state, action) => {
       state.currentRole.other_info = {
         ...state.currentRole.other_info,
-        [action.payload.key]: action.payload.value
+        ...action.payload
+        // [action.payload.key]: action.payload.value
       }
     },
     setTarget: (state, action) => {
@@ -69,6 +71,9 @@ const appSlice = createSlice({
     },
     setSkillsDB: (state, action) => {
       state.skillsDB = action.payload
+    },
+    setLoading: (state, action) => {
+      state.loading = action.payload
     }
   }
 })
@@ -85,7 +90,8 @@ export const {
   setAddress,
   setTypes,
   setWforms,
-  setSkillsDB
+  setSkillsDB,
+  setLoading
 } = appSlice.actions
 
 export default appSlice.reducer

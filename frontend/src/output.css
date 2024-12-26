@@ -726,6 +726,10 @@ video {
   z-index: 1000;
 }
 
+.z-\[9999\] {
+  z-index: 9999;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -1308,6 +1312,14 @@ video {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-\[rgba\(0\2c 0\2c 0\2c 0\.1\)\] {
+  background-color: rgba(0,0,0,0.1);
+}
+
+.bg-\[rgba\(0\2c 0\2c 0\2c 0\.15\)\] {
+  background-color: rgba(0,0,0,0.15);
 }
 
 .bg-cover {

@@ -3,9 +3,10 @@ import Nav from '../components/Nav'
 import { Outlet } from 'react-router-dom'
 import { candidateNavInfo } from '../utils/nav'
 import { useEffect } from 'react'
+import { LoadingOverlay } from '../components'
 const Info = () => {
   const { currentUser } = useSelector((state) => state.auth)
-  const { currentRole } = useSelector((state) => state.app)
+  const { currentRole, loading } = useSelector((state) => state.app)
 
   useEffect(() => {}, [currentRole])
 
@@ -15,6 +16,7 @@ const Info = () => {
       <div className="flex flex-row gap-4">
         <Outlet />
       </div>
+      {loading && <LoadingOverlay />}
     </div>
   )
 }

@@ -8,12 +8,17 @@ import { updateOtherInfo } from '../redux/api/app'
 import UploadImages from './UploadImages'
 import { convertFiles } from '../utils/functions'
 import { useNavigate } from 'react-router-dom'
+import LoadingOverlay from './LoadingOverlay'
 const OtherInfo = () => {
   const { currentUser } = useSelector((state) => state.auth)
   const { currentRole, skillsDB } = useSelector((state) => state.app)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [skills, setSkills] = useState([])
+  const [formData, setFormData] = useState({
+    speciality: [],
+    types: [],
+    wforms: []
+  })
   const [images, setImages] = useState([])
   const [values, setValues] = useState({})
 
@@ -21,6 +26,7 @@ const OtherInfo = () => {
   const [, forceUpdate] = useState(0)
 
   useEffect(() => {
+    console.log(skillsDB)
     if (currentUser?.role === 'candidate') {
       setValues((prevValues) => ({
         ...prevValues,
@@ -42,10 +48,14 @@ const OtherInfo = () => {
         wforms: currentRole?.other_info?.wforms || prevValues.wforms
       }))
     }
-  }, [currentRole.other_info, currentUser])
+  }, [currentRole.other_info])
 
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value })
+  }
+
+  const handleSetTags = (name, tags) => {
+    setFormData((prev) => ({ ...prev, [name]: tags }))
   }
 
   const handleOtherInfo = async (item) => {
@@ -55,7 +65,7 @@ const OtherInfo = () => {
         newValue = values[item.name]
         break
       case 'dropdown':
-        newValue = skills
+        newValue = formData[item.name]
         break
       case 'images':
         let results = await convertFiles(images)
@@ -68,8 +78,7 @@ const OtherInfo = () => {
       currentRole?._id,
       { [item.name]: newValue },
       dispatch,
-      currentUser.role,
-      navigate
+      currentUser.role
     ).then(() => {
       setValues((prev) => ({
         ...prev,
@@ -83,7 +92,6 @@ const OtherInfo = () => {
 
       forceUpdate((prev) => prev + 1)
     })
-    console.log({ [item.name]: newValue })
   }
 
   const toggleOpen = (id) => {
@@ -121,9 +129,9 @@ const OtherInfo = () => {
                   <>
                     <div className="flex flex-row gap-4">
                       <DropdownSearchAdd
-                        tags={skills}
-                        setTags={setSkills}
-                        items={item.options || skillsDB}
+                        tags={formData[item.name]}
+                        setTags={(tags) => handleSetTags(item.name, tags)}
+                        items={item?.options || skillsDB}
                       />
                     </div>
                   </>
