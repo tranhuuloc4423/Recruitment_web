@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 const ProgressBar = ({ progress }) => {
   const [currentProgress, setCurrentProgress] = useState(0)
+  const { currentUser } = useSelector((state) => state.auth)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -49,10 +51,17 @@ const ProgressBar = ({ progress }) => {
       </div>
       {/* Text */}
       <div className="">
-        <p>
-          Nâng cấp hồ sơ của bạn lên <span className="font-bold">80%</span> để
-          bắt đầu tạo CV chuyên nghiệp.
-        </p>
+        {currentUser.role === 'candidate' ? (
+          <p>
+            Nâng cấp hồ sơ của bạn lên <span className="font-bold">80%</span> để
+            bắt đầu tạo CV chuyên nghiệp.
+          </p>
+        ) : (
+          <p>
+            Nâng cấp hồ sơ của bạn lên <span className="font-bold">80%</span> để
+            bắt đầu đăng bài tuyển dụng
+          </p>
+        )}
       </div>
     </div>
   )

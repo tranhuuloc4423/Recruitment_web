@@ -29,9 +29,7 @@ const BasicInfo = () => {
     )?.basicInfo
 
     setBasicInfo(infoToUpdate || [])
-  }, [currentRole])
-
-  useEffect(() => {}, [currentRole.basic_info])
+  }, [currentRole.basic_info])
 
   return (
     <div className="flex flex-col w-[30%] gap-4">

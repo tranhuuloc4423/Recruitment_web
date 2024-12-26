@@ -82,7 +82,7 @@ const info = [
         desc: 'Các kỹ năng chuyên môn chính của công ty',
         type: 'dropdown',
         id: 3,
-        name: 'skills',
+        name: 'speciality',
         placeholder: 'Tìm kiếm kỹ năng'
       },
       {

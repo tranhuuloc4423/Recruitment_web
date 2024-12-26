@@ -3,6 +3,7 @@ import axios from '../../axios'
 import {
   setBasicInfo,
   setData,
+  setLoading,
   setOtherInfo,
   setSkillsDB,
   setTarget
@@ -29,24 +30,26 @@ const getSkills = async (dispatch) => {
 
 const updateBasicInfo = async (id, data, dispatch, role) => {
   try {
+    dispatch(setLoading(true))
     await axios.put(`${role}/basic_info/${id}`, data)
-    const res = axios.get(`${role}/role/${id}`)
+    const res = await axios.get(`${role}/role/${id}`)
     dispatch(setBasicInfo(res.data?.basic_info))
     toast.success('Cập nhật thông tin thành công!')
+    dispatch(setLoading(false))
   } catch (error) {
     console.log(error)
     toast.error('Cập nhật thông tin không thành công!')
   }
 }
 
-const updateOtherInfo = async (id, data, dispatch, role, navigate) => {
+const updateOtherInfo = async (id, data, dispatch, role) => {
   try {
-    console.log(data)
+    dispatch(setLoading(true))
     await axios.put(`${role}/other_info/${id}`, data)
-    // const res = await axios.get(`${role}/role/${id}`)
-    dispatch(setOtherInfo(data))
+    const res = await axios.get(`${role}/role/${id}`)
+    dispatch(setOtherInfo(res.data?.other_info))
     toast.success('Cập nhật thông tin thành công!')
-    navigate('/posts')
+    dispatch(setLoading(false))
   } catch (error) {
     console.log(error)
     toast.error('Cập nhật thông tin không thành công!')

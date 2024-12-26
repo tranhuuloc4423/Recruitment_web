@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { FiSearch } from 'react-icons/fi'
+import { IoClose } from 'react-icons/io5'
 import { PostDetails, Input, Button, Post, FilterFrame } from '../components'
 import Recruiter from '../pages/Recruiter'
 import { getAllPostConfirmed } from '../redux/api/post'
@@ -37,6 +38,14 @@ const Main = () => {
     if (e.key === 'Enter') {
       handleSearch()
     }
+  }
+
+  const handleRemoveSuggestion = (index) => {
+    setFilteredSuggestions((prevSuggestions) => {
+      const updatedSuggestions = prevSuggestions.filter((_, i) => i !== index)
+      localStorage.setItem('searchHistory', JSON.stringify(updatedSuggestions))
+      return updatedSuggestions
+    })
   }
 
   const handleSearch = () => {
@@ -166,7 +175,6 @@ const Main = () => {
       <div className="w-2/3 flex flex-col gap-2">
         {/* Search */}
         <div className="flex flex-row gap-4 w-full items-center">
-          {/* <Search /> */}
           <div className="w-full relative">
             <input
               ref={searchRef}
@@ -188,10 +196,17 @@ const Main = () => {
                 {filteredSuggestions.map((suggestion, index) => (
                   <li
                     key={index}
-                    onClick={() => setSearch(suggestion)}
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between items-center"
                   >
-                    {suggestion}
+                    <span
+                      onClick={() => setSearch(suggestion)}
+                      className="flex-1"
+                    >
+                      {suggestion}
+                    </span>
+                    <span onClick={() => handleRemoveSuggestion(index)}>
+                      <IoClose size={24} />
+                    </span>
                   </li>
                 ))}
               </ul>

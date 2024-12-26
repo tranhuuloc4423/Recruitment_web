@@ -59,9 +59,10 @@ const BasicInfoForm = ({ open, setOpen }) => {
           ...additionalData
         })
 
-    console.log(data)
+    // console.log(data)
+    console.log(currentRole.basic_info)
     updateBasicInfo(currentRole._id, data, dispatch, currentUser.role)
-    getById(currentUser._id, dispatch, currentUser.role)
+    console.log(currentRole.basic_info)
     setOpen(false)
   }
 
