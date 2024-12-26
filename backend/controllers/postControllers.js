@@ -493,7 +493,7 @@ const postController = {
     const { postId } = req.params
 
     try {
-      const post = await Post.findById(postId).populate('applied', 'name email')
+      const post = await Post.findById(postId).populate('applied')
 
       if (!post) {
         return res.status(404).json({ message: 'Không tìm thấy bài viết' })
