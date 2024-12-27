@@ -35,18 +35,13 @@ const OtherInfo = () => {
         exps: currentRole?.other_info?.exps || prevValues.exps,
         education: currentRole?.other_info?.education || prevValues.education,
         certificates:
-          currentRole?.other_info?.certificates || prevValues.certificates,
-        skills: currentRole?.other_info?.skills || prevValues.skills
+          currentRole?.other_info?.certificates || prevValues.certificates
       }))
     } else {
       setValues((prevValues) => ({
         ...prevValues,
         desc: currentRole?.other_info?.desc || prevValues.desc,
-        speciality:
-          currentRole?.other_info?.speciality || prevValues.speciality,
-        images: currentRole?.other_info?.images || prevValues.images,
-        types: currentRole?.other_info?.types || prevValues.types,
-        wforms: currentRole?.other_info?.wforms || prevValues.wforms
+        images: currentRole?.other_info?.images || prevValues.images
       }))
     }
   }, [currentRole.other_info])

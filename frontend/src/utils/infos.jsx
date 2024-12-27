@@ -20,11 +20,11 @@ const info = [
         id: 0,
         name: 'name',
         type: 'text',
-        placeholder: 'Tên công ty (Doanh nghiệp)',
+        placeholder: 'Tên Công Ty (Doanh nghiệp)',
         error:
-          'Tên công ty (Doanh nghiệp) ít nhất 6 ký tự và nhiều nhất 24 ký tự',
-        pattern: '.{6,24}',
-        label: 'Tên công ty (Doanh nghiệp)',
+          'Tên Công Ty (Doanh nghiệp) phải có ít nhất 6 ký tự và tối đa 24 ký tự',
+        pattern: /.{6,24}/, // Tối thiểu 6 ký tự, tối đa 24 ký tự
+        label: 'Tên Công Ty (Doanh nghiệp)',
         required: true
       },
       {
@@ -33,7 +33,7 @@ const info = [
         type: 'email',
         placeholder: 'Email',
         error: 'Địa chỉ email không hợp lệ',
-        pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
+        pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/, // Định dạng email
         label: 'Email',
         required: true,
         icon: <IoMailOutline size={24} />
@@ -42,20 +42,31 @@ const info = [
         id: 2,
         name: 'field',
         type: 'text',
-        placeholder: 'Chuyên môn',
-        error: 'Họ và Tên ít nhất 6 ký tự',
-        pattern: '.{6,}',
-        label: 'Chuyên môn',
+        placeholder: 'Lĩnh vực',
+        error: 'Lĩnh vực phải có ít nhất 6 ký tự',
+        pattern: /.{6,}/, // Tối thiểu 6 ký tự
+        label: 'Lĩnh vực',
         icon: <FaCompass size={24} />,
         required: true
+      },
+      {
+        id: 3,
+        name: 'phone',
+        type: 'phone',
+        placeholder: 'Số điện thoại',
+        error: 'Số điện thoại không hợp lệ',
+        pattern: /^\d{10}$/, // Số điện thoại gồm đúng 10 chữ số
+        label: 'Số điện thoại',
+        required: true,
+        icon: <FiPhone size={24} />
       },
       {
         id: 4,
         name: 'tax_id',
         type: 'text',
         placeholder: 'Mã số thuế',
-        error: 'Mã số thuế ít nhất 10 ký tự',
-        pattern: '.{10,}',
+        error: 'Mã số thuế phải có ít nhất 10 ký tự',
+        pattern: /.{10,}/, // Tối thiểu 10 ký tự
         label: 'Mã số thuế',
         icon: <HiOutlineReceiptTax size={24} />,
         required: true
@@ -135,8 +146,9 @@ const info = [
         name: 'name',
         type: 'text',
         placeholder: 'Tên Công Ty (Doanh nghiệp)',
-        error: 'Tên Công Ty (Doanh nghiệp) nhất 6 ký tự và nhiều nhất 24 ký tự',
-        pattern: '.{6,24}',
+        error:
+          'Tên Công Ty (Doanh nghiệp) phải có ít nhất 6 ký tự và tối đa 24 ký tự',
+        pattern: /.{6,24}/, // Tối thiểu 6 ký tự, tối đa 24 ký tự
         label: 'Tên Công Ty (Doanh nghiệp)',
         required: true
       },
@@ -146,7 +158,7 @@ const info = [
         type: 'email',
         placeholder: 'Email',
         error: 'Địa chỉ email không hợp lệ',
-        pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
+        pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/, // Định dạng email
         label: 'Email',
         required: true,
         icon: <IoMailOutline size={24} />
@@ -156,19 +168,30 @@ const info = [
         name: 'field',
         type: 'text',
         placeholder: 'Lĩnh vực',
-        error: 'Họ và Tên ít nhất 6 ký tự',
-        pattern: '.{6,}',
+        error: 'Lĩnh vực phải có ít nhất 6 ký tự',
+        pattern: /.{6,}/, // Tối thiểu 6 ký tự
         label: 'Lĩnh vực',
         icon: <FaCompass size={24} />,
         required: true
+      },
+      {
+        id: 3,
+        name: 'phone',
+        type: 'phone',
+        placeholder: 'Số điện thoại',
+        error: 'Số điện thoại không hợp lệ',
+        pattern: /^\d{10}$/, // Số điện thoại gồm đúng 10 chữ số
+        label: 'Số điện thoại',
+        required: true,
+        icon: <FiPhone size={24} />
       },
       {
         id: 4,
         name: 'tax_id',
         type: 'text',
         placeholder: 'Mã số thuế',
-        error: 'Mã số thuế ít nhất 10 ký tự',
-        pattern: '.{10,}',
+        error: 'Mã số thuế phải có ít nhất 10 ký tự',
+        pattern: /.{10,}/, // Tối thiểu 10 ký tự
         label: 'Mã số thuế',
         icon: <HiOutlineReceiptTax size={24} />,
         required: true
@@ -244,50 +267,50 @@ const info = [
     name: 'candidate',
     basicInfo: [
       {
-        id: 2,
+        id: 0,
         name: 'name',
         type: 'text',
         placeholder: 'Họ và Tên',
         error: 'Họ và Tên ít nhất 6 ký tự',
-        pattern: '.{6,}',
+        pattern: /.{6,}/, // Tối thiểu 6 ký tự
         label: 'Họ và Tên',
         required: true
       },
       {
-        id: 3,
+        id: 1,
         name: 'email',
         type: 'email',
         placeholder: 'Email',
         error: 'Địa chỉ email không hợp lệ',
-        pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
+        pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/, // Định dạng email
         label: 'Email',
         required: true,
         icon: <IoMailOutline size={24} />
       },
       {
-        id: 4,
+        id: 2,
         name: 'dob',
         type: 'date',
         placeholder: 'Ngày sinh',
         error: 'Ngày sinh không hợp lệ',
-        pattern: '',
+        pattern: null, // Không cần kiểm tra pattern cho ngày sinh, có thể dùng kiểm tra logic phía backend
         label: 'Ngày sinh',
         required: true,
         icon: <LuCake size={24} />
       },
       {
-        id: 6,
+        id: 3,
         name: 'phone',
         type: 'phone',
         placeholder: 'Số điện thoại',
         error: 'Số điện thoại không hợp lệ',
-        // pattern: '^d{10}$',
+        pattern: /^\d{10}$/, // Số điện thoại gồm đúng 10 chữ số
         label: 'Số điện thoại',
         required: true,
         icon: <FiPhone size={24} />
       },
       {
-        id: 7,
+        id: 4,
         name: 'gender',
         type: 'select',
         placeholder: 'Giới tính',

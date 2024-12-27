@@ -74,7 +74,8 @@ function App() {
     }
 
     if (user === null) {
-      navigate(SIGNIN)
+      // navigate(SIGNIN)
+      navigate(HOME + '/' + POSTS)
     } else {
       navigate(HOME + '/' + POSTS)
     }

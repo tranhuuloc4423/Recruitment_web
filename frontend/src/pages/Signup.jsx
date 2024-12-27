@@ -8,6 +8,7 @@ import Footer from '../components/Footer'
 import Dropdown from '../components/Dropdown'
 import { signupUser } from '../redux/api/auth'
 import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
 const Signup = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -28,6 +29,7 @@ const Signup = () => {
     password: '',
     confirmPassword: ''
   })
+  const [errors, setErrors] = useState({})
 
   const inputs = [
     {
@@ -36,7 +38,7 @@ const Signup = () => {
       type: 'text',
       placeholder: 'Họ và tên',
       error: 'Tên chứa ít nhất 6 ký tự',
-      // pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
+      pattern: /^.{6,}$/, // Tên chứa ít nhất 6 ký tự
       label: 'Họ và tên',
       required: true
     },
@@ -46,7 +48,7 @@ const Signup = () => {
       type: 'email',
       placeholder: 'Email',
       error: 'Địa chỉ email không hợp lệ',
-      pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
+      pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/, // Định dạng email
       label: 'Email',
       required: true
     },
@@ -55,8 +57,8 @@ const Signup = () => {
       name: 'password',
       type: 'password',
       placeholder: 'Mật khẩu',
-      error: 'Mật khẩu chưa chính xác',
-      // pattern: '^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{8,}$',
+      error: 'Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ và số',
+      pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, // Ít nhất 8 ký tự, bao gồm chữ và số
       label: 'Mật khẩu',
       required: true
     },
@@ -66,23 +68,61 @@ const Signup = () => {
       type: 'password',
       placeholder: 'Nhập lại mật khẩu',
       error: 'Mật khẩu chưa trùng khớp',
-      pattern: values.password,
+      // Sử dụng hàm validate riêng thay cho pattern
+      validate: (value, values) => value === values.password, // Xác nhận mật khẩu
       label: 'Nhập lại mật khẩu',
       required: true
     }
   ]
 
   const onChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value })
+    const { name, value } = e.target
+    setValues({ ...values, [name]: value })
+
+    // Validate ngay khi người dùng nhập
+    const input = inputs.find((input) => input.name === name)
+    if (input?.pattern && !input.pattern.test(value)) {
+      setErrors({ ...errors, [name]: input.error })
+    } else {
+      const { [name]: removedError, ...rest } = errors
+      setErrors(rest)
+    }
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const user = {
-      ...values,
-      role: selectedOption.value
+
+    // Validate toàn bộ form trước khi submit
+    let formIsValid = true
+    const newErrors = {}
+
+    inputs.forEach((input) => {
+      const value = values[input.name]
+
+      if (input.required && !value) {
+        newErrors[input.name] = `${input.label} là bắt buộc.`
+        formIsValid = false
+      } else if (input.pattern && !input.pattern.test(value)) {
+        newErrors[input.name] = input.error
+        formIsValid = false
+      } else if (input.validate && !input.validate(value, values)) {
+        newErrors[input.name] = input.error
+        formIsValid = false
+      }
+    })
+
+    setErrors(newErrors)
+
+    if (formIsValid) {
+      console.log('Form submitted successfully:', values)
+      const user = {
+        ...values,
+        role: selectedOption.value
+      }
+      signupUser(user, dispatch, navigate)
+    } else {
+      toast.warn('Vui lòng nhập thông tin hợp lệ')
     }
-    signupUser(user, dispatch, navigate)
   }
 
   return (
@@ -101,6 +141,7 @@ const Signup = () => {
                 {...input}
                 value={values[input.name]}
                 onChange={onChange}
+                error={errors[input.name]}
               />
             ))}
             <Dropdown

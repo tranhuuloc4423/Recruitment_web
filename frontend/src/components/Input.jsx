@@ -81,7 +81,9 @@ const Input = (props) => {
           <input
             {...inputProps}
             type={type}
-            className="outline-none border-2 w-full py-2 px-4 rounded-md"
+            className={`outline-none border-2 w-full py-2 px-4 rounded-md ${
+              error ? 'border-red' : ''
+            }`}
             onChange={onChange}
             onBlur={handleFocus}
             onFocus={() =>
@@ -94,13 +96,17 @@ const Input = (props) => {
   }
 
   return (
-    <div className={`${className} input`}>
-      <div className="text-left w-full flex gap-1 items-center">
+    <div className={`${className} flex flex-col items-center w-full`}>
+      <div className={`text-left w-full flex gap-1 items-center`}>
         {label}
         {required && <div className="text-red">*</div>}
       </div>
       {renderInput()}
-      <span className="text-left w-full">{error}</span>
+      <span
+        className={`text-left text-red w-full ${error ? 'block' : 'hidden'}`}
+      >
+        {error}
+      </span>
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 const ProgressBar = ({ progress }) => {
   const [currentProgress, setCurrentProgress] = useState(0)
   const { currentUser } = useSelector((state) => state.auth)
+  const { currentRole } = useSelector((state) => state.app)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -18,7 +19,7 @@ const ProgressBar = ({ progress }) => {
     }, 15)
 
     return () => clearInterval(interval)
-  }, [progress])
+  }, [progress, currentRole.basic_info])
 
   return (
     <div className="flex items-center gap-4">

@@ -61,7 +61,9 @@ const BasicInfo = () => {
             ))}
             <div className="flex items-center gap-2 py-2 px-2">
               <IoLocationOutline size={24} />
-              <span>{`${currentRole?.basic_info.address?.province?.name}, ${currentRole?.basic_info.address?.district?.name}`}</span>
+              {currentRole?.basic_info?.address && (
+                <span>{`${currentRole?.basic_info.address.province.name}, ${currentRole?.basic_info.address.district.name}`}</span>
+              )}
             </div>
           </div>
         </div>

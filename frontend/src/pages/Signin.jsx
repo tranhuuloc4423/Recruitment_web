@@ -40,10 +40,6 @@ const Signin = () => {
     }
   ]
 
-  // const onChange = (e) => {
-  //   setValues({ ...values, [e.target.name]: e.target.value })
-  // }
-
   const onChange = (e) => {
     const { name, value } = e.target
     setValues({ ...values, [name]: value })
@@ -57,12 +53,6 @@ const Signin = () => {
       setErrors(rest)
     }
   }
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault()
-  //   console.log(values)
-  //   // signinUser({ ...values }, dispatch, navigate)
-  // }
 
   const handleSubmit = (e) => {
     e.preventDefault()

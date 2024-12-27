@@ -137,6 +137,16 @@ const getCandidatesByPost = async (id) => {
   }
 }
 
+const getOwnerById = async (id, role) => {
+  try {
+    const res = await axios.get(`${role}/role/${id}`)
+    return res.data
+  } catch (error) {
+    console.log(error)
+    toast.error(error.response.data.message)
+  }
+}
+
 export {
   createPost,
   updatePost,
@@ -151,5 +161,6 @@ export {
   removePost,
   getAllPostedByOwner,
   updateCandidateApplied,
-  getCandidatesByPost
+  getCandidatesByPost,
+  getOwnerById
 }

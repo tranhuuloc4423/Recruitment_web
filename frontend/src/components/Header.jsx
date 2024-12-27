@@ -32,7 +32,7 @@ const Header = () => {
         </div>
       </div>
       <div className="flex gap-4 items-center">
-        {currentRole ? (
+        {currentUser._id ? (
           <>
             <Noti />
             <Account />

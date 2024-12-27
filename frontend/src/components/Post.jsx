@@ -107,7 +107,10 @@ const Post = ({ post, select, manage }) => {
 
       {/* time and tag */}
       <div className="flex-row-center justify-between w-full">
-        <span className="para-1">Hạn ứng tuyển : {date_expiration}</span>
+        <div>
+          <div className="para-1">Hạn ứng tuyển : </div>
+          <div>{date_expiration}</div>
+        </div>
         {type && (
           <span className="relative right-[-8px]">
             <StatusTag state={type} />

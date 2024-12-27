@@ -50,7 +50,7 @@
     @apply flex flex-col items-center;
   }
 
-  .input input:invalid[focused='true'] {
+  /* .input input:invalid[focused='true'] {
     @apply border-2 border-red;
   }
 
@@ -64,7 +64,7 @@
 
   .input span {
     @apply hidden p-1 para-2 text-red;
-  }
+  } */
 
   .slider {
     @apply w-full h-1.5 bg-gray-200 rounded-full flex items-center my-6;

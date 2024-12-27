@@ -41,7 +41,7 @@ const CVTheme_1 = ({ color }) => {
         </div>
       </div>
       {/* container */}
-      <div className="flex flex-row gap-4 p-4 bg-white w-full h-[931px]">
+      <div className="flex flex-row gap-4 p-4 bg-white w-full h-fit">
         <div className="flex flex-col gap-4 w-[35%]">
           <div>
             <span className={`uppercase text-lg font-medium`} style={{ color }}>

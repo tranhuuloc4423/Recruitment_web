@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getAddress, getById, updateBasicInfo } from '../redux/api/app'
+import { getAddress, updateBasicInfo } from '../redux/api/app'
 import { convertFile } from '../utils/functions'
 import Avatar from '../components/Avatar'
 import Input from '../components/Input'
@@ -11,6 +11,7 @@ import Dropdown from '../components/Dropdown'
 import info from '../utils/infos'
 import Address from '../components/Address'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const BasicInfoForm = ({ open, setOpen }) => {
   const { currentUser } = useSelector((state) => state.auth)
@@ -21,49 +22,86 @@ const BasicInfoForm = ({ open, setOpen }) => {
   const navigate = useNavigate()
   const [image, setImage] = useState(null)
   const [values, setValues] = useState({})
+  const [errors, setErrors] = useState({})
   const [gender, setGender] = useState('')
 
   const [selectedProvince, setSelectedProvince] = useState(null)
   const [selectedCity, setSelectedCity] = useState(null)
+  const inputs = info.find((info) => info.name === currentUser?.role).basicInfo
 
   const handleChange = (event) => {
     const { name, value } = event.target
     setValues((prevValues) => ({ ...prevValues, [name]: value }))
+
+    const input = inputs.find((input) => input.name === name)
+    if (input?.pattern && !input.pattern.test(value)) {
+      setErrors({ ...errors, [name]: input.error })
+    } else {
+      const { [name]: removedError, ...rest } = errors
+      setErrors(rest)
+    }
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    if (!image) return
-    const valuesCheck = Object.values(values).find(
-      (value) => value.trim() === ''
-    )
-    if (valuesCheck) return
-    const imagebs64 = await convertFile(image)
-    let data
-    let additionalData = {
-      image: imagebs64,
-      address: {
-        province: { name: selectedProvince.name },
-        district: { name: selectedCity.name }
+
+    let formIsValid = true
+    const newErrors = {}
+
+    inputs.forEach((input) => {
+      const value = values[input.name]
+
+      if (input.required && !value) {
+        newErrors[input.name] = `${input.label} là bắt buộc.`
+        formIsValid = false
+      } else if (input.pattern && !input.pattern.test(value)) {
+        newErrors[input.name] = input.error
+        formIsValid = false
+      } else if (input.validate && !input.validate(value, values)) {
+        newErrors[input.name] = input.error
+        formIsValid = false
       }
+    })
+    setErrors(newErrors)
+
+    if (formIsValid) {
+      if (!image) {
+        return
+      }
+      const valuesCheck = Object.values(values).find(
+        (value) => value.trim() === ''
+      )
+      if (valuesCheck) return
+      if (!selectedProvince) return
+      if (!selectedCity) return
+      const imagebs64 = await convertFile(image)
+      let data
+      let additionalData = {
+        image: imagebs64,
+        address: {
+          province: { name: selectedProvince.name },
+          district: { name: selectedCity.name }
+        }
+      }
+
+      currentUser.role === 'candidate'
+        ? (data = {
+            ...values,
+            gender,
+            ...additionalData
+          })
+        : (data = {
+            ...values,
+            ...additionalData
+          })
+      // console.log(data)
+      console.log(currentRole.basic_info)
+      updateBasicInfo(currentRole._id, data, dispatch, currentUser.role)
+      console.log(currentRole.basic_info)
+      setOpen(false)
+    } else {
+      toast.warn('Vui lòng nhập thông tin hợp lệ')
     }
-
-    currentUser.role === 'candidate'
-      ? (data = {
-          ...values,
-          gender,
-          ...additionalData
-        })
-      : (data = {
-          ...values,
-          ...additionalData
-        })
-
-    // console.log(data)
-    console.log(currentRole.basic_info)
-    updateBasicInfo(currentRole._id, data, dispatch, currentUser.role)
-    console.log(currentRole.basic_info)
-    setOpen(false)
   }
 
   return (
@@ -112,6 +150,7 @@ const BasicInfoForm = ({ open, setOpen }) => {
                           name={subItem.name}
                           value={values[subItem.name]}
                           onChange={handleChange}
+                          error={errors[subItem.name]}
                         />
                       )
                     })}
