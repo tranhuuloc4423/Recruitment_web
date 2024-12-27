@@ -126,10 +126,20 @@ const candidateControllers = {
       if (education) updateFields['other_info.education'] = education
       if (exps) updateFields['other_info.exps'] = exps
       if (skills) {
-        updateFields['other_info.skills'] = Array.isArray(skills)
-          ? skills
-          : [skills]
+        if (
+          !Array.isArray(skills) ||
+          !skills.every(
+            (skill) =>
+              typeof skill.name === 'string' && typeof skill.value === 'string'
+          )
+        ) {
+          return res.status(400).json({
+            message: 'Skills không đúng định dạng (cần có name và value).'
+          })
+        }
+        updateFields['other_info.skills'] = skills
       }
+
       if (projects) updateFields['other_info.projects'] = projects
       if (certificates) updateFields['other_info.certificates'] = certificates
 
@@ -277,6 +287,20 @@ const candidateControllers = {
     } catch (error) {
       console.error(error)
       res.status(500).json({ message: 'Lỗi khi lấy công việc đã ứng tuyển' })
+    }
+  },
+
+  getAppovedJobs: async (req, res) => {
+    try {
+      const id = req.params.id
+      const candidate = await Candidate.findById(id).populate('jobs.appoved')
+      if (!candidate) {
+        return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
+      }
+      res.status(200).json(candidate.jobs.appoved)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: 'Lỗi khi lấy công việc đã được duyệt' })
     }
   },
 

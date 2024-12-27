@@ -360,13 +360,17 @@ const postController = {
       post.applied.push(candidateId)
       await post.save()
 
-      await updateAppliedJobs(candidateId, postId)
+      if (!candidate.jobs.applied.includes(postId)) {
+        candidate.jobs.applied.push(postId)
+        await candidate.save()
+      }
 
       res.json({ message: 'Cập nhật ứng tuyển thành công', post })
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
   },
+
   updateApproved: async (req, res) => {
     const { postId } = req.params
     const { candidateId } = req.body
@@ -402,9 +406,19 @@ const postController = {
       }
 
       await post.save()
-      await updateApprovedJobs(candidateId, postId)
 
-      res.json({ message: 'Cập nhật duyệt ứng viên thành công', post })
+      if (!candidate.jobs.approved.includes(postId)) {
+        candidate.jobs.approved.push(postId)
+      }
+
+      const candidateAppliedIndex = candidate.jobs.applied.indexOf(postId)
+      if (candidateAppliedIndex !== -1) {
+        candidate.jobs.applied.splice(candidateAppliedIndex, 1)
+      }
+
+      await candidate.save()
+
+      res.json({ message: 'Duyệt ứng viên thành công', post })
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
