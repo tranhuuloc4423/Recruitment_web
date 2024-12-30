@@ -78,11 +78,15 @@ const Post = ({ post, select, manage }) => {
   }
 
   const handleApply = () => {
-    if (currentRole.profileStatus < 100) {
+    if (currentRole?.profileStatus < 100) {
       toast.error('Vui lòng cập nhật thông tin cá nhân trước khi ứng tuyển!')
       return
     }
-    updateCandidateApplied(post?._id, currentRole._id)
+    if (!currentUser?._id) {
+      toast.error('Vui lòng đăng nhập để ứng tuyển!')
+      return
+    }
+    updateCandidateApplied(post?._id, currentRole?._id)
   }
 
   const handleView = () => {
@@ -184,7 +188,9 @@ const Post = ({ post, select, manage }) => {
 
       {/* applied button */}
       <div className="flex flex-row justify-end">
-        {currentUser.role === 'candidate' && (
+        {currentUser.role === 'recruiter' || currentUser.role === 'admin' ? (
+          <></>
+        ) : (
           <Button label="Ứng tuyển" onClick={handleApply} />
         )}
       </div>

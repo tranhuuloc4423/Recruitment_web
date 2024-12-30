@@ -17,7 +17,7 @@ const Header = () => {
       <div className="flex gap-4 items-center h-full">
         <img src={logo} alt="Logo Lac Hong" className="w-[100px]" />
         <div className="flex text-white h-full">
-          {currentRole &&
+          {currentUser?._id && currentRole ? (
             nav
               .find((nav) => nav.name === currentUser?.role)
               ?.nav?.map((item, index) => (
@@ -28,11 +28,14 @@ const Header = () => {
                 >
                   {item.name}
                 </Link>
-              ))}
+              ))
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       <div className="flex gap-4 items-center">
-        {currentUser._id ? (
+        {currentUser?._id ? (
           <>
             <Noti />
             <Account />

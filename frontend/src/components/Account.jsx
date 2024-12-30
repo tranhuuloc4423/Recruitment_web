@@ -4,17 +4,20 @@ import defaultAvatar from '../assets/imgs/blank-profile-picture-973460_960_720.p
 import { IoIosArrowDown } from 'react-icons/io'
 import { IoSettingsOutline } from 'react-icons/io5'
 import { LuLogOut } from 'react-icons/lu'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
+import { setCurrentUser } from '../redux/slices/authSlice'
 const Account = () => {
   const [active, setActive] = useState(false)
   const { currentUser } = useSelector((state) => state.auth)
   const { currentRole } = useSelector((state) => state.app)
   const [avatar, setAvatar] = useState(defaultAvatar)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleLogout = () => {
     localStorage.removeItem('currentUser')
+    dispatch(setCurrentUser(null))
     navigate('signin')
   }
 

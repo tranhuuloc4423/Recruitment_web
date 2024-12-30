@@ -8,10 +8,14 @@ import { FiClock } from 'react-icons/fi'
 import Line from './Line'
 import Tag from './Tag'
 import Button from './Button'
-import { getPost, getRoleData } from '../redux/api/post'
+import { getPost, getRoleData, updateCandidateApplied } from '../redux/api/post'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 
 const PostDetails = ({ id }) => {
+  const { currentRole } = useSelector((state) => state.app)
+  const { currentUser } = useSelector((state) => state.auth)
   const [post, setPost] = useState()
   const [basicInfo, setBasicInfo] = useState()
   const [otherInfo, setOtherInfo] = useState()
@@ -21,12 +25,26 @@ const PostDetails = ({ id }) => {
     const res = await getRoleData(post?.authorType, post?.author)
     setBasicInfo(res?.basic_info)
     setOtherInfo(res?.other_info)
+    console.log(res?.basic_info)
+    console.log(res?.other_info)
   }
 
   const getPostById = async (id) => {
     const res = await getPost(id)
     console.log(res)
     setPost(res)
+  }
+
+  const handleApply = () => {
+    if (currentRole.profileStatus < 100) {
+      toast.error('Vui lòng cập nhật thông tin cá nhân trước khi ứng tuyển!')
+      return
+    }
+    if (!currentUser?._id) {
+      toast.error('Vui lòng đăng nhập để ứng tuyển!')
+      return
+    }
+    updateCandidateApplied(post?._id, currentRole._id)
   }
 
   useEffect(() => {
@@ -55,7 +73,7 @@ const PostDetails = ({ id }) => {
       </div>
 
       <div className="flex flex-row justify-between gap-2 items-center">
-        <Button label={'Ứng tuyển'} className="flex-1" />
+        <Button label={'Ứng tuyển'} className="flex-1" onClick={handleApply} />
         <Button
           label={'Xem công ty'}
           onClick={() =>
@@ -124,33 +142,18 @@ const PostDetails = ({ id }) => {
       {/* company's info */}
       <div className="grid grid-cols-3 grid-flow-row gap-2">
         <div className="flex flex-col gap-2">
-          <span>Lĩnh vực</span>
-          <span className="font-bold">Sản phẩm</span>
+          <span className="font-semibold">Lĩnh vực</span>
+          <span className="">{basicInfo?.field}</span>
         </div>
 
         <div className="flex flex-col gap-2">
-          <span>Lĩnh vực</span>
-          <span className="font-bold">Sản phẩm</span>
+          <span className="font-semibold">Mã số thuế</span>
+          <span className="">{basicInfo?.tax_id}</span>
         </div>
 
         <div className="flex flex-col gap-2">
-          <span>Lĩnh vực</span>
-          <span className="font-bold">Sản phẩm</span>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <span>Lĩnh vực</span>
-          <span className="font-bold">Sản phẩm</span>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <span>Lĩnh vực</span>
-          <span className="font-bold">Sản phẩm</span>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <span>Lĩnh vực</span>
-          <span className="font-bold">Sản phẩm</span>
+          <span className="font-semibold">Số điện thoại</span>
+          <span className="">{basicInfo?.phone}</span>
         </div>
       </div>
     </div>
