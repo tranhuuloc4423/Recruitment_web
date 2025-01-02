@@ -9,7 +9,7 @@ const RichText = ({
   name,
   template = false,
   hasImage = false,
-  max = 500
+  max = 1000
 }) => {
   const [charCount, setCharCount] = useState(0)
   const richRef = useRef(null)

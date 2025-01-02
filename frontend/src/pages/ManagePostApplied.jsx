@@ -23,6 +23,7 @@ const ManagePostApplied = () => {
     console.log(res2)
     const res3 = await getCandidatesByPost(location.state.id)
     setCandidates(res3.applied)
+    console.log(res3.applied)
   }
 
   useEffect(() => {
@@ -106,11 +107,8 @@ const ManagePostApplied = () => {
               />
               <div className="flex gap-2 items-center">
                 <div>Kỹ năng :</div>
-                {candidate.other_info.skills.map((skill) => (
-                  <Tag
-                    key={skill}
-                    label={skillsDB?.find((s) => s.value === skill)?.name}
-                  />
+                {candidate.other_info.skills.map((skill, index) => (
+                  <Tag key={index} label={skill.name} />
                 ))}
               </div>
               <div className="flex gap-2 flex-col items-center w-full">
