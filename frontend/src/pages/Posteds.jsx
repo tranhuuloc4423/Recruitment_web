@@ -108,9 +108,7 @@ const Posteds = () => {
       />
       <div className="grid grid-cols-5 gap-4">
         {filterPosts?.map((post, index) => (
-          <div key={index}>
-            <Post post={post} manage={manage} />
-          </div>
+          <Post key={post._id} post={post} manage={manage} />
         ))}
       </div>
       {pages > 1 && <BasicPagination length={pages} />}

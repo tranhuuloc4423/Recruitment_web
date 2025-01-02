@@ -29,7 +29,7 @@ const BasicInfo = () => {
     )?.basicInfo
 
     setBasicInfo(infoToUpdate || [])
-  }, [currentRole.basic_info])
+  }, [currentRole.basic_info, currentRole.profileStatus])
 
   return (
     <div className="flex flex-col w-[30%] gap-4">
@@ -78,7 +78,7 @@ const BasicInfo = () => {
         </div>
       </div>
       <div className="bg-white rounded shadow-md w-full flex justify-center items-center">
-        <ProgressBar progress={currentRole.profileStatus} />
+        <ProgressBar progress={currentRole?.profileStatus} />
       </div>
     </div>
   )

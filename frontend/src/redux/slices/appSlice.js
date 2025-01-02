@@ -9,7 +9,8 @@ const appSlice = createSlice({
       target: {},
       manage_post: [],
       posts: [],
-      notifications: []
+      notifications: [],
+      profileStatus: 0
     },
     filter: {
       salaries: [],
@@ -38,6 +39,9 @@ const appSlice = createSlice({
         ...action.payload
         // [action.payload.key]: action.payload.value
       }
+    },
+    setProfileStatus: (state, action) => {
+      state.currentRole.profileStatus = action.payload
     },
     setTarget: (state, action) => {
       state.currentRole.target = {
@@ -91,7 +95,8 @@ export const {
   setTypes,
   setWforms,
   setSkillsDB,
-  setLoading
+  setLoading,
+  setProfileStatus
 } = appSlice.actions
 
 export default appSlice.reducer

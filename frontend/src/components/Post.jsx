@@ -99,7 +99,7 @@ const Post = ({ post, select, manage }) => {
 
   return (
     <div
-      className={`flex min-h-[400px] flex-col gap-2 bg-white shadow-md p-2 rounded ${
+      className={`flex min-h-[400px] justify-between flex-col gap-2 bg-white shadow-md p-2 rounded ${
         select === post._id ? 'border-2 border-l-8 border-second' : ''
       }`}
     >

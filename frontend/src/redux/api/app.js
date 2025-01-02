@@ -5,6 +5,7 @@ import {
   setData,
   setLoading,
   setOtherInfo,
+  setProfileStatus,
   setSkillsDB,
   setTarget
 } from '../slices/appSlice'
@@ -34,6 +35,7 @@ const updateBasicInfo = async (id, data, dispatch, role) => {
     await axios.put(`${role}/basic_info/${id}`, data)
     const res = await axios.get(`${role}/role/${id}`)
     dispatch(setBasicInfo(res.data?.basic_info))
+    dispatch(setProfileStatus(res.data?.profileStatus))
     toast.success('Cập nhật thông tin thành công!')
     dispatch(setLoading(false))
   } catch (error) {
@@ -48,6 +50,7 @@ const updateOtherInfo = async (id, data, dispatch, role) => {
     await axios.put(`${role}/other_info/${id}`, data)
     const res = await axios.get(`${role}/role/${id}`)
     dispatch(setOtherInfo(res.data?.other_info))
+    dispatch(setProfileStatus(res.data?.profileStatus))
     toast.success('Cập nhật thông tin thành công!')
     dispatch(setLoading(false))
   } catch (error) {

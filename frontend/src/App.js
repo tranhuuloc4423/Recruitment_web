@@ -62,9 +62,9 @@ function App() {
   const fetchRoleData = async (user) => {
     if (user) {
       await getById(user._id, dispatch, user.role)
-      await getAddress(dispatch)
-      await getSkills(dispatch)
     }
+    await getAddress(dispatch)
+    await getSkills(dispatch)
   }
 
   useEffect(() => {
