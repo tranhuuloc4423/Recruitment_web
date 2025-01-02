@@ -1,7 +1,6 @@
 const introduce = `
   <p><strong>Giới thiệu bản thân:</strong></p>
   <p>Tôi là [Tên của bạn], một [Chuyên ngành/Ngành nghề] với [Số năm kinh nghiệm] năm kinh nghiệm trong lĩnh vực [Lĩnh vực chuyên môn]. Tôi có đam mê với [Điều gì đó liên quan đến nghề nghiệp hoặc sở thích] và mong muốn phát triển kỹ năng của mình trong [Lĩnh vực cụ thể].</p>
-  <p>Với khả năng [Kỹ năng nổi bật hoặc điểm mạnh của bạn], tôi đã từng làm việc tại [Tên công ty] và tham gia vào các dự án [Loại dự án hoặc công việc] giúp tôi có cái nhìn sâu sắc hơn về [Lĩnh vực]. Tôi luôn tìm kiếm cơ hội để học hỏi và đóng góp cho [Mục tiêu hoặc sứ mệnh mà bạn muốn đạt được].</p>
 `
 
 const project = `

@@ -33,8 +33,8 @@ const Signin = () => {
       name: 'password',
       type: 'password',
       placeholder: 'Mật khẩu',
-      error: 'Mật khẩu chứa ít nhất 3 ký tự',
-      pattern: /^.{3,}$/,
+      error: 'Mật khẩu chứa ít nhất 6 ký tự',
+      pattern: /^.{6,}$/,
       label: 'Mật khẩu',
       required: true
     }

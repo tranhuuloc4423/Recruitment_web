@@ -57,8 +57,8 @@ const Signup = () => {
       name: 'password',
       type: 'password',
       placeholder: 'Mật khẩu',
-      error: 'Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ và số',
-      pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, // Ít nhất 8 ký tự, bao gồm chữ và số
+      error: 'Mật khẩu phải có ít nhất 6 ký tự',
+      pattern: /^.{6,}$/,
       label: 'Mật khẩu',
       required: true
     },

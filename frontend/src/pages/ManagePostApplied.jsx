@@ -109,7 +109,7 @@ const ManagePostApplied = () => {
                 {candidate.other_info.skills.map((skill) => (
                   <Tag
                     key={skill}
-                    label={skillsDB.find((s) => s._id === skill)?.name}
+                    label={skillsDB?.find((s) => s.value === skill)?.name}
                   />
                 ))}
               </div>
