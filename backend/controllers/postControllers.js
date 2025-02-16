@@ -217,11 +217,13 @@ const postController = {
 
       const updatedPosts = await Promise.all(
         posts.map(async (post) => {
-          const expirationDate = parseDate(post.date_expiration)
+          if (post.date_expiration) {
+            const expirationDate = parseDate(post.date_expiration)
 
-          if (expirationDate < currentDate && post.status !== 'expired') {
-            post.status = 'expired'
-            await post.save()
+            if (expirationDate < currentDate && post.status !== 'expired') {
+              post.status = 'expired'
+              await post.save()
+            }
           }
 
           return post
