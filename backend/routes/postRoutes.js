@@ -14,7 +14,8 @@ const {
   updateSaved,
   updateStatus,
   updateApproved,
-  getAppliedCandidatesByPostId
+  getAppliedCandidatesByPostId,
+  getCandidateById
 } = require('../controllers/postControllers')
 
 router.post('/create', createPost)
@@ -31,5 +32,6 @@ router.put('/:postId/applied', updateApplied)
 router.put('/:postId/approved', updateApproved)
 router.put('/:postId/saved', updateSaved)
 router.put('/:postId/status', updateStatus)
+router.get('/candidate/:candidateId', getCandidateById)
 
 module.exports = router

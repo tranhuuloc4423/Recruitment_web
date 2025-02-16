@@ -519,6 +519,26 @@ const postController = {
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
+  },
+  getCandidateById: async (req, res) => {
+    try {
+      const { candidateId } = req.params
+
+      const candidate = await Candidate.findById(candidateId).populate('userId')
+
+      if (!candidate) {
+        return res
+          .status(404)
+          .json({ success: false, message: 'Không tìm thấy ứng viên' })
+      }
+
+      res.status(200).json({ success: true, candidate })
+    } catch (error) {
+      console.error(error)
+      res
+        .status(500)
+        .json({ success: false, message: 'Đã xảy ra lỗi khi lấy ứng viên' })
+    }
   }
 }
 
