@@ -19,6 +19,7 @@ const Main = () => {
 
   const getPosts = async () => {
     const data = await getAllPostConfirmed()
+    console.log(data)
     setPosts(data)
     setFilteredPosts(data)
   }
