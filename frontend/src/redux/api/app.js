@@ -40,7 +40,7 @@ const updateBasicInfo = async (id, data, dispatch, role) => {
     dispatch(setLoading(false))
   } catch (error) {
     console.log(error)
-    toast.error('Cập nhật thông tin không thành công!')
+    toast.error(error.response.data.message)
   }
 }
 
@@ -55,7 +55,7 @@ const updateOtherInfo = async (id, data, dispatch, role) => {
     dispatch(setLoading(false))
   } catch (error) {
     console.log(error)
-    toast.error('Cập nhật thông tin không thành công!')
+    toast.error(error.response.data.message)
   }
 }
 
@@ -68,7 +68,7 @@ const updateTarget = async (id, data, dispatch) => {
     toast.success('Cập nhật thông tin thành công!')
   } catch (error) {
     console.log(error)
-    toast.error('Cập nhật thông tin không thành công!')
+    toast.error(error.response.data.message)
   }
 }
 

@@ -55,6 +55,10 @@ const CreatePost = () => {
     if (currentUser.role === 'candidate') {
       return
     }
+    if(quantity === 0) {
+      toast.error('Vui lòng cập nhật tối thiểu 1 ứng viên!')
+      return
+    }
 
     let data
     data = {
@@ -134,6 +138,7 @@ const CreatePost = () => {
         step={1}
         label={'Mức Lương'}
       />
+      <div>Ngày hết hạn</div>
       <DateTimePicker date={date} setDate={setDate} validDate={true} />
       <Slider
         value={quantity}

@@ -8,7 +8,7 @@ import { FiClock } from 'react-icons/fi'
 import Line from './Line'
 import Tag from './Tag'
 import Button from './Button'
-import { getPost, getRoleData, updateCandidateApplied } from '../redux/api/post'
+import { getPost, getRoleData, savePost, updateCandidateApplied } from '../redux/api/post'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
@@ -20,6 +20,7 @@ const PostDetails = ({ id }) => {
   const [basicInfo, setBasicInfo] = useState()
   const [otherInfo, setOtherInfo] = useState()
   const navigate = useNavigate()
+  const [save, setSave] = useState(false)
 
   const getBasicData = async (post) => {
     const res = await getRoleData(post?.authorType, post?.author)
@@ -45,6 +46,11 @@ const PostDetails = ({ id }) => {
       return
     }
     updateCandidateApplied(post?._id, currentRole._id)
+  }
+  const handleSavePost = async (id) => {
+    console.log("save")
+    const res = await savePost(id, currentRole._id)
+    setSave(true)
   }
 
   useEffect(() => {
@@ -80,7 +86,13 @@ const PostDetails = ({ id }) => {
             navigate(`/company/${post?.authorType}/${post?.author}`)
           }
         />
-        <LuHeart size={32} />
+        <span onClick={() => handleSavePost(post?._id)}>
+          {save ? (
+            <LuHeart size={24} color="red" fill='red'/>
+          ) : (
+            <LuHeart size={24} />
+          )}
+        </span>
       </div>
 
       <Line />
@@ -154,6 +166,16 @@ const PostDetails = ({ id }) => {
         <div className="flex flex-col gap-2">
           <span className="font-semibold">Số điện thoại</span>
           <span className="">{basicInfo?.phone}</span>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <span className="font-semibold">Email</span>
+          <span className="">{basicInfo?.email}</span>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <span className="font-semibold">Địa chỉ</span>
+          <span className="">{`${basicInfo?.address?.province?.name}, ${basicInfo?.address?.district?.name}`}</span>
         </div>
       </div>
     </div>

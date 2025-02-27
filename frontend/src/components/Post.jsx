@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom';
 import Line from './Line'
 import Tag from './Tag'
 import Button from './Button'
 import StatusTag from './StatusTag'
 import { LuCircleDollarSign } from 'react-icons/lu'
 import { MdInfoOutline, MdOutlineFactCheck } from 'react-icons/md'
+import { BsThreeDots } from 'react-icons/bs'
 import { IoMdPeople } from 'react-icons/io'
 import { IoLocationOutline } from 'react-icons/io5'
 import { PiBagBold } from 'react-icons/pi'
@@ -42,6 +44,7 @@ const Post = ({ post, select, manage }) => {
   const [basicInfo, setBasicInfo] = useState()
   const [otherInfo, setOtherInfo] = useState()
   const navigate = useNavigate()
+  const locationRouter = useLocation();
 
   const getBasicData = async () => {
     console.log(post)
@@ -99,7 +102,7 @@ const Post = ({ post, select, manage }) => {
 
   return (
     <div
-      className={`flex min-h-[400px] justify-between flex-col gap-2 bg-white shadow-md p-2 rounded ${
+      className={`flex min-h-[400px] justify-between flex-col gap-1 bg-white shadow-md p-2 rounded select-none ${
         select === post._id ? 'border-2 border-l-8 border-second' : ''
       }`}
     >
@@ -111,19 +114,20 @@ const Post = ({ post, select, manage }) => {
 
       {/* time and tag */}
       <div className="flex-row-center justify-between w-full">
-        <div>
-          <div className="para-1">Hạn ứng tuyển : </div>
-          <div>{date_expiration}</div>
-        </div>
+      <div>
+        <div className="para-1">Hạn ứng tuyển : </div>
+        <div>{date_expiration}</div>
+      </div>
         {type && (
           <span className="relative right-[-8px]">
             <StatusTag state={type} />
           </span>
         )}
+
       </div>
 
       {/* title */}
-      <div className="heading-3">{title}</div>
+      <div className="heading-3 overflow-hidden">{title}</div>
 
       {/* image */}
       <div className="flex-row-center gap-2">
@@ -160,6 +164,7 @@ const Post = ({ post, select, manage }) => {
           {/* <span>{`${otherInfo.?.}`}</span> */}
         </span>
       </div>
+      
 
       {/* skills */}
       <div className="flex-col gap-2">
@@ -184,24 +189,25 @@ const Post = ({ post, select, manage }) => {
         </div>
       </div>
 
-      <Line />
-
       {/* applied button */}
       <div className="flex flex-row justify-end">
-        {currentUser.role === 'recruiter' || currentUser.role === 'admin' ? (
+        {locationRouter.pathname.includes("manage") ? "" : currentUser.role === 'recruiter' || currentUser.role === 'admin' ? (
           <></>
         ) : (
-          <Button label="Ứng tuyển" onClick={handleApply} />
+          <>
+            <Line />
+            <Button label="Ứng tuyển" onClick={handleApply} />
+          </>
         )}
       </div>
 
       {/* manage buttons */}
       <div className="w-full grid grid-cols-2 grid-flow-row gap-2">
-        {manage?.view && <Button label="Xem" onClick={handleView} />}
-        {manage?.confirm && <Button label="Duyệt" onClick={handleConfirm} />}
-        {manage?.remove && <Button label="Xoá" onClick={handleRemove} />}
-        {manage?.update && <Button label="Cập nhật" onClick={handleUpdate} />}
-        {manage?.extend && <Button label="Gia hạn" />}
+          {manage?.view && <Button label="Xem" onClick={handleView} />}
+          {manage?.confirm && <Button label="Duyệt" onClick={handleConfirm} />}
+          {manage?.remove && <Button label="Xoá" onClick={handleRemove} />}
+          {manage?.update && <Button label="Cập nhật" onClick={handleUpdate} />}
+          {manage?.extend && <Button label="Gia hạn" />}
       </div>
     </div>
   )

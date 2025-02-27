@@ -88,7 +88,7 @@ const Recruiter = () => {
         </div>
 
         {/* company's posst */}
-        <div className="w-[30%] flex flex-col gap-4">
+        <div className="w-[30%] flex flex-col gap-4 max-h-[800px]">
           <span className="heading-3">
             {posts?.length} công việc đang tuyển
           </span>

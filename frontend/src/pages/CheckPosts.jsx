@@ -10,6 +10,9 @@ const CheckPosts = () => {
   const [posts, setPosts] = useState([])
   const [filterPosts, setFilterPosts] = useState()
   const [manage, setManage] = useState({})
+
+  const [currentPage, setCurrentPage] = useState(1) // Thêm state cho trang hiện tại
+  const [postsPerPage] = useState(5) // Số bài post mỗi trang
   const [filter, setFilter] = useState([
     {
       label: 'Theo ngày đăng',
@@ -32,13 +35,11 @@ const CheckPosts = () => {
       active: false
     }
   ])
-  const [pages, setPages] = useState(0)
 
   const getPosteds = async () => {
     const res = await getAllPosted()
     setPosts(res)
     setFilterPosts(res)
-    setPages(res?.length / 10)
   }
 
   const handleFilterClick = (index) => {
@@ -65,7 +66,7 @@ const CheckPosts = () => {
 
   useEffect(() => {
     getPosteds()
-  }, [filterPosts])
+  }, [])
 
   useEffect(() => {
     const activeFilter = filter.find((f) => f.active)
@@ -90,6 +91,13 @@ const CheckPosts = () => {
       setFilterPosts(sortedPosts)
     }
   }, [filter, posts])
+  const indexOfLastPost = currentPage * postsPerPage
+  const indexOfFirstPost = indexOfLastPost - postsPerPage
+  const currentPosts = filterPosts.slice(indexOfFirstPost, indexOfLastPost)
+  const totalPages = Math.ceil(filterPosts.length / postsPerPage)
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="w-full">
@@ -99,12 +107,18 @@ const CheckPosts = () => {
         onChange={handleFilterClick}
       />
       <div className="grid grid-cols-5 gap-4">
-        {filterPosts?.map((post) => (
+        {currentPosts?.map((post) => (
           <Post key={post._id} post={post} manage={manage} />
         ))}
       </div>
 
-      {pages > 1 && <BasicPagination length={pages} />}
+      {totalPages > 1 && (
+        <BasicPagination
+          length={totalPages}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   )
 }

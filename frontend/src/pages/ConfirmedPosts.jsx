@@ -12,6 +12,8 @@ const ConfirmedPosts = () => {
   const [posts, setPosts] = useState([])
   const [filterPosts, setFilterPosts] = useState([])
   const [manage, setManage] = useState({})
+  const [currentPage, setCurrentPage] = useState(1); // Thêm state cho trang hiện tại
+    const [postsPerPage] = useState(5); // Số bài post mỗi trang
   const [selected, setSelected] = useState()
   const [filter, setFilter] = useState([
     {
@@ -95,6 +97,15 @@ const ConfirmedPosts = () => {
     }
   }, [filter, posts])
 
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = filterPosts.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPages = Math.ceil(filterPosts.length / postsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div className="w-full">
       <FilterRowBar
@@ -103,12 +114,18 @@ const ConfirmedPosts = () => {
         onChange={handleFilterClick}
       />
       <div className="grid grid-cols-5 gap-4">
-        {filterPosts?.map((post) => (
+        {currentPosts?.map((post) => (
           <Post key={post._id} post={post} manage={manage} />
         ))}
       </div>
 
-      {pages > 1 && <BasicPagination length={pages} />}
+      {totalPages > 1 && (
+        <BasicPagination
+          length={totalPages}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   )
 }

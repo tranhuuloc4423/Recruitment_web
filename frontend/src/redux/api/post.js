@@ -147,6 +147,32 @@ const getOwnerById = async (id, role) => {
   }
 }
 
+const getListPostByCandidateId = async (id, name) => {
+  try {
+    const res = await axios.get(`candidate/${name}/${id}`)
+    return res.data
+  } catch (error) {
+    console.log(error)
+    toast.error(error.response.data.message)
+  }
+}
+
+const savePost = async (id, candidateId) => {
+  try {
+    console.log("save")
+    const res = await axios.put(`post/${id}/saved`, {
+      candidateId : candidateId
+    })
+    toast.success('Lưu bài thành công!')
+    return res.data
+  } catch (error) {
+    console.log(error)
+    toast.error(error.response.data.message)
+  }
+}
+
+
+
 export {
   createPost,
   updatePost,
@@ -162,5 +188,7 @@ export {
   getAllPostedByOwner,
   updateCandidateApplied,
   getCandidatesByPost,
-  getOwnerById
+  getOwnerById,
+  getListPostByCandidateId,
+  savePost
 }
