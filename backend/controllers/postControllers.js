@@ -229,7 +229,6 @@ const postController = {
           return post
         })
       )
-
       res.status(200).json(updatedPosts)
     } catch (error) {
       console.error('Có lỗi xảy ra khi lấy các bài Post:', error)
@@ -250,12 +249,34 @@ const postController = {
     try {
       const posts = await Post.find({ status: 'confirmed' })
 
-      res.status(200).json(posts)
+      const currentDate = new Date()
+
+      const updatedPosts = await Promise.all(
+        posts.map(async (post) => {
+          if (post.date_expiration) {
+            const expirationDate = parseDate(post.date_expiration)
+
+            if (expirationDate < currentDate && post.status !== 'expired') {
+              post.status = 'expired'
+              await post.save()
+            }
+          }
+
+          return post
+        })
+      )
+
+      const confirmedPosts = updatedPosts.filter(
+        (post) => post.status === 'confirmed'
+      )
+
+      res.status(200).json(confirmedPosts)
     } catch (error) {
       console.error('Có lỗi xảy ra khi lấy các bài Post:', error)
       res.status(500).json({ message: 'Không thể lấy các bài Post.' })
     }
   },
+
   getAllExpiredPosts: async (req, res) => {
     try {
       const posts = await Post.find({ status: 'expired' })
@@ -376,7 +397,6 @@ const postController = {
   updateApproved: async (req, res) => {
     const { postId } = req.params
     const { candidateId } = req.body
-
     try {
       const candidate = await Candidate.findById(candidateId)
       if (!candidate) {
@@ -387,7 +407,6 @@ const postController = {
       if (!post) {
         return res.status(404).json({ message: 'Không tìm thấy bài viết' })
       }
-
       if (post.approved.includes(candidateId)) {
         return res
           .status(400)
