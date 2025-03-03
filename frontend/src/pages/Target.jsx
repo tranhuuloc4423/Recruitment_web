@@ -37,12 +37,14 @@ const Target = () => {
       },
       types: types,
       address: {
-        name: addressSelected.name,
-        code: addressSelected?.code
+        province: {
+          name: addressSelected.name,
+          code: addressSelected?.code
+        }
       },
       wforms: wforms
     }
-
+    console.log(data)
     updateTarget(currentRole._id, data, dispatch)
 
     setSkills(skills)

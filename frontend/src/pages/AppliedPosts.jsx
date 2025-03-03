@@ -68,7 +68,11 @@ const AppliedPosts = () => {
 
   useEffect(() => {
     getPosteds()
+  }, [])
+
+  useEffect(() => {
   }, [filterPosts])
+  
 
   useEffect(() => {
     const activeFilter = filter.find((f) => f.active)

@@ -76,7 +76,8 @@ const CVprofile = () => {
       </div>
       <div className="w-2/3 flex flex-col items-center justify-space-between gap-8">
         {/* Theme zone */}
-        <div ref={cvRef} className="overflow-y-auto h-[600px]">
+        {/* overflow-y-auto h-[600px] */}
+        <div ref={cvRef} className=""> 
           {themeState.activeTheme === 0 ? (
             currentRole.profileStatus === 100 ? (
               <CVTheme_0 color={activeColor} />

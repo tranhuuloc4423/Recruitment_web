@@ -39,6 +39,7 @@ const SavedPosts = () => {
 
   const getPosteds = async () => {
     const res = await getListPostByCandidateId(currentRole._id, "saved_jobs")
+    console.log(res)
     setPosts(res)
   }
 

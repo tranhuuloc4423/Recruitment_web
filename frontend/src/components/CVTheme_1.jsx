@@ -42,7 +42,7 @@ const CVTheme_1 = ({ color }) => {
       </div>
       {/* container */}
       <div className="flex flex-row gap-4 p-4 bg-white w-full h-fit">
-        <div className="flex flex-col gap-4 w-[35%]">
+        <div className="flex flex-col gap-4" style={{ width: '45%' }}>
           <div>
             <span className={`uppercase text-lg font-medium`} style={{ color }}>
               Thông tin cá nhân
@@ -55,7 +55,7 @@ const CVTheme_1 = ({ color }) => {
           })}
         </div>
         <Line direction="y" />
-        <div className="flex flex-col w-[65%]">
+        <div className="flex flex-col gap-4" style={{ width: '55%' }}>
           {renderOtherCV(otherInfo?.slice(3, 6), currentRole, {
             color: color
           })}

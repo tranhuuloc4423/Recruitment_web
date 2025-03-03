@@ -47,9 +47,9 @@ const Post = ({ post, select, manage }) => {
   const locationRouter = useLocation();
 
   const getBasicData = async () => {
-    console.log(post)
+    // console.log(post)
     const res = await getRoleData(authorType, author)
-    console.log(res)
+    // console.log(res)
     setBasicInfo(res?.basic_info)
     setOtherInfo(res?.other_info)
   }

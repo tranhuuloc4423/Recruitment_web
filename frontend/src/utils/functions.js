@@ -83,7 +83,7 @@ const renderOtherCV = (items, currentRole, options = {}) => {
   const { lineComponent = null, color } = options
 
   return items?.map((item, index) => (
-    <div key={index} className={`flex flex-col gap-4`}>
+    <div key={index} className={`flex flex-col`}>
       <div className="flex flex-col items-start justify-between">
         <span className={`text-xl font-semibold uppercase`} style={{ color }}>
           {item?.title}
@@ -94,7 +94,7 @@ const renderOtherCV = (items, currentRole, options = {}) => {
               {currentRole?.other_info?.[item?.name]?.map((skill) => (
                 <div
                   key={skill?.value}
-                  className="flex items-center gap-2 py-2"
+                  className="flex items-center"
                 >
                   <span>{skill?.name}</span>
                 </div>

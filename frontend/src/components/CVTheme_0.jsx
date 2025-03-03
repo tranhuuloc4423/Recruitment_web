@@ -40,9 +40,8 @@ const CVTheme_0 = ({ color }) => {
             </div>
             <div className="para-1">UX/UI Design</div>
           </div>
-          <div className="grid grid-cols-3 grid-flow-row gap-2 px-4">
-            {renderBasicCV(basicInfo?.slice(1, 4), currentRole)}
-            {renderBasicCV(basicInfo?.slice(4, 7), currentRole)}
+          <div className="grid grid-cols-2 grid-flow-row gap-2 px-4 auto-cols-fr">
+            {renderBasicCV(basicInfo?.slice(1, 7), currentRole)}
           </div>
         </div>
       </div>
