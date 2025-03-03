@@ -4,57 +4,6 @@ const Recruiter = require('../models/recruiterModel')
 const Candidate = require('../models/candidateModel')
 const { formatDate, parseDate } = require('../utils/funcs')
 const postController = {
-  updateAppliedJobs: async (candidateId, postId) => {
-    try {
-      const updatedCandidate = await Candidate.findOneAndUpdate(
-        { _id: candidateId },
-        { $push: { 'jobs.applied': postId } },
-        { new: true }
-      )
-
-      if (!updatedCandidate) {
-        throw new Error('Không tìm thấy ứng viên hoặc cập nhật thất bại')
-      }
-
-      return updatedCandidate
-    } catch (error) {
-      throw new Error(error.message)
-    }
-  },
-  updateApprovedJobs: async (candidateId, postId) => {
-    try {
-      const updatedCandidate = await Candidate.findOneAndUpdate(
-        { _id: candidateId },
-        { $push: { 'jobs.approved': postId } },
-        { new: true }
-      )
-
-      if (!updatedCandidate) {
-        throw new Error('Không tìm thấy ứng viên hoặc cập nhật thất bại')
-      }
-
-      return updatedCandidate
-    } catch (error) {
-      throw new Error(error.message)
-    }
-  },
-  updateSavedJobs: async (candidateId, postId) => {
-    try {
-      const updatedCandidate = await Candidate.findOneAndUpdate(
-        { _id: candidateId },
-        { $push: { 'jobs.saved': postId } },
-        { new: true }
-      )
-
-      if (!updatedCandidate) {
-        throw new Error('Không tìm thấy ứng viên hoặc cập nhật thất bại')
-      }
-
-      return updatedCandidate
-    } catch (error) {
-      throw new Error(error.message)
-    }
-  },
   createPost: async (req, res) => {
     const { postData } = req.body
 
@@ -262,7 +211,20 @@ const postController = {
             }
           }
 
-          return post
+          let author = await Recruiter.findById(post.author)
+          if (!author) {
+            author = await Admin.findById(post.author)
+          }
+
+          return {
+            ...post.toObject(),
+            author: author
+              ? {
+                  wform: author.other_info.wforms || null,
+                  type: author.other_info.types || null
+                }
+              : null
+          }
         })
       )
 
@@ -388,15 +350,44 @@ const postController = {
         await candidate.save()
       }
 
-      res.json({ message: 'Cập nhật ứng tuyển thành công', post })
+      let recruiterOrAdmin = await Recruiter.findById(post.author)
+      if (!recruiterOrAdmin) {
+        recruiterOrAdmin = await Admin.findById(post.author)
+      }
+
+      if (!recruiterOrAdmin) {
+        return res
+          .status(404)
+          .json({ message: 'Không tìm thấy người tạo bài viết' })
+      }
+
+      const newNotification = new Notification({
+        sender: candidateId,
+        recipient: recruiterOrAdmin._id,
+        title: 'Ứng viên mới đã ứng tuyển!',
+        desc: `Ứng viên ${
+          candidate.basic_info?.name || 'N/A'
+        } đã ứng tuyển vào bài viết "${post.title}".`
+      })
+
+      await newNotification.save()
+
+      recruiterOrAdmin.notifications.push(newNotification._id)
+      await recruiterOrAdmin.save()
+
+      res.json({
+        message: 'Cập nhật ứng tuyển thành công',
+        post,
+        notification: newNotification
+      })
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
   },
-
   updateApproved: async (req, res) => {
     const { postId } = req.params
     const { candidateId } = req.body
+
     try {
       const candidate = await Candidate.findById(candidateId)
       if (!candidate) {
@@ -407,6 +398,7 @@ const postController = {
       if (!post) {
         return res.status(404).json({ message: 'Không tìm thấy bài viết' })
       }
+
       if (post.approved.includes(candidateId)) {
         return res
           .status(400)
@@ -439,32 +431,64 @@ const postController = {
 
       await candidate.save()
 
-      res.json({ message: 'Duyệt ứng viên thành công', post })
+      let recruiterOrAdmin = await Recruiter.findById(post.author)
+      if (!recruiterOrAdmin) {
+        recruiterOrAdmin = await Admin.findById(post.author)
+      }
+
+      if (!recruiterOrAdmin) {
+        return res
+          .status(404)
+          .json({ message: 'Không tìm thấy người tạo bài viết' })
+      }
+
+      const newNotification = new Notification({
+        sender: recruiterOrAdmin._id,
+        recipient: candidate._id,
+        title: 'Bạn đã được duyệt cho công việc!',
+        desc: `Nhà tuyển dụng "${
+          recruiterOrAdmin.basic_info?.name || 'N/A'
+        }" đã chấp nhận bạn vào công việc "${post.title}".`
+      })
+
+      await newNotification.save()
+
+      candidate.notifications.push(newNotification._id)
+      await candidate.save()
+
+      res.json({
+        message: 'Duyệt ứng viên thành công',
+        post,
+        notification: newNotification
+      })
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
   },
-  updateSaved: async (req, res) => {
+  updateSavedJob: async (req, res) => {
     const { postId } = req.params
     const { candidateId } = req.body
 
     try {
-      const candidate = await Candidate.findById(candidateId)
+      const [candidate, post] = await Promise.all([
+        Candidate.findByIdAndUpdate(
+          candidateId,
+          { $addToSet: { 'jobs.saved': postId } },
+          { new: true }
+        ),
+        Post.findByIdAndUpdate(
+          postId,
+          { $addToSet: { saved: candidateId } },
+          { new: true }
+        )
+      ])
+
       if (!candidate) {
         return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
       }
-
-      const post = await Post.findByIdAndUpdate(
-        postId,
-        { $push: { saved: candidateId } },
-        { new: true }
-      )
-
       if (!post) {
         return res.status(404).json({ message: 'Không tìm thấy bài viết' })
       }
-
-      await updateSavedJobs(candidateId, postId)
 
       res.json({ message: 'Lưu công việc thành công', post })
     } catch (error) {

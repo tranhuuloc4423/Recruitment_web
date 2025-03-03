@@ -11,7 +11,7 @@ const {
   getPostByUserId,
   getPostById,
   updateApplied,
-  updateSaved,
+  updateSavedJob,
   updateStatus,
   updateApproved,
   getAppliedCandidatesByPostId,
@@ -30,7 +30,7 @@ router.get('/:postId', getPostById)
 router.get('/:postId/applied', getAppliedCandidatesByPostId)
 router.put('/:postId/applied', updateApplied)
 router.put('/:postId/approved', updateApproved)
-router.put('/:postId/saved', updateSaved)
+router.put('/:postId/saved', updateSavedJob)
 router.put('/:postId/status', updateStatus)
 router.get('/candidate/:candidateId', getCandidateById)
 

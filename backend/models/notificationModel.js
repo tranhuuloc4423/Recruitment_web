@@ -2,23 +2,10 @@ const mongoose = require('mongoose')
 
 const notiSchema = new mongoose.Schema(
   {
-    sender: mongoose.Schema.Types.ObjectId,
-    recipient: mongoose.Schema.Types.ObjectId,
-    time: {
-      type: String,
-      default: '7 days'
-    },
-    title: {
-      type: String
-    },
-    desc: {
-      type: String
-    },
-    expiresAt: {
-      type: Date,
-      default: Date.now,
-      index: { expires: 0 }
-    }
+    sender: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    recipient: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    title: { type: String, required: true },
+    desc: { type: String, required: true }
   },
   { timestamps: true }
 )

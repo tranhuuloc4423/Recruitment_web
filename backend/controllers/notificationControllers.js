@@ -6,42 +6,13 @@ const Candidate = require('../models/candidateModel')
 const notiControllers = {
   createNotification: async (req, res) => {
     try {
-      const { sender, recipient, title, desc, time } = req.body
-
-      let expiresAt = new Date()
-      switch (time) {
-        case '1 day':
-          expiresAt.setDate(expiresAt.getDate() + 1)
-          break
-        case '2 days':
-          expiresAt.setDate(expiresAt.getDate() + 2)
-          break
-        case '3 days':
-          expiresAt.setDate(expiresAt.getDate() + 3)
-          break
-        case '4 days':
-          expiresAt.setDate(expiresAt.getDate() + 4)
-          break
-        case '5 days':
-          expiresAt.setDate(expiresAt.getDate() + 5)
-          break
-        case '6 days':
-          expiresAt.setDate(expiresAt.getDate() + 6)
-          break
-        case '7 days':
-          expiresAt.setDate(expiresAt.getDate() + 7)
-          break
-        default:
-          expiresAt.setDate(expiresAt.getDate() + 7)
-      }
+      const { sender, recipient, title, desc } = req.body
 
       const newNotification = new Notification({
         sender,
         recipient,
         title,
-        desc,
-        time,
-        expiresAt
+        desc
       })
 
       await newNotification.save()

@@ -46,10 +46,6 @@ const postSchema = new mongoose.Schema(
             name: { type: String },
             code: { type: String }
           }
-          // ward: {
-          //   name: { type: String },
-          //   code: { type: String }
-          // }
         }
       ]
     },
