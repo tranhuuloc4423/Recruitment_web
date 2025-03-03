@@ -218,12 +218,9 @@ const postController = {
 
           return {
             ...post.toObject(),
-            author: author
-              ? {
-                  wform: author.other_info.wforms || null,
-                  type: author.other_info.types || null
-                }
-              : null
+            // authorId: post.author,
+            wforms: author?.other_info?.wforms || null,
+            types: author?.other_info?.types || null
           }
         })
       )
