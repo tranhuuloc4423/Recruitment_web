@@ -4,6 +4,7 @@ import Input from '../components/Input'
 import Button from '../components/Button'
 import { changePassword } from '../redux/api/auth'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const Settings = () => {
   const { currentUser } = useSelector((state) => state.auth)
@@ -13,6 +14,7 @@ const Settings = () => {
     new: '',
     renew: ''
   })
+  const [errors, setErrors] = useState({})
 
   const inputs = [
     {
@@ -20,7 +22,7 @@ const Settings = () => {
       name: 'old',
       type: 'password',
       placeholder: 'Mật khẩu cũ',
-      pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$'
+      pattern: /^.{6,}$/
     },
     {
       id: 2,
@@ -28,43 +30,66 @@ const Settings = () => {
       type: 'password',
       placeholder: 'Mật khẩu mới',
       error: 'Mật khẩu chứa ít nhất 6 ký tự',
-      pattern: '.{6,}'
+      pattern: /^.{6,}$/
     },
     {
       id: 3,
       name: 'renew',
       type: 'password',
       placeholder: 'Nhập lại mật khẩu mới',
-      // error: values.new,
-      pattern: '.{6,}'
+      error: 'Mật khẩu phải trùng khớp',
+      pattern: /^.{6,}$/
     }
   ]
 
   const onChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value })
+    const { name, value } = e.target
+    setValues({ ...values, [name]: value })
+
+    // Validate ngay khi người dùng nhập
+    const input = inputs.find((input) => input.name === name)
+    if (input?.pattern && !input.pattern.test(value)) {
+      setErrors({ ...errors, [name]: input.error })
+    } else {
+      const { [name]: removedError, ...rest } = errors
+      setErrors(rest)
+    }
   }
 
   const handleSubmit = () => {
-    if (!values.old) {
-      return
+    // Validate toàn bộ form trước khi submit
+    let formIsValid = true
+    const newErrors = {}
+
+    inputs.forEach((input) => {
+      if (input.required && !values[input.name]) {
+        newErrors[input.name] = `${input.label} là bắt buộc.`
+        formIsValid = false
+      } else if (
+        input.pattern &&
+        !input.pattern.test(values[input.name] || '')
+      ) {
+        newErrors[input.name] = input.error
+        formIsValid = false
+      }
+    })
+    if(values.new !== values.renew) {
+      formIsValid = false
     }
 
-    // Kiểm tra mật khẩu mới
-    if (!values.new || values.new.length < 6) {
-      return
-    }
-
-    // Kiểm tra nhập lại mật khẩu mới
-    if (values.new !== values.renew) {
-      return
-    }
+    setErrors(newErrors)
 
     const data = {
       oldPassword: values.old,
       newPassword: values.new
     }
 
-    changePassword(currentUser?._id, data, navigate)
+    if (formIsValid) {
+      console.log('Form submitted successfully:', values)
+      changePassword(currentUser?._id, data, navigate)
+    } else {
+      toast.warn('Vui lòng nhập thông tin hợp lệ')
+    }
   }
 
   return (
@@ -92,9 +117,11 @@ const Settings = () => {
             {inputs.map((input) => (
               <Input
                 key={input.id}
+                className="w-full"
                 {...input}
                 value={values[input.name]}
                 onChange={onChange}
+                error={errors[input.name]}
               />
             ))}
             <Button label={'Cập nhật mật khẩu'} onClick={handleSubmit} />

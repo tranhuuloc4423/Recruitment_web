@@ -20,7 +20,7 @@ const CVTheme_0 = ({ color }) => {
   }, [currentRole.basic_info, currentRole.other_info, basicInfo, otherInfo])
 
   return (
-    <div className="w-[794px] flex flex-col px-8 py-2">
+    <div className="w-[794px] flex flex-col mx-8 my-2">
       {/* header */}
       <div
         className={`p-4 flex flex-row gap-4 items-center w-full h-[192px]`}

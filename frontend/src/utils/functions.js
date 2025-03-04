@@ -114,6 +114,11 @@ const renderOtherCV = (items, currentRole, options = {}) => {
   ))
 }
 
+const stripHtml = (html) => {
+  if (!html) return '';
+  return html.replace(/<[^>]+>/g, ''); // Removes all HTML tags
+};
+
 export {
   convertFile,
   convertFileToURL,
@@ -122,5 +127,6 @@ export {
   convertStringtoDate,
   convertDatetoString,
   renderBasicCV,
-  renderOtherCV
+  renderOtherCV,
+  stripHtml
 }
