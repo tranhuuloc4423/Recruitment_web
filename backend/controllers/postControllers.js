@@ -1,8 +1,10 @@
 const Post = require('../models/postModel')
+const Notification = require('../models/notificationModel')
 const Admin = require('../models/adminModel')
 const Recruiter = require('../models/recruiterModel')
 const Candidate = require('../models/candidateModel')
 const { formatDate, parseDate } = require('../utils/funcs')
+
 const postController = {
   createPost: async (req, res) => {
     const { postData } = req.body

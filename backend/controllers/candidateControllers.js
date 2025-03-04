@@ -373,6 +373,18 @@ const candidateControllers = {
     } catch (error) {
       res.status(500).json({ message: 'Lỗi máy chủ', error })
     }
+  },
+  getNotification: async (req, res) => {
+    try {
+      const { id } = req.params
+      const candidate = await Candidate.findById(id).populate('notification')
+      if (!candidate) {
+        return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
+      }
+      res.status(200).json(candidate.jobs.recent)
+    } catch (error) {
+      console.error(error)
+    }
   }
 }
 
