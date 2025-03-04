@@ -7,7 +7,8 @@ const {
   getConfirmedPosts,
   getPostedPosts,
   getExpiredPosts,
-  getDataByIdRole
+  getDataByIdRole,
+  getNotification
 } = require('../controllers/recruiterControllers')
 
 const router = require('express').Router()
@@ -21,5 +22,6 @@ router.get('/posts/:id', getPosts)
 router.get('/confirmed/:id', getConfirmedPosts)
 router.get('/posted/:id', getPostedPosts)
 router.get('/expired/:id', getExpiredPosts)
+router.get('/notification/:id', getNotification)
 
 module.exports = router

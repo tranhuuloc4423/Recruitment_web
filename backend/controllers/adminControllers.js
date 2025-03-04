@@ -256,6 +256,18 @@ const adminControllers = {
     } catch (error) {
       res.status(500).json({ message: 'Lỗi máy chủ', error })
     }
+  },
+  getNotification: async (req, res) => {
+    try {
+      const { id } = req.params
+      const admin = await Admin.findById(id).populate('notifications')
+      if (!admin) {
+        return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
+      }
+      res.status(200).json(admin.notifications)
+    } catch (error) {
+      console.error(error)
+    }
   }
 }
 
