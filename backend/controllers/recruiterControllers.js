@@ -266,6 +266,18 @@ const recruiterControllers = {
     } catch (error) {
       res.status(500).json({ message: 'Lỗi máy chủ', error })
     }
+  },
+  getNotification: async (req, res) => {
+    try {
+      const { id } = req.params
+      const recruiter = await Recruiter.findById(id).populate('notifications')
+      if (!recruiter) {
+        return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
+      }
+      res.status(200).json(recruiter.notifications)
+    } catch (error) {
+      console.error(error)
+    }
   }
 }
 
