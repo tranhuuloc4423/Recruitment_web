@@ -65,9 +65,9 @@ const notiControllers = {
 
   getNotificationsBySender: async (req, res) => {
     try {
-      const { senderId } = req.params
+      const { id } = req.params
 
-      const notifications = await Notification.find({ sender: senderId })
+      const notifications = await Notification.find({ sender: id })
 
       const enrichedNotifications = await Promise.all(
         notifications.map(async (notification) => {
@@ -110,9 +110,9 @@ const notiControllers = {
 
   getNotificationsByRecipient: async (req, res) => {
     try {
-      const { recipientId } = req.params
+      const { id } = req.params
 
-      const notifications = await Notification.find({ recipient: recipientId })
+      const notifications = await Notification.find({ recipient: id })
 
       const enrichedNotifications = await Promise.all(
         notifications.map(async (notification) => {
@@ -150,6 +150,33 @@ const notiControllers = {
       res
         .status(500)
         .json({ message: 'Lỗi khi lấy thông báo theo người nhận', error })
+    }
+  },
+  deleteNotification: async (req, res) => {
+    try {
+      const { id } = req.params
+
+      const notification = await Notification.findByIdAndDelete(id)
+      if (!notification) {
+        return res.status(404).json({ message: 'Thông báo không tồn tại' })
+      }
+
+      await Admin.updateMany(
+        { notifications: id },
+        { $pull: { notifications: id } }
+      )
+      await Recruiter.updateMany(
+        { notifications: id },
+        { $pull: { notifications: id } }
+      )
+      await Candidate.updateMany(
+        { notifications: id },
+        { $pull: { notifications: id } }
+      )
+
+      res.status(200).json({ message: 'Xóa thông báo thành công' })
+    } catch (error) {
+      res.status(500).json({ message: 'Lỗi khi xóa thông báo', error })
     }
   }
 }
