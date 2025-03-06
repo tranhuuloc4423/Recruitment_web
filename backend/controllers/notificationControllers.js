@@ -66,8 +66,41 @@ const notiControllers = {
   getNotificationsBySender: async (req, res) => {
     try {
       const { senderId } = req.params
+
       const notifications = await Notification.find({ sender: senderId })
-      res.status(200).json(notifications)
+
+      const enrichedNotifications = await Promise.all(
+        notifications.map(async (notification) => {
+          if (!notification.sender) {
+            return {
+              ...notification.toObject(),
+              senderName: null,
+              senderRole: null
+            }
+          }
+
+          const senderInfo =
+            (await Admin.findOne(
+              { UserId: notification.sender },
+              'basic_info.name'
+            )) ||
+            (await Candidate.findOne(
+              { UserId: notification.sender },
+              'basic_info.name'
+            )) ||
+            (await Recruiter.findOne(
+              { UserId: notification.sender },
+              'basic_info.name'
+            ))
+
+          return {
+            ...notification.toObject(),
+            senderName: senderInfo ? senderInfo.basic_info.name : null
+          }
+        })
+      )
+
+      res.status(200).json(enrichedNotifications)
     } catch (error) {
       res
         .status(500)
@@ -78,8 +111,41 @@ const notiControllers = {
   getNotificationsByRecipient: async (req, res) => {
     try {
       const { recipientId } = req.params
+
       const notifications = await Notification.find({ recipient: recipientId })
-      res.status(200).json(notifications)
+
+      const enrichedNotifications = await Promise.all(
+        notifications.map(async (notification) => {
+          if (!notification.sender) {
+            return {
+              ...notification.toObject(),
+              senderName: null,
+              senderRole: null
+            }
+          }
+
+          const senderInfo =
+            (await Admin.findOne(
+              { UserId: notification.sender },
+              'basic_info.name'
+            )) ||
+            (await Candidate.findOne(
+              { UserId: notification.sender },
+              'basic_info.name'
+            )) ||
+            (await Recruiter.findOne(
+              { UserId: notification.sender },
+              'basic_info.name'
+            ))
+
+          return {
+            ...notification.toObject(),
+            senderName: senderInfo ? senderInfo.basic_info.name : null
+          }
+        })
+      )
+
+      res.status(200).json(enrichedNotifications)
     } catch (error) {
       res
         .status(500)
