@@ -7,12 +7,21 @@ import Button from '../components/Button'
 import { FiDownload } from 'react-icons/fi'
 import CVTheme_0 from '../components/CVTheme_0'
 import CVTheme_1 from '../components/CVTheme_1'
-// import html2canvas from 'html2canvas'
-// import jsPDF from 'jspdf'
-
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import CVTheme_0_PDF from '../components/CVTheme_0_PDF'
+import CVTheme_1_PDF from '../components/CVTheme_1_pdf'
+import info from '../utils/infos'
 const CVprofile = () => {
   const { currentRole } = useSelector((state) => state.app)
   const [bg, setBg] = useState('#b6ceff')
+  const [otherInfo, setOtherInfo] = useState([])
+  const [basicInfo, setBasicInfo] = useState([])
+
+  useEffect(() => {
+    let renderInfo = info.find((item) => item?.name === 'candidate')
+    setBasicInfo(renderInfo?.basicInfo)
+    setOtherInfo(renderInfo?.otherInfo)
+  }, [])
   const [themeState, setThemeState] = useState({
     activeTheme: 0,
     activeColor: 0, // Chỉ số của màu đang active trong theme hiện tại
@@ -27,8 +36,25 @@ const CVprofile = () => {
   })
   const cvRef = useRef(null)
 
-  const downloadPDF = () => {
-    console.log(1)
+  const getPDFDocument = () => {
+    if (currentRole.profileStatus !== 100) {
+      return null // Không tạo PDF nếu profile chưa hoàn thiện
+    }
+    return themeState.activeTheme === 0 ? (
+      <CVTheme_0_PDF
+        color={activeColor}
+        currentRole={currentRole}
+        basicInfo={basicInfo}
+        otherInfo={otherInfo}
+      />
+    ) : (
+      <CVTheme_1_PDF
+        color={activeColor}
+        currentRole={currentRole}
+        basicInfo={basicInfo}
+        otherInfo={otherInfo}
+      />
+    )
   }
 
   const handleThemeChange = (themeIndex) => {
@@ -77,15 +103,19 @@ const CVprofile = () => {
       <div className="w-2/3 flex flex-col items-center justify-space-between gap-8">
         {/* Theme zone */}
         {/* overflow-y-auto h-[600px] */}
-        <div ref={cvRef} className=""> 
+        <div ref={cvRef} className="">
           {themeState.activeTheme === 0 ? (
             currentRole.profileStatus === 100 ? (
-              <CVTheme_0 color={activeColor} />
+              <>
+                <CVTheme_0 color={activeColor} />
+              </>
             ) : (
               <img src={cv_t_0} />
             )
           ) : currentRole.profileStatus === 100 ? (
-            <CVTheme_1 color={activeColor} />
+            <>
+              <CVTheme_1 color={activeColor} />
+            </>
           ) : (
             <img src={cv_t_1} />
           )}
@@ -111,12 +141,25 @@ const CVprofile = () => {
 
           <div className="flex items-center gap-4">
             <span className="">Hoàn thiện hồ sơ để tải CV</span>
-            <Button
-              label={'Tải CV'}
-              iconPosition="left"
-              icon={<FiDownload color="white" size={24} />}
-              onClick={() => downloadPDF()}
-            />
+
+            {currentRole.profileStatus === 100 && (
+              <PDFDownloadLink
+                document={getPDFDocument()}
+                fileName={`cv_theme_${themeState.activeTheme}.pdf`}
+              >
+                {({ loading }) =>
+                  loading ? (
+                    'Đang tạo PDF...'
+                  ) : (
+                    <Button
+                      label={'Tải CV'}
+                      iconPosition="left"
+                      icon={<FiDownload color="white" size={24} />}
+                    />
+                  )
+                }
+              </PDFDownloadLink>
+            )}
           </div>
         </div>
       </div>
