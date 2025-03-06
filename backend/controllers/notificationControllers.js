@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 const Notification = require('../models/notificationModel')
 const Admin = require('../models/adminModel')
 const Recruiter = require('../models/recruiterModel')
@@ -160,29 +161,23 @@ const notiControllers = {
         return res.status(400).json({ message: 'ID không hợp lệ' })
       }
 
-      const notification = await Notification.findById(id)
+      const notification = await Notification.findByIdAndDelete(id)
       if (!notification) {
         return res.status(404).json({ message: 'Thông báo không tồn tại' })
       }
 
-      const recipientId = notification.recipient
-
-      await Admin.updateOne(
-        { userId: recipientId },
+      await Admin.updateMany(
+        { notifications: id },
         { $pull: { notifications: id } }
       )
-
-      await Recruiter.updateOne(
-        { userId: recipientId },
+      await Recruiter.updateMany(
+        { notifications: id },
         { $pull: { notifications: id } }
       )
-
-      await Candidate.updateOne(
-        { userId: recipientId },
+      await Candidate.updateMany(
+        { notifications: id },
         { $pull: { notifications: id } }
       )
-
-      await Notification.findByIdAndDelete(id)
 
       res.status(200).json({ message: 'Xóa thông báo thành công' })
     } catch (error) {
