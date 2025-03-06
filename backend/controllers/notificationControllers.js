@@ -156,26 +156,37 @@ const notiControllers = {
     try {
       const { id } = req.params
 
-      const notification = await Notification.findByIdAndDelete(id)
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: 'ID không hợp lệ' })
+      }
+
+      const notification = await Notification.findById(id)
       if (!notification) {
         return res.status(404).json({ message: 'Thông báo không tồn tại' })
       }
 
-      await Admin.updateMany(
-        { notifications: id },
-        { $pull: { notifications: id } }
-      )
-      await Recruiter.updateMany(
-        { notifications: id },
-        { $pull: { notifications: id } }
-      )
-      await Candidate.updateMany(
-        { notifications: id },
+      const recipientId = notification.recipient
+
+      await Admin.updateOne(
+        { userId: recipientId },
         { $pull: { notifications: id } }
       )
 
+      await Recruiter.updateOne(
+        { userId: recipientId },
+        { $pull: { notifications: id } }
+      )
+
+      await Candidate.updateOne(
+        { userId: recipientId },
+        { $pull: { notifications: id } }
+      )
+
+      await Notification.findByIdAndDelete(id)
+
       res.status(200).json({ message: 'Xóa thông báo thành công' })
     } catch (error) {
+      console.error('Lỗi khi xóa thông báo:', error)
       res.status(500).json({ message: 'Lỗi khi xóa thông báo', error })
     }
   }
