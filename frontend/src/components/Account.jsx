@@ -34,7 +34,7 @@ const Account = () => {
       className="border border-white rounded p-2 flex items-center gap-2 relative cursor-pointer"
       onClick={() => setActive(!active)}
     >
-      <img src={avatar} alt="avatar" className="rounded-full w-10 h-10" />
+      <img src={avatar} alt="avatar" className="rounded-full w-10 h-10 object-cover" />
       <span className="text-white select-none whitespace-nowrap overflow-hidden text-ellipsis">
         {currentRole?.basic_info?.name}
       </span>

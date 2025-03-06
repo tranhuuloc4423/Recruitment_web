@@ -55,6 +55,14 @@ const formatDate = (date, format = 'dd/mm/yyyy') => {
   }
 }
 
+const formatDateIso = (isoString) => {
+  console.log(typeof isoString)
+  const year = isoString?.slice(0, 4);
+  const month = isoString?.slice(5, 7) // Tháng trong JS bắt đầu từ 0
+  const day = isoString?.slice(8, 10);
+  return `${day}/${month}/${year}`;
+}
+
 const convertDatetoString = (date) => {
   return `${date.$D}/${date.$M + 1}/${date.$y}`
 }
@@ -128,5 +136,6 @@ export {
   convertDatetoString,
   renderBasicCV,
   renderOtherCV,
-  stripHtml
+  stripHtml,
+  formatDateIso
 }

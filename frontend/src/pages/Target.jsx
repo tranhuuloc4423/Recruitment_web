@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Filter } from '../components/'
-import { updateTarget } from '../redux/api/app'
+import { getTarget, updateTarget } from '../redux/api/app'
 import { useDispatch, useSelector } from 'react-redux'
 
 const Target = () => {
@@ -45,18 +45,16 @@ const Target = () => {
       wforms: wforms
     }
     console.log(data)
-    updateTarget(currentRole._id, data, dispatch)
+    updateTarget(currentRole._id, data)
 
     setSkills(skills)
     setSalarys(salarys)
     setTags(tags)
     setAddressSelected(address)
-    console.log(data)
   }
 
   useEffect(() => {
-    console.log(address)
-    console.log(skillsDB)
+    // getTarget(currentRole._id, dispatch)
   }, [])
 
   return (

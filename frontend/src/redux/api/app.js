@@ -59,18 +59,27 @@ const updateOtherInfo = async (id, data, dispatch, role) => {
   }
 }
 
-const updateTarget = async (id, data, dispatch) => {
+const updateTarget = async (id, data) => {
   try {
-    console.log(data)
     await axios.put(`/candidate/target/${id}`, data)
-    const res = axios.get(`/candidate/${id}`)
-    dispatch(setTarget(res.data?.target))
+    // const res = axios.get(`/candidate/${id}`)
+    // dispatch(setTarget(res.data?.target))
     toast.success('Cập nhật thông tin thành công!')
   } catch (error) {
     console.log(error)
     toast.error(error.response.data.message)
   }
 }
+
+const getTarget = async (id, dispatch) => {
+  try {
+    const res = axios.get(`/candidate/${id}`)
+    dispatch(setTarget(res.data?.target))
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 
 const getAddress = async (dispatch) => {
   try {
@@ -90,6 +99,26 @@ const getCandidate = async (id) => {
   }
 }
 
+const GetNotification = async (id) => {
+  try {
+    const result = await axios.get(`/notification/${id}/recipient`)
+    return result.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const deleteNotification = async (id) => {
+  try {
+    const result = await axios.delete(`/notification/${id}`)
+    toast.success(result.data.message)
+    return result.data
+  } catch (error) {
+    toast.error(error)
+    console.log(error)
+  }
+}
+
 export {
   updateBasicInfo,
   updateOtherInfo,
@@ -97,5 +126,8 @@ export {
   getById,
   getAddress,
   getSkills,
-  getCandidate
+  getCandidate,
+  GetNotification,
+  deleteNotification,
+  getTarget
 }
