@@ -29,6 +29,7 @@ import { setCurrentUser } from './redux/slices/authSlice'
 import { getAddress, getById, getSkills } from './redux/api/app'
 import { CreatePost } from './components'
 import ManagePostApplied from './pages/ManagePostApplied'
+import CustomToast from './components/CustomToast'
 
 const {
   HOME,

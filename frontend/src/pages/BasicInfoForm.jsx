@@ -13,14 +13,14 @@ import Address from '../components/Address'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
-const BasicInfoForm = ({ open, setOpen }) => {
+const BasicInfoForm = ({ open, setOpen, data }) => {
   const { currentUser } = useSelector((state) => state.auth)
   const { currentRole } = useSelector((state) => state.app)
   const { address } = useSelector((state) => state.address)
   const { basicInfo } = info.find((info) => info.name === currentUser?.role)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [image, setImage] = useState(null)
+  const [image, setImage] = useState(data?.image?.url || null)
   const [values, setValues] = useState({})
   const [errors, setErrors] = useState({})
   const [gender, setGender] = useState('')

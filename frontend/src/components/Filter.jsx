@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Dropdown, Button, Tag, RangeSlider, Line } from './'
 import DropdownSearch from './DropdownSearch'
+import { getById, getTarget } from '../redux/api/app'
+import { useLocation } from 'react-router-dom'
 
 const Filter = (props) => {
   const {
@@ -20,6 +22,15 @@ const Filter = (props) => {
     isTarget
   } = props
   const { currentRole } = useSelector((state) => state.app)
+  // const { currentUser } = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
+  const location = useLocation()
+
+  useEffect(() => {
+    if (currentRole?._id && location.pathname === '/info/target') {
+      getTarget(currentRole._id, dispatch)
+    }
+  }, [location.pathname])
 
   useEffect(() => {
     if (currentRole?.target) {

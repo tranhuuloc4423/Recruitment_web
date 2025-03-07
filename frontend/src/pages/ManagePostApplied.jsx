@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { getCandidatesByPost, getOwnerById, getPost } from '../redux/api/post'
+import {
+  getCandidatesByPost,
+  getOwnerById,
+  getPost,
+  updateApproved
+} from '../redux/api/post'
 import { getCandidate, getCandidates } from '../redux/api/app'
 import { useSelector } from 'react-redux'
 import { Button, Tag } from '../components'
 import { GoInfo } from 'react-icons/go'
+import Swal from 'sweetalert2'
+import { Tooltip } from 'react-tooltip'
 
 const ManagePostApplied = () => {
   const { skillsDB } = useSelector((state) => state.app)
@@ -14,6 +21,7 @@ const ManagePostApplied = () => {
   const [post, setPost] = useState(null)
   const [owner, setOwner] = useState(null)
   const [candidates, setCandidates] = useState([])
+  const [descText, setDescContent] = useState('')
 
   const handleGetData = async () => {
     const res = await getPost(location.state.id)
@@ -24,6 +32,42 @@ const ManagePostApplied = () => {
     const res3 = await getCandidatesByPost(location.state.id)
     setCandidates(res3.applied)
     console.log(res3.applied)
+  }
+
+  const handleApproved = async (candidate) => {
+    Swal.fire({
+      title: 'Tôi nhắc bạn?',
+      text: `Bạn có chắc muốn duyệt ứng viên ${candidate.basic_info.name}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'suy nghĩ lại',
+      confirmButtonText: 'chắc chắn'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const postId = location.state.id
+        await updateApproved(postId, candidate._id)
+      }
+    })
+  }
+
+  const htmlToText = (htmlString) => {
+    const tempDiv = document.createElement('div')
+    tempDiv.innerHTML = htmlString
+    return tempDiv.textContent || tempDiv.innerText || ''
+  }
+
+  const addClassToElements = (htmlString, className) => {
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(htmlString, 'text/html')
+
+    // Lặp qua tất cả các phần tử con và thêm class
+    doc.body.querySelectorAll('*').forEach((el) => {
+      el.classList.add(...className.split(' '))
+    })
+
+    return doc.body.innerHTML
   }
 
   useEffect(() => {
@@ -83,7 +127,7 @@ const ManagePostApplied = () => {
       {/* Container */}
       <div className="py-4">
         <h2 className="text-lg font-semibold mb-4">Danh sách ứng viên</h2>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-5 gap-4">
           {candidates?.map((candidate, index) => (
             <div
               key={index}
@@ -99,13 +143,20 @@ const ManagePostApplied = () => {
                   {candidate.basic_info.name}
                 </h3>
               </div>
+
               <div
+                title={htmlToText(candidate.other_info.desc)}
+                data-tooltip-place="top"
                 className="text-center text-sm text-gray-700"
                 dangerouslySetInnerHTML={{
-                  __html: candidate.other_info.desc
+                  __html: addClassToElements(
+                    candidate.other_info.desc,
+                    'line-clamp-3 overflow-hidden text-ellipsis'
+                  )
                 }}
               />
-              <div className="flex gap-2 items-center">
+
+              <div className="flex gap-2 items-center flex-wrap">
                 <div>Kỹ năng :</div>
                 {candidate.other_info.skills.map((skill, index) => (
                   <Tag key={index} label={skill.name} />
@@ -113,7 +164,10 @@ const ManagePostApplied = () => {
               </div>
               <div className="flex gap-2 flex-col items-center w-full">
                 <Button label={'Xem hồ sơ CV'} />
-                <Button label={'Duyệt'} />
+                <Button
+                  label={'Duyệt'}
+                  onClick={() => handleApproved(candidate)}
+                />
               </div>
             </div>
           ))}
