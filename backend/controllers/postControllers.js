@@ -341,6 +341,12 @@ const postController = {
           .json({ message: 'Ứng viên đã ứng tuyển vào bài viết này' })
       }
 
+      if (post.approved.includes(candidateId)) {
+        return res
+          .status(400)
+          .json({ message: 'Ứng viên đã được duyệt ở bài viết này' })
+      }
+
       post.applied.push(candidateId)
       await post.save()
 
