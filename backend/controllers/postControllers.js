@@ -335,6 +335,10 @@ const postController = {
         return res.status(404).json({ message: 'Không tìm thấy bài viết' })
       }
 
+      if (post.quantity && post.applied.length >= post.quantity) {
+        return res.status(400).json({ message: 'Đã đủ người cho bài viết' })
+      }
+
       if (post.applied.includes(candidateId)) {
         return res
           .status(400)
@@ -411,9 +415,8 @@ const postController = {
       }
 
       if (post.quantity && post.approved.length >= post.quantity) {
-        post.status = 'completed'
         await post.save()
-        return res.status(400).json({ message: 'Đã đủ người được tuyển' })
+        return res.status(400).json({ message: 'Đã đủ người cho bài viết' })
       }
 
       post.approved.push(candidateId)
