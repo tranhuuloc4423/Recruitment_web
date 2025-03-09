@@ -72,4 +72,14 @@
   .slider .thumb {
     @apply w-6 h-6 rounded-full bg-primary cursor-pointer;
   }
+
+
+  #candidate_desc > * {
+    overflow: hidden;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+  }
 }

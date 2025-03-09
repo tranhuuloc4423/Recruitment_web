@@ -59,6 +59,17 @@ const updateConfirmed = async (id, data) => {
   }
 }
 
+const updateApproved = async (id, candidateId) => {
+  try {
+    const res = await axios.put(`/post/${id}/approved`, {candidateId: candidateId})
+    toast.success(res.data.message)
+    return res.data
+  } catch (error) {
+    toast.error(error.response.data.message)
+    console.log(error)
+  }
+}
+
 const removePost = async (id, data) => {
   try {
     await axios.delete(`/post/${id}/`, data)
@@ -190,5 +201,6 @@ export {
   getCandidatesByPost,
   getOwnerById,
   getListPostByCandidateId,
-  savePost
+  savePost,
+  updateApproved
 }

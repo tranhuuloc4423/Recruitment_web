@@ -74,7 +74,7 @@ const BasicInfo = () => {
             className="w-fit"
             onClick={() => setOpen(true)}
           />
-          {open && <BasicInfoForm open={open} setOpen={setOpen} />}
+          {open && <BasicInfoForm open={open} setOpen={setOpen} data={currentRole?.basic_info} />}
         </div>
       </div>
       <div className="bg-white rounded shadow-md w-full flex justify-center items-center">

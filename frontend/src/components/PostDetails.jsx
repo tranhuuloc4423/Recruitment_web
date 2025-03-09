@@ -86,13 +86,13 @@ const PostDetails = ({ id }) => {
             navigate(`/company/${post?.authorType}/${post?.author}`)
           }
         />
-        <span onClick={() => handleSavePost(post?._id)}>
-          {save ? (
-            <LuHeart size={24} color="red" fill='red'/>
-          ) : (
-            <LuHeart size={24} />
-          )}
-        </span>
+        <Button
+          label={'Theo dõi'}
+          className="bg-second text-black"
+          onClick={() =>
+            handleSavePost(post?._id)
+          }
+        />
       </div>
 
       <Line />
@@ -100,7 +100,7 @@ const PostDetails = ({ id }) => {
       <div className="grid grid-cols-2 grid-flow-row gap-2">
         <span className="flex flex-row items-center gap-2">
           <LuCircleDollarSign size={24} />
-          <span>{post?.salary} vnđ</span>
+          <span>{new Intl.NumberFormat('de-DE').format(post?.salary)} vnđ</span> 
         </span>
 
         <span className="flex flex-row items-center gap-2">

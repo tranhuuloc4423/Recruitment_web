@@ -59,11 +59,12 @@ const updateOtherInfo = async (id, data, dispatch, role) => {
   }
 }
 
-const updateTarget = async (id, data) => {
+const updateTarget = async (id,userId, data, dispatch) => {
   try {
     await axios.put(`/candidate/target/${id}`, data)
-    // const res = axios.get(`/candidate/${id}`)
-    // dispatch(setTarget(res.data?.target))
+    const res = await axios.get(`/candidate/${userId}`)
+    // console.log(res)
+    dispatch(setTarget(res.data?.target))
     toast.success('Cập nhật thông tin thành công!')
   } catch (error) {
     console.log(error)

@@ -35,7 +35,9 @@
     "react-slick": "^0.30.2",
     "react-slider": "^2.0.6",
     "react-toastify": "^10.0.5",
+    "react-tooltip": "^5.28.0",
     "redux": "^5.0.1",
+    "sweetalert2": "^11.17.2",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
