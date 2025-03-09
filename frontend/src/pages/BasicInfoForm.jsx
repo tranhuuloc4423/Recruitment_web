@@ -25,7 +25,7 @@ const BasicInfoForm = ({ open, setOpen, data }) => {
   const [image, setImage] = useState(null)
   const [values, setValues] = useState({})
   const [errors, setErrors] = useState({})
-  const [gender, setGender] = useState(data?.gender?.name || data?.gender || '')
+  const [gender, setGender] = useState(data?.gender || null)
   const [selectedProvince, setSelectedProvince] = useState(data?.address.province || null)
   const [selectedCity, setSelectedCity] = useState(data?.address.district || null)
 
@@ -114,8 +114,8 @@ const BasicInfoForm = ({ open, setOpen, data }) => {
         submitData.gender = gender
       }
 
-      // updateBasicInfo(currentRole._id, submitData, dispatch, currentUser.role)
-      // setOpen(false)
+      updateBasicInfo(currentRole._id, submitData, dispatch, currentUser.role)
+      setOpen(false)
     } else {
       toast.warn('Vui lòng nhập thông tin hợp lệ')
     }
