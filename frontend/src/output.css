@@ -1019,10 +1019,6 @@ video {
   flex: 1 1 0%;
 }
 
-.border-collapse {
-  border-collapse: collapse;
-}
-
 .origin-bottom-left {
   transform-origin: bottom left;
 }
@@ -1346,6 +1342,10 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.bg-opacity-50 {
+  --tw-bg-opacity: 0.5;
+}
+
 .bg-cover {
   background-size: cover;
 }
@@ -1464,11 +1464,6 @@ video {
   line-height: 2.25rem;
 }
 
-.text-base {
-  font-size: 1rem;
-  line-height: 1.5rem;
-}
-
 .text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem;
@@ -1507,10 +1502,6 @@ video {
 
 .italic {
   font-style: italic;
-}
-
-.leading-\[1\.6\] {
-  line-height: 1.6;
 }
 
 .text-\[\#C0D6E2\] {

@@ -20,14 +20,29 @@ const BasicInfoForm = ({ open, setOpen, data }) => {
   const { basicInfo } = info.find((info) => info.name === currentUser?.role)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [image, setImage] = useState(data?.image?.url || null)
+
+  // State khởi tạo từ dữ liệu cũ
+  const [image, setImage] = useState(null)
   const [values, setValues] = useState({})
   const [errors, setErrors] = useState({})
-  const [gender, setGender] = useState('')
+  const [gender, setGender] = useState(data?.gender?.name || data?.gender || '')
+  const [selectedProvince, setSelectedProvince] = useState(data?.address.province || null)
+  const [selectedCity, setSelectedCity] = useState(data?.address.district || null)
 
-  const [selectedProvince, setSelectedProvince] = useState(null)
-  const [selectedCity, setSelectedCity] = useState(null)
   const inputs = info.find((info) => info.name === currentUser?.role).basicInfo
+
+  useEffect(() => {
+    if (data) {
+      console.log(data)
+      const initialValues = {}
+      basicInfo.forEach((item) => {
+        if (item.name !== 'gender' && data[item.name]) {
+          initialValues[item.name] = data[item.name] || ''
+        }
+      })
+      setValues(initialValues)
+    }
+  }, [data, basicInfo])
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -65,40 +80,42 @@ const BasicInfoForm = ({ open, setOpen, data }) => {
     setErrors(newErrors)
 
     if (formIsValid) {
-      if (!image) {
+      if (!image && !data?.image) {
+        toast.warn('Vui lòng chọn ảnh')
         return
       }
-      const valuesCheck = Object.values(values).find(
-        (value) => value.trim() === ''
-      )
-      if (valuesCheck) return
-      if (!selectedProvince) return
-      if (!selectedCity) return
-      const imagebs64 = await convertFile(image)
-      let data
-      let additionalData = {
-        image: imagebs64,
+      const valuesCheck = Object.values(values).find((value) => value.trim() === '')
+      if (valuesCheck) {
+        toast.warn('Vui lòng điền đầy đủ thông tin')
+        return
+      }
+      if (!selectedProvince || !selectedCity) {
+        toast.warn('Vui lòng chọn địa chỉ')
+        return
+      }
+      let imageConvert
+      if(image === null && data?.image) {
+        imageConvert = data?.image.url
+      } else if(image) {
+        imageConvert = await convertFile(image)
+      }
+      
+      let submitData = {
+        ...values,
+        image: imageConvert,
         address: {
-          province: { name: selectedProvince.name },
-          district: { name: selectedCity.name }
+          province: { name: selectedProvince?.name },
+          district: { name: selectedCity?.name }
         }
       }
+      console.log(submitData)
 
-      currentUser.role === 'candidate'
-        ? (data = {
-            ...values,
-            gender,
-            ...additionalData
-          })
-        : (data = {
-            ...values,
-            ...additionalData
-          })
-      // console.log(data)
-      console.log(currentRole.basic_info)
-      updateBasicInfo(currentRole._id, data, dispatch, currentUser.role)
-      console.log(currentRole.basic_info)
-      setOpen(false)
+      if (currentUser.role === 'candidate') {
+        submitData.gender = gender
+      }
+
+      // updateBasicInfo(currentRole._id, submitData, dispatch, currentUser.role)
+      // setOpen(false)
     } else {
       toast.warn('Vui lòng nhập thông tin hợp lệ')
     }
@@ -120,40 +137,37 @@ const BasicInfoForm = ({ open, setOpen, data }) => {
           />
         </div>
         <Line />
-        <Avatar file={image} setFile={setImage} />
+        <Avatar file={image} setFile={setImage} initialImage={data?.image} />
 
         <div className="w-full flex flex-col gap-2">
           {basicInfo.map((item, index) => {
             if (index % 2 === 0) {
               return (
                 <div key={index} className="flex gap-4">
-                  {' '}
-                  {basicInfo
-                    .slice(index, index + 2)
-                    .map((subItem, subIndex) => {
-                      if (subItem.name === 'gender') {
-                        return (
-                          <Dropdown
-                            key={index + subIndex}
-                            label={subItem.label}
-                            options={subItem.options}
-                            selectedOption={gender}
-                            setSelectedOption={setGender}
-                          />
-                        )
-                      }
+                  {basicInfo.slice(index, index + 2).map((subItem, subIndex) => {
+                    if (subItem.name === 'gender') {
                       return (
-                        <Input
+                        <Dropdown
                           key={index + subIndex}
-                          className="flex-1"
-                          {...subItem}
-                          name={subItem.name}
-                          value={values[subItem.name]}
-                          onChange={handleChange}
-                          error={errors[subItem.name]}
+                          label={subItem.label}
+                          options={subItem.options}
+                          selectedOption={gender}
+                          setSelectedOption={setGender}
                         />
                       )
-                    })}
+                    }
+                    return (
+                      <Input
+                        key={index + subIndex}
+                        className="flex-1"
+                        {...subItem}
+                        name={subItem.name}
+                        value={values[subItem.name] || ''}
+                        onChange={handleChange}
+                        error={errors[subItem.name]}
+                      />
+                    )
+                  })}
                 </div>
               )
             }

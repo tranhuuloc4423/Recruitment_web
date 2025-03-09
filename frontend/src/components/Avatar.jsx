@@ -1,58 +1,60 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { CiCamera } from 'react-icons/ci'
-const Avatar = ({ file, setFile }) => {
-  const [blob, setBlob] = useState('')
-  const inputFileRef = useRef(null)
+import React, { useEffect, useRef, useState } from "react";
+import { CiCamera } from "react-icons/ci";
+
+const Avatar = ({ file, setFile, initialImage = "" }) => {
+  const [blob, setBlob] = useState(initialImage);
+  const inputFileRef = useRef(null);
 
   useEffect(() => {
     if (file) {
-      setBlob(URL.createObjectURL(file))
-      console.log(file)
-    }
+      const objectURL = URL.createObjectURL(file);
+      setBlob(objectURL);
 
-    return () => {
-      URL.revokeObjectURL(blob)
+      return () => URL.revokeObjectURL(objectURL);
     }
-  }, [file])
+  }, [file]);
 
   const onFileChange = (e) => {
-    const newFile = e.target.files[0]
+    const newFile = e.target.files[0];
+  
     if (newFile) {
-      if (!newFile.type.match('image.*')) {
-      } else {
-        inputFileRef.current && (inputFileRef.current.value = null)
-
-        setFile(newFile)
+      if (!newFile.type.startsWith("image/")) {
+        alert("Vui lòng chọn một file ảnh hợp lệ!");
+        return;
       }
+      inputFileRef.current.value = null; // Reset input file để chọn lại cùng ảnh nếu cần
+      setFile(newFile);
     }
-  }
+  };
+  
 
   return (
     <div
-      style={{
-        '--bg': `url(${blob})`
-      }}
-      onClick={() => inputFileRef.current && inputFileRef.current.click()}
-      className={`${
-        blob ? 'before-bg-file' : ''
-      } relative rounded-full overflow-hidden cursor-pointer h-[180px] w-[180px] mx-auto flex flex-col items-center border-2 border-collapse border-primary text-base leading-[1.6] select-none`}
+      onClick={() => inputFileRef.current.click()}
+      className={`relative rounded-full overflow-hidden cursor-pointer h-[180px] w-[180px] mx-auto flex items-center border-2 border-primary select-none ${
+        blob ? "before-bg-file" : ""
+      }`}
     >
-      {blob && (
+      {blob ? (
         <img
-          src={blob}
-          alt="Preview ảnh"
-          className="absolute top-0 left-0 w-full h-full object-cover "
+          src={blob?.url || blob}
+          alt="Avatar"
+          className="absolute top-0 left-0 w-full h-full object-cover"
         />
+      ) : (
+        <div className="flex items-center justify-center w-full h-full bg-gray-200">
+          <CiCamera size={32} color="#666" />
+        </div>
       )}
+
       <div
-        className={`absolute left-0 w-full h-full flex justify-center items-center bg-overlay transition-opacity ${
-          blob ? 'opacity-0 hover:opacity-100' : 'opacity-100'
+        className={`absolute left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 transition-opacity ${
+          blob ? "opacity-0 hover:opacity-100" : "opacity-100"
         }`}
       >
-        <span>
-          <CiCamera size={32} color="#fff" />
-        </span>
+        <CiCamera size={32} color="#fff" />
       </div>
+
       <input
         ref={inputFileRef}
         onChange={onFileChange}
@@ -61,7 +63,7 @@ const Avatar = ({ file, setFile }) => {
         hidden
       />
     </div>
-  )
-}
+  );
+};
 
-export default Avatar
+export default Avatar;

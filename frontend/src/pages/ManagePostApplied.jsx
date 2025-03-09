@@ -11,7 +11,6 @@ import { useSelector } from 'react-redux'
 import { Button, Tag } from '../components'
 import { GoInfo } from 'react-icons/go'
 import Swal from 'sweetalert2'
-import { Tooltip } from 'react-tooltip'
 
 const ManagePostApplied = () => {
   const { skillsDB } = useSelector((state) => state.app)

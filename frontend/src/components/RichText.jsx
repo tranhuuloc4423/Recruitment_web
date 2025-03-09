@@ -1,7 +1,8 @@
-import React, { useRef, useState } from 'react'
-import ReactQuill from 'react-quill'
-import '../customQuill.css'
-import { toast } from 'react-toastify'
+import React, { useRef, useState } from 'react';
+import ReactQuill from 'react-quill';
+import '../customQuill.css';
+import { toast } from 'react-toastify';
+
 const RichText = ({
   value,
   onChange,
@@ -11,33 +12,41 @@ const RichText = ({
   hasImage = false,
   max = 1000
 }) => {
-  const [charCount, setCharCount] = useState(0)
-  const richRef = useRef(null)
+  const [charCount, setCharCount] = useState(0);
+  const richRef = useRef(null);
+
   const handleChange = (newValue) => {
-    const plainText = newValue.replace(/<[^>]+>/g, '')
+    const plainText = newValue.replace(/<[^>]+>/g, ''); // Loại bỏ các thẻ HTML để đếm ký tự thực
+
+    // Kiểm tra nếu vượt quá giới hạn max
     if (plainText.length > max) {
-      toast.error(`Vui lòng nhập ít hơn ${max} ký tự`)
-      return
+      toast.error(`Vui lòng nhập ít hơn ${max} ký tự`);
+      return; // Không cho phép cập nhật nếu vượt quá giới hạn
     }
-    setCharCount(plainText.length)
-    onChange({ target: { name, value: newValue } })
-  }
+
+    // Nếu hợp lệ, cập nhật state và gọi onChange
+    setCharCount(plainText.length);
+    onChange({ target: { name, value: newValue } });
+  };
 
   const handleInsertTemplate = () => {
-    if (template) {
-      const templateText = template // Nội dung mẫu
-      let newValue
-      if (value) {
-        newValue = value + templateText
-      } else {
-        newValue = templateText
-      }
-      onChange({ target: { name, value: newValue } })
-      setCharCount(newValue.replace(/<[^>]+>/g, '').length)
-    } else {
-      return
+    if (!template) return;
+
+    const templateText = template; // Nội dung mẫu
+    const currentPlainText = value ? value.replace(/<[^>]+>/g, '') : '';
+    const newPlainText = currentPlainText + templateText.replace(/<[^>]+>/g, '');
+
+    // Kiểm tra nếu chèn mẫu vượt quá giới hạn
+    if (newPlainText.length > max) {
+      toast.error(`Nội dung mẫu vượt quá giới hạn ${max} ký tự`);
+      return;
     }
-  }
+
+    // Nếu hợp lệ, chèn mẫu
+    const newValue = value ? value + templateText : templateText;
+    onChange({ target: { name, value: newValue } });
+    setCharCount(newPlainText.length);
+  };
 
   const modules = {
     toolbar: [
@@ -53,7 +62,7 @@ const RichText = ({
         hasImage ? 'image' : ''
       ]
     ]
-  }
+  };
 
   return (
     <div className="w-full">
@@ -79,7 +88,7 @@ const RichText = ({
         {charCount} ký tự
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default RichText
+export default RichText;

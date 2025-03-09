@@ -11,17 +11,20 @@ const Address = ({
   const [provinces, setProvinces] = useState(provincesData || [])
   const [cities, setCities] = useState([])
 
-  // UseEffect để lấy danh sách thành phố khi selectedProvince thay đổi
   useEffect(() => {
-    if (selectedProvince) {
+    console.log(selectedProvince)
+    console.log(provincesData)
+    if (selectedProvince && selectedCity == null) {
       setCities(selectedProvince.districts || [])
 
       setSelectedCity(null)
     } else if (selectedProvince?.districts === null) {
       setCities([])
       setSelectedCity(null)
+    } else if(selectedProvince && selectedCity) {
+      setCities(provincesData.find((province) => province.code === selectedProvince.code).districts)
     }
-  }, [selectedProvince])
+  }, [selectedProvince, selectedCity])
 
   return (
     <div className="flex flex-row justify-between w-full gap-4">
