@@ -556,6 +556,7 @@ const postController = {
       res.status(500).json({ message: error.message })
     }
   },
+
   getAppliedCandidatesByPostId: async (req, res) => {
     const { postId } = req.params
 
@@ -567,6 +568,21 @@ const postController = {
       }
 
       res.status(200).json({ applied: post.applied })
+    } catch (error) {
+      res.status(500).json({ message: error.message })
+    }
+  },
+  getApprovedCandidatesByPostId: async (req, res) => {
+    const { postId } = req.params
+
+    try {
+      const post = await Post.findById(postId).populate('approved')
+
+      if (!post) {
+        return res.status(404).json({ message: 'Không tìm thấy bài viết' })
+      }
+
+      res.status(200).json({ approved: post.approved })
     } catch (error) {
       res.status(500).json({ message: error.message })
     }

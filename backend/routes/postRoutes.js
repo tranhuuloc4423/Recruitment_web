@@ -15,6 +15,7 @@ const {
   updateStatus,
   updateApproved,
   getAppliedCandidatesByPostId,
+  getApprovedCandidatesByPostId,
   getCandidateById
 } = require('../controllers/postControllers')
 
@@ -28,6 +29,7 @@ router.get('/expired', getAllExpiredPosts)
 router.get('/user/:userId/', getPostByUserId)
 router.get('/:postId', getPostById)
 router.get('/:postId/applied', getAppliedCandidatesByPostId)
+router.get('/:postId/approved', getApprovedCandidatesByPostId)
 router.put('/:postId/applied', updateApplied)
 router.put('/:postId/approved', updateApproved)
 router.put('/:postId/saved', updateSavedJob)
