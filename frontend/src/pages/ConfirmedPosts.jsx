@@ -71,6 +71,9 @@ const ConfirmedPosts = () => {
 
   useEffect(() => {
     getPosteds()
+  }, [])
+
+  useEffect(() => {
   }, [filterPosts])
 
   useEffect(() => {

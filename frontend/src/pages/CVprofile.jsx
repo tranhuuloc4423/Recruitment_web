@@ -24,7 +24,7 @@ const CVprofile = () => {
   }, [])
   const [themeState, setThemeState] = useState({
     activeTheme: 0,
-    activeColor: 0, // Chỉ số của màu đang active trong theme hiện tại
+    activeColor: 0,
     themes: [
       {
         color: ['#383d44', '#0e3850']

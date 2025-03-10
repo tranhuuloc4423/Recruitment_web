@@ -127,6 +127,27 @@ const stripHtml = (html) => {
   return html.replace(/<[^>]+>/g, ''); // Removes all HTML tags
 };
 
+const htmlToText = (htmlString) => {
+    const tempDiv = document.createElement('div')
+    tempDiv.innerHTML = htmlString
+    return tempDiv.textContent || tempDiv.innerText || ''
+  }
+
+  const addClassToElements = (htmlString, className) => {
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(htmlString, 'text/html')
+
+    // Lặp qua tất cả các phần tử con và thêm class
+    doc.body.querySelectorAll('*').forEach((el) => {
+      el.classList.add(...className.split(' '))
+    })
+
+    return doc.body.innerHTML
+  }
+
+  const formatSalary = (salary) => {
+    return new Intl.NumberFormat('de-DE').format(salary)
+  }
 export {
   convertFile,
   convertFileToURL,
@@ -137,5 +158,8 @@ export {
   renderBasicCV,
   renderOtherCV,
   stripHtml,
-  formatDateIso
+  formatDateIso,
+  htmlToText,
+  addClassToElements,
+  formatSalary
 }

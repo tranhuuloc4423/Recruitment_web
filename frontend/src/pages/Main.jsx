@@ -29,8 +29,6 @@ const Main = () => {
 
   // Tính điểm phù hợp (matchScore) dựa trên currentRole
   const calculateMatchScore = (post) => {
-    console.log(currentRole.target)
-    console.log(post)
     if (!currentRole?.target) return 0;
     const { skills, target_money, types, address, wforms } = currentRole.target;
     let score = 0;
@@ -178,7 +176,6 @@ const Main = () => {
     if (posts.length > 0 && currentRole) {
       const sortedPosts = sortPosts(posts);
       setFilteredPosts(sortedPosts);
-      console.log(sortedPosts)
       setSelectedPost(sortedPosts[0]?._id || null);
     }
   }, [posts, currentRole]);

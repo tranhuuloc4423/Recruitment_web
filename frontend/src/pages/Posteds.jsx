@@ -57,6 +57,9 @@ const Posteds = () => {
 
   useEffect(() => {
     getPosteds();
+  }, []);
+
+  useEffect(() => {
   }, [filterPosts]);
 
   useEffect(() => {

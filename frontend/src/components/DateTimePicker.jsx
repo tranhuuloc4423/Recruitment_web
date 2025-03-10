@@ -1,54 +1,50 @@
-import React, { useState } from 'react'
-import dayjs from 'dayjs'
-import { DatePicker } from '@mui/x-date-pickers'
-import { TextField } from '@mui/material'
+import React from "react";
+import dayjs from "dayjs";
+import "dayjs/locale/vi"; // Import ngôn ngữ Tiếng Việt
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { viVN } from "@mui/x-date-pickers/locales";
 
 const DateTimePicker = ({ date, setDate, validDate, minDate, maxDate }) => {
-  // const [selectedDate, setSelectedDate] = useState(null)
-  const today = dayjs().add(1, 'day')
-  // const validate = dayjs(minDate)
+  const today = dayjs().add(1, "day");
 
-  const handleDateChange = (date) => {
-    setDate(date)
-  }
+  const handleDateChange = (newDate) => {
+    setDate(newDate);
+  };
 
   return (
-    <DatePicker
-      format="DD/MM/YYYY"
-      value={date}
-      onChange={handleDateChange}
-      minDate={minDate || undefined}
-      maxDate={maxDate || undefined}
-      shouldDisableDate={validDate ? (date) => date < today : undefined}
-      sx={{
-        '& .MuiOutlinedInput-root': {
-          borderRadius: '8px',
-          fontSize: '1rem',
-          fontWeight: '400',
-          outline: 'none',
-          fontFamily: 'Lexend',
-          ':hover': {
-            borderColor: '#e5e7eb'
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="vi" localeText={viVN.components.MuiLocalizationProvider.defaultProps.localeText}>
+      <DatePicker
+        format="DD/MM/YYYY"
+        value={date}
+        onChange={handleDateChange}
+        minDate={minDate || undefined}
+        maxDate={maxDate || undefined}
+        shouldDisableDate={validDate ? (date) => date < today : undefined}
+        slotProps={{
+          textField: {
+            placeholder: "Chọn ngày...",
+            sx: {
+              borderRadius: "8px",
+              fontSize: "1rem",
+              fontWeight: "400",
+              fontFamily: "Lexend",
+              "& .MuiOutlinedInput-notchedOutline": {
+                border: "2px solid",
+                borderColor: "#e5e7eb",
+              },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#e5e7eb",
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#e5e7eb",
+              },
+            },
           },
-          outlineColor: '#e5e7eb',
-          ':focus': {
-            borderColor: '#e5e7eb'
-          }
-        },
-        '& .MuiOutlinedInput-notchedOutline': {
-          border: '2px solid',
-          borderColor: '#e5e7eb'
-        },
-        '&:hover .MuiOutlinedInput-notchedOutline': {
-          borderColor: '#e5e7eb'
-        },
-        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-          borderColor: '#e5e7eb'
-        }
-      }}
-      renderInput={(params) => <input {...params} placeholder="time" />}
-    />
-  )
-}
+        }}
+      />
+    </LocalizationProvider>
+  );
+};
 
-export default DateTimePicker
+export default DateTimePicker;

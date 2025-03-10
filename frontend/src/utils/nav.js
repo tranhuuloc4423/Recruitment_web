@@ -95,6 +95,8 @@ const candidateNavInfo = [
   }
 ]
 
+
+
 const manageNav = [
   {
     name: 'admin',
@@ -171,6 +173,27 @@ const manageNav = [
         id: 2
       }
     ]
+  }
+]
+
+const chartNav = [
+  {
+    name: 'Cơ bản',
+    path: '/' + INFO + '/',
+    active: true,
+    id: 0
+  },
+  {
+    name: 'CV',
+    path: '/' + INFO + '/' + CV,
+    active: false,
+    id: 1
+  },
+  {
+    name: 'Tiêu chí',
+    path: '/' + INFO + '/' + TARGET,
+    active: false,
+    id: 2
   }
 ]
 
