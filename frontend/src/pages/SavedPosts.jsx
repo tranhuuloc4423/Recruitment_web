@@ -39,7 +39,6 @@ const SavedPosts = () => {
 
   const getPosteds = async () => {
     const res = await getListPostByCandidateId(currentRole._id, "saved_jobs")
-    console.log(res)
     setPosts(res)
   }
 
@@ -68,8 +67,11 @@ const SavedPosts = () => {
   }, [currentUser.role])
 
   useEffect(() => {
-    getPosteds()
-  }, [filterPosts])
+      getPosteds()
+    }, [])
+  
+    useEffect(() => {
+    }, [filterPosts])
 
   useEffect(() => {
     const activeFilter = filter.find((f) => f.active)

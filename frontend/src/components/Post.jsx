@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom'
 import Line from './Line'
 import Tag from './Tag'
 import Button from './Button'
@@ -44,7 +44,7 @@ const Post = ({ post, select, manage }) => {
   const [basicInfo, setBasicInfo] = useState()
   const [otherInfo, setOtherInfo] = useState()
   const navigate = useNavigate()
-  const locationRouter = useLocation();
+  const locationRouter = useLocation()
 
   const getBasicData = async () => {
     // console.log(post)
@@ -100,6 +100,14 @@ const Post = ({ post, select, manage }) => {
     })
   }
 
+  const buttons = [
+    manage?.view && { label: 'Xem', onClick: handleView },
+    manage?.confirm && { label: 'Duyệt', onClick: handleConfirm },
+    manage?.remove && { label: 'Xoá', onClick: handleRemove },
+    manage?.update && { label: 'Cập nhật', onClick: handleUpdate },
+    manage?.extend && { label: 'Gia hạn' }
+  ].filter(Boolean) // Lọc ra các nút hợp lệ
+
   return (
     <div
       className={`flex min-h-[400px] justify-between flex-col gap-1 bg-white shadow-md p-2 rounded select-none ${
@@ -114,16 +122,15 @@ const Post = ({ post, select, manage }) => {
 
       {/* time and tag */}
       <div className="flex-row-center justify-between w-full">
-      <div>
-        <div className="para-1">Hạn ứng tuyển : </div>
-        <div>{date_expiration}</div>
-      </div>
+        <div>
+          <div className="para-1">Hạn ứng tuyển : </div>
+          <div>{date_expiration}</div>
+        </div>
         {type && (
           <span className="relative right-[-8px]">
             <StatusTag state={type} />
           </span>
         )}
-
       </div>
 
       {/* title */}
@@ -164,7 +171,6 @@ const Post = ({ post, select, manage }) => {
           {/* <span>{`${otherInfo.?.}`}</span> */}
         </span>
       </div>
-      
 
       {/* skills */}
       <div className="flex-col gap-2">
@@ -191,7 +197,9 @@ const Post = ({ post, select, manage }) => {
 
       {/* applied button */}
       <div className="flex flex-row justify-end">
-        {locationRouter.pathname.includes("manage") ? "" : currentUser.role === 'recruiter' || currentUser.role === 'admin' ? (
+        {locationRouter.pathname.includes('manage') ? (
+          ''
+        ) : currentUser.role === 'recruiter' || currentUser.role === 'admin' ? (
           <></>
         ) : (
           <>
@@ -202,12 +210,19 @@ const Post = ({ post, select, manage }) => {
       </div>
 
       {/* manage buttons */}
-      <div className="w-full grid grid-cols-2 grid-flow-row gap-2">
-          {manage?.view && <Button label="Xem" onClick={handleView} />}
-          {manage?.confirm && <Button label="Duyệt" onClick={handleConfirm} />}
-          {manage?.remove && <Button label="Xoá" onClick={handleRemove} />}
-          {manage?.update && <Button label="Cập nhật" onClick={handleUpdate} />}
-          {manage?.extend && <Button label="Gia hạn" />}
+      <div
+        className={`w-full grid gap-2 ${
+          buttons.length === 1 ? 'grid-cols-1' : 'grid-cols-2'
+        }`}
+      >
+        {buttons.map((btn, index) => (
+          <Button
+            key={index}
+            label={btn.label}
+            onClick={btn.onClick}
+            className={buttons.length === 3 && index === 2 ? 'col-span-2' : ''}
+          />
+        ))}
       </div>
     </div>
   )

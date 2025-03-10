@@ -25,7 +25,7 @@ const BasicInfoForm = ({ open, setOpen, data }) => {
   const [image, setImage] = useState(null)
   const [values, setValues] = useState({})
   const [errors, setErrors] = useState({})
-  const [gender, setGender] = useState(data?.gender?.name || data?.gender || '')
+  const [gender, setGender] = useState(data?.gender || null)
   const [selectedProvince, setSelectedProvince] = useState(data?.address.province || null)
   const [selectedCity, setSelectedCity] = useState(data?.address.district || null)
 

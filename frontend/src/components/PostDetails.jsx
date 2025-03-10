@@ -8,10 +8,17 @@ import { FiClock } from 'react-icons/fi'
 import Line from './Line'
 import Tag from './Tag'
 import Button from './Button'
-import { getPost, getRoleData, savePost, updateCandidateApplied } from '../redux/api/post'
+import {
+  getPost,
+  getRoleData,
+  savePost,
+  updateCandidateApplied
+} from '../redux/api/post'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import { formatSalary } from '../utils/functions'
+import emptybox from '../assets/imgs/emptybox.png'
 
 const PostDetails = ({ id }) => {
   const { currentRole } = useSelector((state) => state.app)
@@ -26,13 +33,10 @@ const PostDetails = ({ id }) => {
     const res = await getRoleData(post?.authorType, post?.author)
     setBasicInfo(res?.basic_info)
     setOtherInfo(res?.other_info)
-    console.log(res?.basic_info)
-    console.log(res?.other_info)
   }
 
   const getPostById = async (id) => {
     const res = await getPost(id)
-    console.log(res)
     setPost(res)
   }
 
@@ -48,7 +52,6 @@ const PostDetails = ({ id }) => {
     updateCandidateApplied(post?._id, currentRole._id)
   }
   const handleSavePost = async (id) => {
-    console.log("save")
     const res = await savePost(id, currentRole._id)
     setSave(true)
   }
@@ -62,123 +65,137 @@ const PostDetails = ({ id }) => {
   }, [post])
 
   return (
-    <div className="flex flex-col bg-white rounded p-4 gap-4 shadow-md">
-      {/* title */}
-      <div className="heading-2">{post?.title}</div>
-
-      {/* image */}
-      <div className="flex-row-center gap-2">
-        <div className="w-[60px] h-[60px] border border-gray-100">
-          <img
-            src={basicInfo?.image?.url}
-            alt="avatar"
-            className="w-full h-full"
-          />
-        </div>
-        <span>{basicInfo?.name}</span>
-      </div>
-
-      <div className="flex flex-row justify-between gap-2 items-center">
-        <Button label={'Ứng tuyển'} className="flex-1" onClick={handleApply} />
-        <Button
-          label={'Xem công ty'}
-          onClick={() =>
-            navigate(`/company/${post?.authorType}/${post?.author}`)
-          }
-        />
-        <Button
-          label={'Theo dõi'}
-          className="bg-second text-black"
-          onClick={() =>
-            handleSavePost(post?._id)
-          }
-        />
-      </div>
-
-      <Line />
-      {/* infos */}
-      <div className="grid grid-cols-2 grid-flow-row gap-2">
-        <span className="flex flex-row items-center gap-2">
-          <LuCircleDollarSign size={24} />
-          <span>{new Intl.NumberFormat('de-DE').format(post?.salary)} vnđ</span> 
-        </span>
-
-        <span className="flex flex-row items-center gap-2">
-          <IoMdPeople size={24} />
-          <span>{post?.quantity} người</span>
-        </span>
-
-        <span className="flex flex-row items-center gap-2">
-          <IoLocationOutline size={24} />
-          <span>{`${basicInfo?.address?.province?.name}, ${basicInfo?.address?.district?.name}`}</span>
-        </span>
-
-        <span>
-          <PiBagBold size={24} />
-        </span>
-      </div>
-
-      {/* skills */}
-      <div className="flex-row-center gap-2">
-        <span className="para-1">Yêu cầu kỹ năng : </span>
+    <>
+      {post ? (
+        <div className="flex flex-col bg-white rounded p-4 gap-4 shadow-md">
+        {/* title */}
+        <div className="heading-2">{post?.title}</div>
+  
+        {/* image */}
         <div className="flex-row-center gap-2">
-          {post?.skills?.map((skill) => (
-            <Tag key={skill?.value} label={skill?.name} />
-          ))}
+          <div className="w-[60px] h-[60px] border border-gray-100">
+            <img
+              src={basicInfo?.image?.url}
+              alt="avatar"
+              className="w-full h-full"
+            />
+          </div>
+          <span>{basicInfo?.name}</span>
+        </div>
+  
+        <div className="flex flex-row justify-between gap-2 items-center">
+          {currentUser.role === 'candidate' && (
+            <Button
+              label={'Ứng tuyển'}
+              className="flex-1"
+              onClick={handleApply}
+            />
+          )}
+  
+          <Button
+            label={'Xem công ty'}
+            onClick={() =>
+              navigate(`/company/${post?.authorType}/${post?.author}`)
+            }
+          />
+          {currentUser.role === 'candidate' && (
+            <Button
+              label={'Theo dõi'}
+              className="bg-second text-black"
+              onClick={() => handleSavePost(post?._id)}
+            />
+          )}
+        </div>
+  
+        <Line />
+        {/* infos */}
+        <div className="grid grid-cols-2 grid-flow-row gap-2">
+          <span className="flex flex-row items-center gap-2">
+            <LuCircleDollarSign size={24} />
+            <span>{formatSalary(post?.salary)} vnđ</span>
+          </span>
+  
+          <span className="flex flex-row items-center gap-2">
+            <IoMdPeople size={24} />
+            <span>{post?.quantity} người</span>
+          </span>
+  
+          <span className="flex flex-row items-center gap-2">
+            <IoLocationOutline size={24} />
+            <span>{`${basicInfo?.address?.province?.name}, ${basicInfo?.address?.district?.name}`}</span>
+          </span>
+  
+          <span>
+            <PiBagBold size={24} />
+          </span>
+        </div>
+  
+        {/* skills */}
+        <div className="flex-row-center gap-2">
+          <span className="para-1">Yêu cầu kỹ năng : </span>
+          <div className="flex-row-center gap-2">
+            {post?.skills?.map((skill) => (
+              <Tag key={skill?.value} label={skill?.name} />
+            ))}
+          </div>
+        </div>
+        <Line />
+  
+        {/* description */}
+        <div className="flex flex-col gap-2">
+          <span className="heading-3">Mô tả công việc:</span>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: post?.desc
+            }}
+          ></div>
+        </div>
+  
+        <Line />
+        {/* work requirement */}
+        <div className="flex flex-col gap-2">
+          <span className="heading-3">Yêu cầu công việc:</span>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: post?.request
+            }}
+          ></div>
+        </div>
+        <Line />
+  
+        {/* company's info */}
+        <div className="grid grid-cols-3 grid-flow-row gap-2">
+          <div className="flex flex-col gap-2">
+            <span className="font-semibold">Lĩnh vực</span>
+            <span className="">{basicInfo?.field}</span>
+          </div>
+  
+          <div className="flex flex-col gap-2">
+            <span className="font-semibold">Mã số thuế</span>
+            <span className="">{basicInfo?.tax_id}</span>
+          </div>
+  
+          <div className="flex flex-col gap-2">
+            <span className="font-semibold">Số điện thoại</span>
+            <span className="">{basicInfo?.phone}</span>
+          </div>
+  
+          <div className="flex flex-col gap-2">
+            <span className="font-semibold">Email</span>
+            <span className="">{basicInfo?.email}</span>
+          </div>
+  
+          <div className="flex flex-col gap-2">
+            <span className="font-semibold">Địa chỉ</span>
+            <span className="">{`${basicInfo?.address?.province?.name}, ${basicInfo?.address?.district?.name}`}</span>
+          </div>
         </div>
       </div>
-      <Line />
-
-      {/* description */}
-      <div className="flex flex-col gap-2">
-        <span className="heading-3">Mô tả công việc:</span>
-        <div
-          dangerouslySetInnerHTML={{
-            __html: post?.desc
-          }}
-        ></div>
-      </div>
-
-      <Line />
-      {/* work requirement */}
-      <div className="flex flex-col gap-2">
-        <span className="heading-3">Yêu cầu công việc:</span>
-        <div
-          dangerouslySetInnerHTML={{
-            __html: post?.request
-          }}
-        ></div>
-      </div>
-      <Line />
-
-      {/* company's info */}
-      <div className="grid grid-cols-3 grid-flow-row gap-2">
-        <div className="flex flex-col gap-2">
-          <span className="font-semibold">Lĩnh vực</span>
-          <span className="">{basicInfo?.field}</span>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <span className="font-semibold">Mã số thuế</span>
-          <span className="">{basicInfo?.tax_id}</span>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <span className="font-semibold">Số điện thoại</span>
-          <span className="">{basicInfo?.phone}</span>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <span className="font-semibold">Email</span>
-          <span className="">{basicInfo?.email}</span>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <span className="font-semibold">Địa chỉ</span>
-          <span className="">{`${basicInfo?.address?.province?.name}, ${basicInfo?.address?.district?.name}`}</span>
-        </div>
-      </div>
-    </div>
+      ) : <div className='flex flex-col items-center justify-center border-2 p-4 rounded-md'>
+          <img src={emptybox} alt="" />
+          <div className='text-xl text-gray-500 font-bold'>Không tìm thấy tin tuyển dụng nào...</div>
+        </div>}
+    </>
   )
 }
 

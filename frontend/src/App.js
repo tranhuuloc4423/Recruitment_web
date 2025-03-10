@@ -30,6 +30,7 @@ import { getAddress, getById, getSkills } from './redux/api/app'
 import { CreatePost } from './components'
 import ManagePostApplied from './pages/ManagePostApplied'
 import CustomToast from './components/CustomToast'
+import ChartData from './pages/ChartData'
 
 const {
   HOME,
@@ -41,6 +42,7 @@ const {
   CV,
   TARGET,
   MANAGE,
+  CHART,
   CREATEPOST,
   CONFIRMPOST,
   CHECKPOST,
@@ -102,7 +104,7 @@ function App() {
             <Route
               path={''}
               element={
-                currentUser === 'candidate' ? <SavedPosts /> : <Posteds />
+                currentUser?.role === 'candidate' ? <SavedPosts /> : <Posteds />
               }
             />
             <Route path={CONFIRMPOST} element={<ConfirmedPosts />} />
@@ -111,6 +113,7 @@ function App() {
             <Route path={APPLIEDPOSTS} element={<AppliedPosts />} />
             <Route path={RECENTPOSTS} element={<RecentPosts />} />
           </Route>
+          <Route path={CHART} element={<ChartData />} />
         </Route>
       </Routes>
       <ToastContainer

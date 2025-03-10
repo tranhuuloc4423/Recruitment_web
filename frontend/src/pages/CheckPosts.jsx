@@ -69,6 +69,9 @@ const CheckPosts = () => {
   }, [])
 
   useEffect(() => {
+  }, [filterPosts])
+
+  useEffect(() => {
     const activeFilter = filter.find((f) => f.active)
     if (activeFilter) {
       const sortedPosts = [...posts].sort((a, b) => {
@@ -93,8 +96,8 @@ const CheckPosts = () => {
   }, [filter, posts])
   const indexOfLastPost = currentPage * postsPerPage
   const indexOfFirstPost = indexOfLastPost - postsPerPage
-  const currentPosts = filterPosts.slice(indexOfFirstPost, indexOfLastPost)
-  const totalPages = Math.ceil(filterPosts.length / postsPerPage)
+  const currentPosts = filterPosts?.slice(indexOfFirstPost, indexOfLastPost)
+  const totalPages = Math.ceil(filterPosts?.length / postsPerPage)
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };

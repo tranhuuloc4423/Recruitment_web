@@ -7,6 +7,7 @@ import { LuLogOut } from 'react-icons/lu'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { setCurrentUser } from '../redux/slices/authSlice'
+import Swal from 'sweetalert2'
 const Account = () => {
   const [active, setActive] = useState(false)
   const { currentUser } = useSelector((state) => state.auth)
@@ -16,9 +17,23 @@ const Account = () => {
   const dispatch = useDispatch()
 
   const handleLogout = () => {
-    localStorage.removeItem('currentUser')
-    dispatch(setCurrentUser(null))
-    navigate('signin')
+    Swal.fire({
+      title: 'Đăng xuất',
+      text: `Bạn có chắc muốn đăng xuất`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Quay lại',
+      confirmButtonText: 'Đăng xuất'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem('currentUser')
+        navigate('signin')
+        dispatch(setCurrentUser(null))
+      }
+    })
+    
   }
 
   useEffect(() => {
@@ -34,10 +49,15 @@ const Account = () => {
       className="border border-white rounded p-2 flex items-center gap-2 relative cursor-pointer"
       onClick={() => setActive(!active)}
     >
-      <img src={avatar} alt="avatar" className="rounded-full w-10 h-10 object-cover" />
-      <span className="text-white select-none whitespace-nowrap overflow-hidden text-ellipsis">
+      <img
+        src={avatar}
+        alt="avatar"
+        className="rounded-full w-10 h-10 object-cover"
+      />
+      <span className="text-white select-none whitespace-nowrap overflow-hidden text-ellipsis truncate max-w-[150px]">
         {currentRole?.basic_info?.name}
       </span>
+
       <IoIosArrowDown size={24} color="white" />
       <div
         className={`absolute select-none w-full top-[100%] left-0 bg-white shadow-md flex flex-col rounded transition-transform ${
