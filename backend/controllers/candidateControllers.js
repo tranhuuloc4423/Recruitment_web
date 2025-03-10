@@ -385,6 +385,30 @@ const candidateControllers = {
     } catch (error) {
       console.error(error)
     }
+  },
+  updateTheme: async (req, res) => {
+    try {
+      const candidateId = req.params
+      const { themeId, color } = req.body
+
+      const updatedCandidate = await Candidate.findByIdAndUpdate(
+        candidateId,
+        { themeCV: { themeId, color } },
+        { new: true }
+      )
+
+      if (!updatedCandidate) {
+        return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
+      }
+
+      res.status(200).json({
+        message: 'Cập nhật theme thành công',
+        candidate: updatedCandidate
+      })
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: 'Lỗi server', error: error.message })
+    }
   }
 }
 

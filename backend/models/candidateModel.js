@@ -60,6 +60,10 @@ const candidateSchema = new mongoose.Schema(
     profileStatus: {
       type: Number,
       default: 0
+    },
+    themeCV: {
+      themeId: { type: Number, default: 0 },
+      color: { type: String }
     }
   },
   { timestamps: true }

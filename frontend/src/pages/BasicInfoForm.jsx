@@ -114,8 +114,8 @@ const BasicInfoForm = ({ open, setOpen, data }) => {
         submitData.gender = gender
       }
 
-      // updateBasicInfo(currentRole._id, submitData, dispatch, currentUser.role)
-      // setOpen(false)
+      updateBasicInfo(currentRole._id, submitData, dispatch, currentUser.role)
+      setOpen(false)
     } else {
       toast.warn('Vui lòng nhập thông tin hợp lệ')
     }

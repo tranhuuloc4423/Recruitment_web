@@ -13,7 +13,8 @@ const {
   updateRecent,
   getDataByIdRole,
   getDatasByIdRole,
-  getNotification
+  getNotification,
+  updateTheme
 } = require('../controllers/candidateControllers')
 
 const router = require('express').Router()
@@ -33,5 +34,6 @@ router.get('/approved_jobs/:id', getAppovedJobs)
 router.get('/followed_jobs/:id', getFollowedJobs)
 router.get('/recent_jobs/:id', getRecentJobs)
 router.get('/notification/:id', getNotification)
+router.put('/theme/:id', updateTheme)
 
 module.exports = router
