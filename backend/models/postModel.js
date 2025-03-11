@@ -54,7 +54,7 @@ const postSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['posted', 'confirmed', 'expired', 'completed'],
+      enum: ['posted', 'confirmed', 'expired', 'completed', 'cancelled'],
       default: 'posted'
     },
     type: {

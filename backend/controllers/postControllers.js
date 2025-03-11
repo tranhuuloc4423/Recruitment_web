@@ -606,6 +606,43 @@ const postController = {
         .status(500)
         .json({ success: false, message: 'Đã xảy ra lỗi khi lấy ứng viên' })
     }
+  },
+  cancelPost: async (req, res) => {
+    const { postId } = req.params
+    const { userId, authorId } = req.body
+
+    try {
+      const admin = await Admin.findById(userId)
+      if (!admin) {
+        return res
+          .status(403)
+          .json({ message: 'Tài khoản không phải là admin' })
+      }
+
+      const post = await Post.findById(postId)
+      if (!post) {
+        return res.status(404).json({ message: 'Bài viết không tìm thấy' })
+      }
+
+      if (post.status === 'cancelled') {
+        return res.status(400).json({ message: 'Bài viết đã bị từ chối' })
+      }
+
+      post.status = 'cancelled'
+      await post.save()
+
+      await Admin.findByIdAndUpdate(userId, {
+        $pull: { 'manage_post.posted': postId, 'manage_post.confirmed': postId }
+      })
+
+      await Recruiter.findByIdAndUpdate(authorId, {
+        $pull: { 'manage_post.posted': postId, 'manage_post.confirmed': postId }
+      })
+
+      res.json({ message: 'Bài viết đã bị từ chối thành công', post })
+    } catch (error) {
+      res.status(500).json({ message: error.message })
+    }
   }
 }
 
