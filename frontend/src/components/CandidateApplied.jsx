@@ -2,8 +2,10 @@ import React from 'react'
 import { addClassToElements, htmlToText } from '../utils/functions'
 import Tag from './Tag'
 import Button from './Button'
+import { useSelector } from 'react-redux'
 
-const CandidateApplied = ({ candidates, handleApproved }) => {
+const CandidateApplied = ({ candidates, handleApproved, post, hanleViewCV }) => {
+  const { currentRole } = useSelector((state) => state.app)
   return (
     <div className='grid grid-cols-5 gap-4'>
       {candidates?.map((candidate, index) => (
@@ -41,8 +43,8 @@ const CandidateApplied = ({ candidates, handleApproved }) => {
             ))}
           </div>
           <div className="flex gap-2 flex-col items-center w-full">
-            <Button label={'Xem hồ sơ CV'} />
-            <Button label={'Duyệt'} onClick={() => handleApproved(candidate)} />
+            <Button label={'Xem hồ sơ CV'} onClick={() => hanleViewCV(candidate._id)}/>
+            {currentRole._id === post?.author && <Button label={'Duyệt'} onClick={() => handleApproved(candidate)} />}
           </div>
         </div>
       ))}

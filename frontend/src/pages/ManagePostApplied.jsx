@@ -37,6 +37,15 @@ const ManagePostApplied = () => {
     setApprovedCandidates(res4.approved)
   }
 
+  const hanleViewCV = (id) => {
+    if (!id) {
+      console.error("Candidate ID is invalid");
+      return;
+    }
+    
+    navigate(`/candidate-cv/${id}`);
+  }
+
   const handleApproved = async (candidate) => {
     Swal.fire({
       title: 'Tôi nhắc bạn?',
@@ -209,6 +218,8 @@ const ManagePostApplied = () => {
               <CandidateApplied
                 candidates={appliedCandidates}
                 handleApproved={handleApproved}
+                post={post}
+                hanleViewCV={hanleViewCV}
               />
             </div>
           </>
@@ -221,7 +232,7 @@ const ManagePostApplied = () => {
               </span>
             </h2>
             <div>
-              <CandidateApproved candidates={approvedCandidates} />
+              <CandidateApproved candidates={approvedCandidates} hanleViewCV={hanleViewCV} owner={owner} />
             </div>
           </>
         )}

@@ -7,8 +7,9 @@ import avatar from '../assets/imgs/blank-profile-picture-973460_960_720.png'
 import info from '../utils/infos'
 import { renderBasicCV, renderOtherCV } from '../utils/functions'
 
-const CVTheme_1 = ({ color }) => {
+const CVTheme_1 = ({ color, data = null }) => {
   const { currentRole } = useSelector((state) => state.app)
+  const [candidate, setCandidate] = useState(data || currentRole)
   const [otherInfo, setOtherInfo] = useState()
   const [basicInfo, setBasicInfo] = useState()
   useEffect(() => {
@@ -26,7 +27,7 @@ const CVTheme_1 = ({ color }) => {
         <div className="flex-1 flex flex-col">
           <div className="gap-2 pb-6">
             <div className="heading-1 font-medium">
-              {currentRole?.basic_info?.name}
+              {candidate?.basic_info?.name}
             </div>
             <div className="para-1">UX/UI Design</div>
           </div>
@@ -34,7 +35,7 @@ const CVTheme_1 = ({ color }) => {
 
         <div className="bg-cover w-[150px] h-[150px] rounded-full overflow-hidden border-2 border-white">
           <img
-            src={currentRole?.basic_info?.image?.url || avatar}
+            src={candidate?.basic_info?.image?.url || avatar}
             alt="avatar"
             className={`w-full h-full bg-cover bg-center object-cover`}
           />
@@ -47,16 +48,16 @@ const CVTheme_1 = ({ color }) => {
             <span className={`uppercase text-lg font-medium`} style={{ color }}>
               Thông tin cá nhân
             </span>
-            {renderBasicCV(basicInfo, currentRole)}
+            {renderBasicCV(basicInfo, candidate)}
           </div>
 
-          {renderOtherCV(otherInfo?.slice(0, 3), currentRole, {
+          {renderOtherCV(otherInfo?.slice(0, 3), candidate, {
             color: color
           })}
         </div>
         <Line direction="y" />
         <div className="flex flex-col gap-4" style={{ width: '55%' }}>
-          {renderOtherCV(otherInfo?.slice(3, 6), currentRole, {
+          {renderOtherCV(otherInfo?.slice(3, 6), candidate, {
             color: color
           })}
         </div>

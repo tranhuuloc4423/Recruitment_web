@@ -35,8 +35,8 @@ const CreatePost = () => {
   const [date, setDate] = useState(convertStringtoDate(updateDate) || null)
   const [skillSelected, setSkillSelected] = useState(null)
   const [skills, setSkills] = useState(skillsUpdate || [])
-  const [salary, setSalary] = useState(parseInt(updateSalary) / 1000000 || 1)
-  const [quantity, setQuantity] = useState(updateQuantity || 0)
+  const [salary, setSalary] = useState(parseInt(updateSalary) / 1000000 || 0)
+  const [quantity, setQuantity] = useState(updateQuantity || 1)
 
   const HandleOnChange = (e) => {
     const { name, value } = e.target

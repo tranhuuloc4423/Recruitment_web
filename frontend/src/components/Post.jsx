@@ -21,6 +21,7 @@ import {
 } from '../redux/api/post'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import CustomSwal from './CustomSwal'
 
 const Post = ({ post, select, manage }) => {
   const { currentUser } = useSelector((state) => state.auth)
@@ -59,10 +60,23 @@ const Post = ({ post, select, manage }) => {
   }, [])
 
   const handleConfirm = () => {
-    updateConfirmed(post._id, { userId: currentRole._id, authorId: author })
+    CustomSwal({
+      title: "Duyệt bài",
+      text: "Bạn có chắc muốn duyệt bài viết này",
+      cancelText: "Không",
+      confirmText: "Duyệt",
+      handle: () => updateConfirmed(post._id, { userId: currentRole._id, authorId: author })
+    })
+    
   }
   const handleRemove = () => {
-    removePost(post._id, { userId: currentRole._id, authorId: author })
+    CustomSwal({
+      title: "Xoá bài",
+      text: "Bạn có chắc muốn xoá bài viết này",
+      cancelText: "Không",
+      confirmText: "Xoá",
+      handle: () => removePost(post._id, { userId: currentRole._id, authorId: author })
+    })
   }
 
   const handleUpdate = () => {
@@ -110,7 +124,7 @@ const Post = ({ post, select, manage }) => {
 
   return (
     <div
-      className={`flex min-h-[400px] justify-between flex-col gap-1 bg-white shadow-md p-2 rounded select-none ${
+      className={`flex min-h-[400px] justify-between flex-col gap-1 bg-white shadow-md p-2 rounded ${
         select === post._id ? 'border-2 border-l-8 border-second' : ''
       }`}
     >
