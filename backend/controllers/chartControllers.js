@@ -1,11 +1,24 @@
 const User = require('../models/userModel')
+const Admin = require('../models/adminModel')
+const Recruiter = require('../models/recruiterModel')
+const Candidate = require('../models/candidateModel')
 const Post = require('../models/postModel')
 
 const chartControllers = {
   getUserCount: async (req, res) => {
     try {
-      const userCount = await User.countDocuments()
-      res.json(userCount)
+      const adminCount = await Admin.countDocuments()
+      const candidateCount = await Candidate.countDocuments()
+      const recruiterCount = await Recruiter.countDocuments()
+
+      const total = adminCount + candidateCount + recruiterCount
+
+      res.json({
+        admin: adminCount,
+        candidate: candidateCount,
+        recruiter: recruiterCount,
+        total
+      })
     } catch (err) {
       res.status(500).json({ message: err.message })
     }
@@ -13,13 +26,42 @@ const chartControllers = {
 
   getPostCount: async (req, res) => {
     try {
-      const postCount = await Post.countDocuments()
-      res.json(postCount)
+      const results = await Post.aggregate([
+        {
+          $match: {
+            status: { $in: ['posted', 'confirmed', 'expired', 'cancelled'] }
+          }
+        },
+        {
+          $group: {
+            _id: '$status',
+            count: { $sum: 1 }
+          }
+        }
+      ])
+
+      const statusCounts = {
+        posted: 0,
+        confirmed: 0,
+        expired: 0,
+        cancelled: 0
+      }
+
+      results.forEach((item) => {
+        statusCounts[item._id] = item.count
+      })
+
+      statusCounts.total =
+        statusCounts.posted +
+        statusCounts.confirmed +
+        statusCounts.expired +
+        statusCounts.cancelled
+
+      res.json(statusCounts)
     } catch (err) {
       res.status(500).json({ message: err.message })
     }
   },
-
   getTotalApplicationCount: async (req, res) => {
     try {
       const result = await Post.aggregate([
