@@ -13,8 +13,13 @@ const ConfirmedPosts = () => {
   const [filterPosts, setFilterPosts] = useState([])
   const [manage, setManage] = useState({})
   const [currentPage, setCurrentPage] = useState(1); // Thêm state cho trang hiện tại
-    const [postsPerPage] = useState(5); // Số bài post mỗi trang
+  const [postsPerPage] = useState(5); // Số bài post mỗi trang
   const [selected, setSelected] = useState()
+
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = filterPosts.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPages = Math.ceil(filterPosts.length / postsPerPage);
   const [filter, setFilter] = useState([
     {
       label: 'Theo ngày đăng',
@@ -99,11 +104,6 @@ const ConfirmedPosts = () => {
       setFilterPosts(sortedPosts)
     }
   }, [filter, posts])
-
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = filterPosts.slice(indexOfFirstPost, indexOfLastPost);
-  const totalPages = Math.ceil(filterPosts.length / postsPerPage);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);

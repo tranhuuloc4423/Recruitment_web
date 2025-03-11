@@ -148,6 +148,8 @@ const htmlToText = (htmlString) => {
   const formatSalary = (salary) => {
     return new Intl.NumberFormat('de-DE').format(salary)
   }
+
+  
 export {
   convertFile,
   convertFileToURL,

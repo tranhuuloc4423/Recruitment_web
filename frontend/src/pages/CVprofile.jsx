@@ -11,9 +11,9 @@ import { PDFDownloadLink } from '@react-pdf/renderer'
 import CVTheme_0_PDF from '../components/CVTheme_0_PDF'
 import CVTheme_1_PDF from '../components/CVTheme_1_pdf'
 import info from '../utils/infos'
+import { updateTheme } from '../redux/api/app'
 const CVprofile = () => {
   const { currentRole } = useSelector((state) => state.app)
-  const [bg, setBg] = useState('#b6ceff')
   const [otherInfo, setOtherInfo] = useState([])
   const [basicInfo, setBasicInfo] = useState([])
 
@@ -57,20 +57,34 @@ const CVprofile = () => {
     )
   }
 
-  const handleThemeChange = (themeIndex) => {
+  // const handleThemeChange = (themeIndex) => {
+  //   setThemeState((prevState) => ({
+  //     ...prevState,
+  //     activeTheme: themeIndex,
+  //     activeColor: 0 // Reset màu khi đổi theme
+  //   }))
+  // }
+  // Hàm để thay đổi màu hiện tại
+  // const handleColorChange = (colorIndex) => {
+  //   setThemeState((prevState) => ({
+  //     ...prevState,
+  //     activeColor: colorIndex
+  //   }))
+  // }
+
+  const handleThemeAndColorChange = async (themeIndex = themeState.activeTheme, colorIndex = themeState.activeColor) => {
     setThemeState((prevState) => ({
       ...prevState,
       activeTheme: themeIndex,
-      activeColor: 0 // Reset màu khi đổi theme
-    }))
-  }
-
-  // Hàm để thay đổi màu hiện tại
-  const handleColorChange = (colorIndex) => {
-    setThemeState((prevState) => ({
-      ...prevState,
       activeColor: colorIndex
     }))
+
+    const color = themeState.themes[themeIndex]
+    const theme = {
+      themeId: themeState.activeTheme,
+      color: color.color[colorIndex]
+    }
+    await updateTheme(theme, currentRole?._id)
   }
 
   const activeTheme = themeState.themes[themeState.activeTheme]
@@ -85,7 +99,7 @@ const CVprofile = () => {
             className={`w-1/2 cursor-pointer relative ${
               themeState.activeTheme === index ? 'border-second border-4' : ''
             }`}
-            onClick={() => handleThemeChange(index)}
+            onClick={() => handleThemeAndColorChange(index, 0)}
           >
             <img
               src={index === 0 ? cv_t_0 : cv_t_1}
@@ -131,7 +145,7 @@ const CVprofile = () => {
                     index === themeState.activeColor ? 'border-2' : ''
                   }`}
                   style={{ backgroundColor: color }}
-                  onClick={() => handleColorChange(index)}
+                  onClick={() => handleThemeAndColorChange(themeState.activeTheme, index)}
                 >
                   {index === themeState.activeColor && <FaCheck size={16} />}
                 </span>

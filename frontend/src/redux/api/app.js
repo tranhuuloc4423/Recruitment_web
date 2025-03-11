@@ -93,7 +93,7 @@ const getAddress = async (dispatch) => {
 
 const getCandidate = async (id) => {
   try {
-    const result = await axios.get(`/candidate/role/${id}`)
+    const result = await axios.get(`candidate/role/${id}`)
     return result.data
   } catch (error) {
     console.log(error)
@@ -120,6 +120,19 @@ const deleteNotification = async (id) => {
   }
 }
 
+const updateTheme = async (theme, id) => {
+  console.log(theme)
+  console.log(id)
+  try {
+    const result = await axios.put(`candidate/theme/${id}`, theme)
+    toast.success(result.data.message)
+    return result.data
+  } catch (error) {
+    toast.error(error)
+    console.log(error)
+  }
+}
+
 export {
   updateBasicInfo,
   updateOtherInfo,
@@ -130,5 +143,6 @@ export {
   getCandidate,
   GetNotification,
   deleteNotification,
-  getTarget
+  getTarget,
+  updateTheme
 }

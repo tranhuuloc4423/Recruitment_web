@@ -1,9 +1,30 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { addClassToElements, htmlToText } from '../utils/functions'
 import Tag from './Tag'
 import Button from './Button'
+import { useSelector } from 'react-redux'
 
-const CandidateApproved = ({ candidates, handleApproved }) => {
+const CandidateApproved = ({ candidates, hanleViewCV, owner }) => {
+  const { currentRole} = useSelector((state) => state.app)
+  const handleContact = (candidate) => {
+    const recipientEmail = candidate.basic_info.email;
+    const name = owner?.basic_info?.name
+    const subject = `Liên hệ từ ${name} qua website tuyển dụng`;
+  
+    const body =
+      `Chào ${candidate.basic_info.name},\n\n` +
+      `Tôi là ${name}. Chúng tôi đã xem CV của bạn trên website và rất ấn tượng với kinh nghiệm của bạn.\n\n` +
+      `Xin vui lòng phản hồi để chúng tôi có thể trao đổi thêm.\n\n` +
+      `Trân trọng,\n` +
+      `${name}`;
+  
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+      recipientEmail
+    )}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  
+    window.open(gmailUrl, '_blank');
+  };
+  
   return (
     <div className='grid grid-cols-5 gap-4'>
       {candidates?.map((candidate, index) => (
@@ -41,8 +62,11 @@ const CandidateApproved = ({ candidates, handleApproved }) => {
             ))}
           </div>
           <div className="flex gap-2 flex-col items-center w-full">
-            <Button label={'Xem hồ sơ CV'} />
-            <Button label={'Liên lạc'} onClick={() => handleApproved(candidate)} />
+            <Button label={'Xem hồ sơ CV'} onClick={() => hanleViewCV(candidate._id)} />
+            {owner?._id === currentRole?._id && (
+              <Button label={'Liên lạc'} onClick={() => handleContact(candidate)} />
+            )}
+            
           </div>
         </div>
       ))}

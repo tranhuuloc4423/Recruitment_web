@@ -31,6 +31,7 @@ import { CreatePost } from './components'
 import ManagePostApplied from './pages/ManagePostApplied'
 import CustomToast from './components/CustomToast'
 import ChartData from './pages/ChartData'
+import CandidateCV from './pages/CandidateCV'
 
 const {
   HOME,
@@ -114,6 +115,8 @@ function App() {
             <Route path={RECENTPOSTS} element={<RecentPosts />} />
           </Route>
           <Route path={CHART} element={<ChartData />} />
+          {/* view cv */}
+          <Route path="/candidate-cv/:id" element={<CandidateCV />} />
         </Route>
       </Routes>
       <ToastContainer
