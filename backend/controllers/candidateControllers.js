@@ -388,7 +388,7 @@ const candidateControllers = {
   },
   updateTheme: async (req, res) => {
     try {
-      const candidateId = req.params
+      const { candidateId } = req.params
       const { themeId, color } = req.body
 
       const updatedCandidate = await Candidate.findByIdAndUpdate(
