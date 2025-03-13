@@ -6,7 +6,9 @@ const {
   getTotalApplicationCount,
   getUserCountCurrentMonth,
   getPostCountCurrentMonthConfirmed,
-  getPostCountCurrentMonthCancelled
+  getPostCountCurrentMonthCancelled,
+  getTotalApplicationCountCurrentMonth,
+  getApplicationSuccessRateCurrentMonth
 } = require('../controllers/chartControllers')
 
 router.get('/user', getUserCount)
@@ -15,5 +17,10 @@ router.get('/application', getTotalApplicationCount)
 router.get('/user-current-month', getUserCountCurrentMonth)
 router.get('/post-current-month-confirmed', getPostCountCurrentMonthConfirmed)
 router.get('/post-current-month-cancelled', getPostCountCurrentMonthCancelled)
+router.get('/application-current-month', getTotalApplicationCountCurrentMonth)
+router.get(
+  '/application-success-rate-current-month',
+  getApplicationSuccessRateCurrentMonth
+)
 
 module.exports = router

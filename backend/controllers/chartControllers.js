@@ -136,6 +136,84 @@ const chartControllers = {
     } catch (err) {
       res.status(500).json({ message: err.message })
     }
+  },
+  getTotalApplicationCountCurrentMonth: async (req, res) => {
+    try {
+      const now = new Date()
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1)
+
+      const result = await Post.aggregate([
+        {
+          $match: {
+            createdAt: { $gte: startOfMonth, $lt: endOfMonth }
+          }
+        },
+        {
+          $project: {
+            totalApplications: {
+              $add: [
+                { $size: { $ifNull: ['$applied', []] } },
+                { $size: { $ifNull: ['$approved', []] } }
+              ]
+            }
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            total: { $sum: '$totalApplications' }
+          }
+        }
+      ])
+
+      const totalApplications = result[0] ? result[0].total : 0
+      res.json({ totalApplications })
+    } catch (err) {
+      res.status(500).json({ message: err.message })
+    }
+  },
+
+  getApplicationSuccessRateCurrentMonth: async (req, res) => {
+    try {
+      const now = new Date()
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1)
+
+      const result = await Post.aggregate([
+        {
+          $match: {
+            createdAt: { $gte: startOfMonth, $lt: endOfMonth }
+          }
+        },
+        {
+          $project: {
+            appliedCount: { $size: { $ifNull: ['$applied', []] } },
+            approvedCount: { $size: { $ifNull: ['$approved', []] } }
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            totalApplied: { $sum: '$appliedCount' },
+            totalApproved: { $sum: '$approvedCount' }
+          }
+        }
+      ])
+
+      const totalApplied = result[0]?.totalApplied || 0
+      const totalApproved = result[0]?.totalApproved || 0
+      const successRate =
+        totalApplied > 0 ? (totalApproved / totalApplied) * 100 : 0
+
+      res.json({
+        totalApplied,
+        totalApproved,
+        successRate: successRate.toFixed(2) + '%'
+      })
+    } catch (err) {
+      res.status(500).json({ message: err.message })
+    }
   }
 }
 
