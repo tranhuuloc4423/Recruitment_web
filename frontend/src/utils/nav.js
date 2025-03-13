@@ -12,7 +12,10 @@ const {
   CREATEPOST,
   POSTED,
   RECENTPOSTS,
-  APPLIEDPOSTS
+  APPLIEDPOSTS,
+  CHART_USER,
+  CHART_POST,
+  CHART_APPLICATION
 } = paths
 
 const nav = [
@@ -178,25 +181,25 @@ const manageNav = [
 
 const chartNav = [
   {
-    name: 'Cơ bản',
-    path: '/' + INFO + '/',
+    name: 'Người dùng',
+    path: '/chart/' + CHART_USER + '/',
     active: true,
     id: 0
   },
   {
-    name: 'CV',
-    path: '/' + INFO + '/' + CV,
+    name: 'Bài tuyển dụng',
+    path: '/chart/' + CHART_POST + '/',
     active: false,
     id: 1
   },
   {
-    name: 'Tiêu chí',
-    path: '/' + INFO + '/' + TARGET,
+    name: 'Hệ thống',
+    path: '/chart/' + CHART_APPLICATION + '/',
     active: false,
     id: 2
   }
 ]
 
-export { candidateNavInfo, manageNav }
+export { candidateNavInfo, manageNav, chartNav }
 
 export default nav

@@ -19,7 +19,11 @@ import {
   RecentPosts,
   SavedPosts,
   AppliedPosts,
-  Recruiter
+  Recruiter,
+  ChartData,
+  ChartUser,
+  ChartPost,
+  ChartApplication
 } from './pages'
 import { useEffect } from 'react'
 import { Bounce, ToastContainer } from 'react-toastify'
@@ -30,7 +34,6 @@ import { getAddress, getById, getSkills } from './redux/api/app'
 import { CreatePost } from './components'
 import ManagePostApplied from './pages/ManagePostApplied'
 import CustomToast from './components/CustomToast'
-import ChartData from './pages/ChartData'
 import CandidateCV from './pages/CandidateCV'
 
 const {
@@ -52,7 +55,10 @@ const {
   RECENTPOSTS,
   APPLIEDPOSTS,
   COMPANY,
-  MANAGEAPPLIED
+  MANAGEAPPLIED,
+  CHART_USER,
+  CHART_POST,
+  CHART_APPLICATION
 } = paths
 
 function App() {
@@ -114,7 +120,11 @@ function App() {
             <Route path={APPLIEDPOSTS} element={<AppliedPosts />} />
             <Route path={RECENTPOSTS} element={<RecentPosts />} />
           </Route>
-          <Route path={CHART} element={<ChartData />} />
+          <Route path={CHART} element={<ChartData />} > 
+            <Route path={CHART_USER} element={<ChartUser />} />
+            <Route path={CHART_POST} element={<ChartPost />} />
+            <Route path={CHART_APPLICATION} element={<ChartApplication />} />
+          </Route>
           {/* view cv */}
           <Route path="/candidate-cv/:id" element={<CandidateCV />} />
         </Route>
