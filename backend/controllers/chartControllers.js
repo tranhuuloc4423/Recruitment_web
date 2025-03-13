@@ -1,16 +1,14 @@
-const User = require('../models/userModel')
 const Admin = require('../models/adminModel')
 const Recruiter = require('../models/recruiterModel')
 const Candidate = require('../models/candidateModel')
 const Post = require('../models/postModel')
 
 const chartControllers = {
-  getUserCount: async (req, res) => {
+  getTotalUser: async (req, res) => {
     try {
       const adminCount = await Admin.countDocuments()
       const candidateCount = await Candidate.countDocuments()
       const recruiterCount = await Recruiter.countDocuments()
-
       const total = adminCount + candidateCount + recruiterCount
 
       res.json({
@@ -24,7 +22,74 @@ const chartControllers = {
     }
   },
 
-  getPostCount: async (req, res) => {
+  getUserByMonth: async (req, res) => {
+    try {
+      const now = new Date()
+      const startMonth = new Date(now.getFullYear(), now.getMonth() - 5, 1)
+
+      let time = []
+      for (let i = 0; i < 6; i++) {
+        let d = new Date(now.getFullYear(), now.getMonth() - i, 1)
+        let key = `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}`
+        time.push(key)
+      }
+      time = time.reverse()
+
+      const result = time.map((time) => ({
+        time,
+        admin: 0,
+        candidate: 0,
+        recruiter: 0,
+        total: 0
+      }))
+
+      const aggregateRoleByMonth = async (Model) => {
+        return Model.aggregate([
+          { $match: { createdAt: { $gte: startMonth } } },
+          {
+            $project: {
+              month: { $dateToString: { format: '%Y-%m', date: '$createdAt' } }
+            }
+          },
+          {
+            $group: {
+              _id: '$month',
+              count: { $sum: 1 }
+            }
+          }
+        ])
+      }
+
+      const [adminData, candidateData, recruiterData] = await Promise.all([
+        aggregateRoleByMonth(Admin),
+        aggregateRoleByMonth(Candidate),
+        aggregateRoleByMonth(Recruiter)
+      ])
+
+      const mergeData = (data, role) => {
+        data.forEach((item) => {
+          const monthIndex = result.findIndex((r) => r.month === item._id)
+          if (monthIndex !== -1) {
+            result[monthIndex][role] = item.count
+          }
+        })
+      }
+
+      mergeData(adminData, 'admin')
+      mergeData(candidateData, 'candidate')
+      mergeData(recruiterData, 'recruiter')
+
+      result.forEach((item) => {
+        item.total = item.admin + item.candidate + item.recruiter
+      })
+
+      res.json(result)
+    } catch (err) {
+      res.status(500).json({ message: err.message })
+    }
+  },
+
+  getTotalPost: async (req, res) => {
     try {
       const results = await Post.aggregate([
         {
@@ -40,17 +105,10 @@ const chartControllers = {
         }
       ])
 
-      const statusCounts = {
-        posted: 0,
-        confirmed: 0,
-        expired: 0,
-        cancelled: 0
-      }
-
+      const statusCounts = { posted: 0, confirmed: 0, expired: 0, cancelled: 0 }
       results.forEach((item) => {
         statusCounts[item._id] = item.count
       })
-
       statusCounts.total =
         statusCounts.posted +
         statusCounts.confirmed +
@@ -62,130 +120,73 @@ const chartControllers = {
       res.status(500).json({ message: err.message })
     }
   },
-  getTotalApplicationCount: async (req, res) => {
-    try {
-      const result = await Post.aggregate([
-        {
-          $project: {
-            totalApplications: {
-              $add: [
-                { $size: { $ifNull: ['$applied', []] } },
-                { $size: { $ifNull: ['$approved', []] } }
-              ]
-            }
-          }
-        },
-        {
-          $group: {
-            _id: null,
-            total: { $sum: '$totalApplications' }
-          }
-        }
-      ])
 
-      const totalApplications = result[0] ? result[0].total : 0
-      res.json({ totalApplications })
-    } catch (err) {
-      res.status(500).json({ message: err.message })
-    }
-  },
-  getUserCountCurrentMonth: async (req, res) => {
+  getPostByMonth: async (req, res) => {
     try {
       const now = new Date()
-      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1)
+      const startMonth = new Date(now.getFullYear(), now.getMonth() - 5, 1)
 
-      const userCountCurrentMonth = await User.countDocuments({
-        createdAt: { $gte: startOfMonth, $lt: endOfMonth }
-      })
+      let time = []
+      for (let i = 0; i < 6; i++) {
+        let d = new Date(now.getFullYear(), now.getMonth() - i, 1)
+        let key = `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}`
+        time.push(key)
+      }
+      time = time.reverse()
 
-      res.json({ userCountCurrentMonth })
-    } catch (err) {
-      res.status(500).json({ message: err.message })
-    }
-  },
-  getPostCountCurrentMonthConfirmed: async (req, res) => {
-    try {
-      const now = new Date()
-      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1)
+      const result = time.map((time) => ({
+        time,
+        posted: 0,
+        confirmed: 0,
+        expired: 0,
+        cancelled: 0,
+        total: 0
+      }))
 
-      const confirmedCount = await Post.countDocuments({
-        status: 'confirmed',
-        createdAt: { $gte: startOfMonth, $lt: endOfMonth }
-      })
-
-      res.json({ confirmedCount })
-    } catch (err) {
-      res.status(500).json({ message: err.message })
-    }
-  },
-
-  getPostCountCurrentMonthCancelled: async (req, res) => {
-    try {
-      const now = new Date()
-      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1)
-
-      const cancelledCount = await Post.countDocuments({
-        status: 'cancelled',
-        createdAt: { $gte: startOfMonth, $lt: endOfMonth }
-      })
-
-      res.json({ cancelledCount })
-    } catch (err) {
-      res.status(500).json({ message: err.message })
-    }
-  },
-  getTotalApplicationCountCurrentMonth: async (req, res) => {
-    try {
-      const now = new Date()
-      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1)
-
-      const result = await Post.aggregate([
+      const data = await Post.aggregate([
         {
           $match: {
-            createdAt: { $gte: startOfMonth, $lt: endOfMonth }
+            createdAt: { $gte: startMonth },
+            status: { $in: ['posted', 'confirmed', 'expired', 'cancelled'] }
           }
         },
         {
           $project: {
-            totalApplications: {
-              $add: [
-                { $size: { $ifNull: ['$applied', []] } },
-                { $size: { $ifNull: ['$approved', []] } }
-              ]
-            }
+            time: { $dateToString: { format: '%Y-%m', date: '$createdAt' } },
+            status: 1
           }
         },
         {
           $group: {
-            _id: null,
-            total: { $sum: '$totalApplications' }
+            _id: { time: '$time', status: '$status' },
+            count: { $sum: 1 }
           }
         }
       ])
 
-      const totalApplications = result[0] ? result[0].total : 0
-      res.json({ totalApplications })
+      data.forEach((item) => {
+        const monthKey = item._id.time
+        const monthObj = result.find((r) => r.time === monthKey)
+
+        if (monthObj) {
+          monthObj[item._id.status] = item.count
+        }
+      })
+
+      result.forEach((item) => {
+        item.total =
+          item.posted + item.confirmed + item.expired + item.cancelled
+      })
+
+      res.json(result)
     } catch (err) {
       res.status(500).json({ message: err.message })
     }
   },
 
-  getApplicationSuccessRateCurrentMonth: async (req, res) => {
+  getTotalApplication: async (req, res) => {
     try {
-      const now = new Date()
-      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1)
-
       const result = await Post.aggregate([
-        {
-          $match: {
-            createdAt: { $gte: startOfMonth, $lt: endOfMonth }
-          }
-        },
         {
           $project: {
             appliedCount: { $size: { $ifNull: ['$applied', []] } },
@@ -201,16 +202,166 @@ const chartControllers = {
         }
       ])
 
-      const totalApplied = result[0]?.totalApplied || 0
-      const totalApproved = result[0]?.totalApproved || 0
-      const successRate =
-        totalApplied > 0 ? (totalApproved / totalApplied) * 100 : 0
+      const totals = result[0] || { totalApplied: 0, totalApproved: 0 }
+      const total = totals.totalApplied + totals.totalApproved
 
       res.json({
-        totalApplied,
-        totalApproved,
-        successRate: successRate.toFixed(2) + '%'
+        applied: totals.totalApplied,
+        approved: totals.totalApproved,
+        total
       })
+    } catch (err) {
+      res.status(500).json({ message: err.message })
+    }
+  },
+
+  getApplicationByMonth: async (req, res) => {
+    try {
+      const now = new Date()
+      const startMonth = new Date(now.getFullYear(), now.getMonth() - 5, 1)
+
+      let time = []
+      for (let i = 0; i < 6; i++) {
+        let d = new Date(now.getFullYear(), now.getMonth() - i, 1)
+        let key = `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}`
+        time.push(key)
+      }
+      time = time.reverse()
+
+      const result = time.map((time) => ({
+        time,
+        applied: 0,
+        approved: 0,
+        total: 0
+      }))
+
+      const data = await Post.aggregate([
+        { $match: { createdAt: { $gte: startMonth } } },
+        {
+          $project: {
+            time: { $dateToString: { format: '%Y-%m', date: '$createdAt' } },
+            appliedCount: { $size: { $ifNull: ['$applied', []] } },
+            approvedCount: { $size: { $ifNull: ['$approved', []] } }
+          }
+        },
+        {
+          $group: {
+            _id: '$time',
+            totalApplied: { $sum: '$appliedCount' },
+            totalApproved: { $sum: '$approvedCount' }
+          }
+        }
+      ])
+
+      data.forEach((item) => {
+        const monthObj = result.find((r) => r.time === item._id)
+        if (monthObj) {
+          monthObj.applied = item.totalApplied
+          monthObj.approved = item.totalApproved
+          monthObj.total = item.totalApplied + item.totalApproved
+        }
+      })
+
+      res.json(result)
+    } catch (err) {
+      res.status(500).json({ message: err.message })
+    }
+  },
+
+  getRateUser: async (req, res) => {
+    try {
+      const adminCount = await Admin.countDocuments()
+      const candidateCount = await Candidate.countDocuments()
+      const recruiterCount = await Recruiter.countDocuments()
+      const total = adminCount + candidateCount + recruiterCount
+
+      let adminRate = 0,
+        candidateRate = 0,
+        recruiterRate = 0
+      if (total > 0) {
+        adminRate = ((adminCount / total) * 100).toFixed(2)
+        candidateRate = ((candidateCount / total) * 100).toFixed(2)
+        recruiterRate = ((recruiterCount / total) * 100).toFixed(2)
+      }
+      res.json({
+        adminRate: adminRate + '%',
+        candidateRate: candidateRate + '%',
+        recruiterRate: recruiterRate + '%'
+      })
+    } catch (err) {
+      res.status(500).json({ message: err.message })
+    }
+  },
+
+  getRatePost: async (req, res) => {
+    try {
+      const results = await Post.aggregate([
+        {
+          $match: {
+            status: { $in: ['posted', 'confirmed', 'expired', 'cancelled'] }
+          }
+        },
+        {
+          $group: {
+            _id: '$status',
+            count: { $sum: 1 }
+          }
+        }
+      ])
+
+      const counts = { posted: 0, confirmed: 0, expired: 0, cancelled: 0 }
+      results.forEach((item) => {
+        counts[item._id] = item.count
+      })
+      const total =
+        counts.posted + counts.confirmed + counts.expired + counts.cancelled
+
+      let postedRate = 0,
+        confirmedRate = 0,
+        expiredRate = 0,
+        cancelledRate = 0
+      if (total > 0) {
+        postedRate = ((counts.posted / total) * 100).toFixed(2)
+        confirmedRate = ((counts.confirmed / total) * 100).toFixed(2)
+        expiredRate = ((counts.expired / total) * 100).toFixed(2)
+        cancelledRate = ((counts.cancelled / total) * 100).toFixed(2)
+      }
+      res.json({
+        postedRate: postedRate + '%',
+        confirmedRate: confirmedRate + '%',
+        expiredRate: expiredRate + '%',
+        cancelledRate: cancelledRate + '%'
+      })
+    } catch (err) {
+      res.status(500).json({ message: err.message })
+    }
+  },
+
+  getRateApply: async (req, res) => {
+    try {
+      const result = await Post.aggregate([
+        {
+          $project: {
+            appliedCount: { $size: { $ifNull: ['$applied', []] } },
+            approvedCount: { $size: { $ifNull: ['$approved', []] } }
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            totalApplied: { $sum: '$appliedCount' },
+            totalApproved: { $sum: '$approvedCount' }
+          }
+        }
+      ])
+
+      const totals = result[0] || { totalApplied: 0, totalApproved: 0 }
+      const total = totals.totalApplied + totals.totalApproved
+      let applyRate = 0
+      if (total > 0) {
+        applyRate = ((totals.totalApplied / total) * 100).toFixed(2)
+      }
+      res.json({ applyRate: applyRate + '%' })
     } catch (err) {
       res.status(500).json({ message: err.message })
     }
