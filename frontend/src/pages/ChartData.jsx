@@ -1,22 +1,20 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 import React from 'react'
-
+import { Nav } from '../components';
+import { Outlet } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { chartNav } from '../utils/nav';
 const ChartData = () => {
-    const data = [
-        { name: 'Tháng 1', value: 400 },
-        { name: 'Tháng 2', value: 300 },
-        { name: 'Tháng 3', value: 500 },
-      ];
+  const { currentUser } = useSelector((state) => state.auth)
+  const { currentRole, loading } = useSelector((state) => state.app)
       return (
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={data}>
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="value" fill="#8884d8" />
-          </BarChart>
-        </ResponsiveContainer>
+        <div className="flex flex-col gap-4">
+      {currentUser.role === 'admin' && <Nav data={chartNav} />}
+      <div className="flex flex-row gap-4">
+        <Outlet />
+      </div>
+    </div>
       );
 }
 
