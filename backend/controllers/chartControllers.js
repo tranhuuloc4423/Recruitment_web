@@ -30,13 +30,21 @@ const chartControllers = {
       let time = []
       for (let i = 0; i < 6; i++) {
         let d = new Date(now.getFullYear(), now.getMonth() - i, 1)
-        let key = `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}`
-        time.push(key)
+        let formattedTime = `${('0' + (d.getMonth() + 1)).slice(
+          -2
+        )}-${d.getFullYear()}` // MM-YYYY
+        time.push({
+          time: formattedTime,
+          month: d.getMonth() + 1,
+          year: d.getFullYear()
+        })
       }
       time = time.reverse()
 
-      const result = time.map((time) => ({
+      let result = time.map(({ time, month, year }) => ({
         time,
+        month,
+        year,
         admin: 0,
         candidate: 0,
         recruiter: 0,
@@ -48,7 +56,7 @@ const chartControllers = {
           { $match: { createdAt: { $gte: startMonth } } },
           {
             $project: {
-              month: { $dateToString: { format: '%Y-%m', date: '$createdAt' } }
+              month: { $dateToString: { format: '%m-%Y', date: '$createdAt' } } // MM-YYYY
             }
           },
           {
@@ -68,7 +76,7 @@ const chartControllers = {
 
       const mergeData = (data, role) => {
         data.forEach((item) => {
-          const monthIndex = result.findIndex((r) => r.month === item._id)
+          const monthIndex = result.findIndex((r) => r.time === item._id)
           if (monthIndex !== -1) {
             result[monthIndex][role] = item.count
           }
@@ -129,13 +137,21 @@ const chartControllers = {
       let time = []
       for (let i = 0; i < 6; i++) {
         let d = new Date(now.getFullYear(), now.getMonth() - i, 1)
-        let key = `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}`
-        time.push(key)
+        let formattedTime = `${('0' + (d.getMonth() + 1)).slice(
+          -2
+        )}-${d.getFullYear()}` // MM-YYYY
+        time.push({
+          time: formattedTime,
+          month: d.getMonth() + 1,
+          year: d.getFullYear()
+        })
       }
       time = time.reverse()
 
-      const result = time.map((time) => ({
+      const result = time.map(({ time, month, year }) => ({
         time,
+        month,
+        year,
         posted: 0,
         confirmed: 0,
         expired: 0,
@@ -152,7 +168,7 @@ const chartControllers = {
         },
         {
           $project: {
-            time: { $dateToString: { format: '%Y-%m', date: '$createdAt' } },
+            time: { $dateToString: { format: '%m-%Y', date: '$createdAt' } }, // MM-YYYY
             status: 1
           }
         },
@@ -183,7 +199,6 @@ const chartControllers = {
       res.status(500).json({ message: err.message })
     }
   },
-
   getTotalApplication: async (req, res) => {
     try {
       const result = await Post.aggregate([
@@ -223,13 +238,21 @@ const chartControllers = {
       let time = []
       for (let i = 0; i < 6; i++) {
         let d = new Date(now.getFullYear(), now.getMonth() - i, 1)
-        let key = `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}`
-        time.push(key)
+        let formattedTime = `${('0' + (d.getMonth() + 1)).slice(
+          -2
+        )}-${d.getFullYear()}` // MM-YYYY
+        time.push({
+          time: formattedTime,
+          month: d.getMonth() + 1,
+          year: d.getFullYear()
+        })
       }
       time = time.reverse()
 
-      const result = time.map((time) => ({
+      const result = time.map(({ time, month, year }) => ({
         time,
+        month,
+        year,
         applied: 0,
         approved: 0,
         total: 0
@@ -239,7 +262,7 @@ const chartControllers = {
         { $match: { createdAt: { $gte: startMonth } } },
         {
           $project: {
-            time: { $dateToString: { format: '%Y-%m', date: '$createdAt' } },
+            time: { $dateToString: { format: '%m-%Y', date: '$createdAt' } }, // MM-YYYY
             appliedCount: { $size: { $ifNull: ['$applied', []] } },
             approvedCount: { $size: { $ifNull: ['$approved', []] } }
           }
@@ -267,7 +290,6 @@ const chartControllers = {
       res.status(500).json({ message: err.message })
     }
   },
-
   getRateUser: async (req, res) => {
     try {
       const adminCount = await Admin.countDocuments()
