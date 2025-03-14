@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   BarChart,
   Bar,
@@ -7,88 +7,256 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line
 } from 'recharts'
-import { Button, Dropdown } from '../components'
+import { Button, Dropdown, Tip } from '../components'
 import * as XLSX from 'xlsx'
+import { getChartUser } from '../redux/api/chart'
+import { CircularProgress } from '@mui/material'
+import { toast } from 'react-toastify'
 
 const ChartUser = () => {
-  const data = [
-    { month: '10-2024', admin: 0, candidate: 0, recruiter: 0, total: 0 },
-    { month: '11-2024', admin: 1, candidate: 0, recruiter: 1, total: 2 },
-    { month: '12-2024', admin: 0, candidate: 1, recruiter: 0, total: 1 },
-    { month: '01-2025', admin: 0, candidate: 6, recruiter: 0, total: 6 },
-    { month: '02-2025', admin: 0, candidate: 2, recruiter: 0, total: 2 },
-    { month: '03-2025', admin: 0, candidate: 3, recruiter: 1, total: 4 }
-  ]
+  const [time, setTime] = useState(null)
+  const [total, setTotal] = useState(null)
+  const [activeTab, setActiveTab] = useState('monthly') // State để chuyển đổi tab
 
-  // State để quản lý tháng được chọn
-  const [selectedMonth, setSelectedMonth] = useState({
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getChartUser()
+        setTime(res?.monthlyData)
+        setTotal(res?.totalUsers)
+      } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu:', error)
+      }
+    }
+    fetchData()
+  }, [])
+
+  const [selectedTime, setSelectedTime] = useState({
     value: 'all',
     name: 'Tất cả'
   })
 
-  // Lấy danh sách tháng duy nhất từ dữ liệu để làm option cho Dropdown
-  const monthOptions = [
-    { value: 'all', name: 'Tất cả' },
-    ...data.map((item) => ({ value: item.month, name: item.month }))
-  ]
+  // Tạo timeOptions cho Dropdown
+  const timeOptions = time
+    ? [
+        { value: 'all', name: 'Tất cả' },
+        ...time.map((item) => ({ value: item.time, name: item.time }))
+      ]
+    : [{ value: 'all', name: 'Tất cả' }]
 
-  // Lọc dữ liệu dựa trên tháng được chọn
+  // Lọc dữ liệu cho BarChart
   const filteredData =
-    selectedMonth.value === 'all'
-      ? data
-      : data.filter((item) => item.month === selectedMonth.value)
+    time && selectedTime.value === 'all'
+      ? time
+      : time?.filter((item) => item.time === selectedTime.value) || []
 
-  // Hàm xuất dữ liệu sang Excel
+  // Dữ liệu cho PieChart từ totalUsers
+  const pieData = total
+    ? [
+        { name: 'Admin', value: total.admin },
+        { name: 'Ứng viên', value: total.candidate },
+        { name: 'Nhà tuyển dụng', value: total.recruiter }
+      ]
+    : []
+
+  // Màu sắc cho PieChart
+  const COLORS = ['#8884d8', '#82ca9d', '#ffc107']
+
+  // Xuất Excel cho BarChart
   const exportToExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(filteredData)
+    let dataExport = null
+    const totalFormat = [
+      {
+        'Vai trò': 'Quản trị',
+        'Số lượng': total.admin,
+        'Tỷ lệ': total.rate.admin
+      },
+      {
+        'Vai trò': 'Ứng viên',
+        'Số lượng': total.candidate,
+        'Tỷ lệ': total.rate.candidate
+      },
+      {
+        'Vai trò': 'Nhà tuyển dụng',
+        'Số lượng': total.recruiter,
+        'Tỷ lệ': total.rate.recruiter
+      }
+    ]
+    if (activeTab === 'monthly') {
+      dataExport = filteredData
+    } else {
+      dataExport = totalFormat
+    }
+    if (dataExport === null) {
+      toast.error('Không có dữ liệu để xuất.')
+      return
+    }
+    const worksheet = XLSX.utils.json_to_sheet(dataExport)
     const workbook = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'NameSheet')
-    XLSX.writeFile(workbook, `${selectedMonth.name}.xlsx`)
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'UserStatistics')
+    XLSX.writeFile(workbook, `${selectedTime.name}.xlsx`)
   }
 
   return (
     <div className="w-full p-4 flex flex-col justify-center">
-      {/* Tiêu đề và dropdown lọc */}
+      {/* Tiêu đề và tab */}
+      <div className="text-2xl font-semibold text-center">
+        Thống kê người dùng
+      </div>
       <div className="flex justify-between items-center mb-4">
-        <div className="text-2xl font-semibold">Thống kê người dùng</div>
-        <div className="flex items-center gap-2 w-1/4">
-          <span className="min-w-fit">Lọc theo tháng</span>
-          <Dropdown
-              options={monthOptions}
-              label="Lọc theo tháng"
-              setSelectedOption={setSelectedMonth}
-              selectedOption={selectedMonth}
-            />
-          <Button
-            label={'Xuất Excel'}
+        <div className="flex">
+          <button
+            onClick={() => setActiveTab('monthly')}
+            className={`px-4 py-2 rounded ${
+              activeTab === 'monthly'
+                ? 'border-b border-primary text-primary'
+                : 'text-gray-500'
+            }`}
+          >
+            Thống kê theo tháng
+          </button>
+          <button
+            label="Tổng quan"
+            onClick={() => setActiveTab('total')}
+            className={`px-4 py-2 rounded ${
+              activeTab === 'total'
+                ? 'border-b border-primary text-primary'
+                : 'text-gray-500'
+            }`}
+          >
+            Tổng quan
+          </button>
+        </div>
+
+        {/* Dropdown và nút xuất Excel */}
+        <div className="flex items-center gap-2">
+          {activeTab === 'monthly' && (
+            <>
+              <span className="min-w-fit">Lọc theo tháng</span>
+              <Dropdown
+                options={timeOptions}
+                label="Lọc theo tháng"
+                setSelectedOption={setSelectedTime}
+                selectedOption={selectedTime}
+                className={'min-w-[120px]'}
+              />
+            </>
+          )}
+          <button
             onClick={exportToExcel}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-          />
+            className="bg-green-500 min-w-fit text-white px-4 py-2 rounded hover:bg-green-600"
+          >
+            Xuất Excel
+          </button>
         </div>
       </div>
 
-      {/* Biểu đồ */}
-      <ResponsiveContainer width="100%" height={400}>
-        <BarChart
-          data={filteredData}
-          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="month" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="admin" fill="#8884d8" name="Admin" />
-          <Bar dataKey="candidate" fill="#82ca9d" name="Ứng viên" />
-          <Bar dataKey="recruiter" fill="#ffc107" name="Nhà tuyển dụng" />
-          <Bar dataKey="total" fill="#ff7300" name="Tổng" />
-        </BarChart>
-      </ResponsiveContainer>
+      {/* Nội dung tab */}
+      {activeTab === 'monthly' ? (
+        <>
+          {/* BarChart */}
+          {time ? (
+            <ResponsiveContainer width="100%" height={400}>
+              <BarChart
+                data={filteredData}
+                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="time" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar
+                  type="monotone"
+                  dataKey="admin"
+                  fill="#8884d8"
+                  name="Admin"
+                />
+                <Bar
+                  type="monotone"
+                  dataKey="candidate"
+                  fill="#82ca9d"
+                  name="Ứng viên"
+                />
+                <Bar
+                  type="monotone"
+                  dataKey="recruiter"
+                  fill="#ffc107"
+                  name="Nhà tuyển dụng"
+                />
+                <Bar
+                  type="monotone"
+                  dataKey="total"
+                  fill="#ff7300"
+                  name="Tổng"
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="text-center">
+              <CircularProgress />
+            </div>
+          )}
+        </>
+      ) : /* PieChart */
+      total ? (
+        <div className="flex flex-col justify-center items-center">
+          <ResponsiveContainer width="100%" height={400}>
+            <PieChart>
+              <Pie
+                data={pieData}
+                cx="50%"
+                cy="50%"
+                outerRadius={150}
+                fill="#8884d8"
+                dataKey="value"
+                label={({ name, percent }) =>
+                  `${name}: ${(percent * 100).toFixed(2)}%`
+                }
+              >
+                {pieData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="text-[#ff7300]">
+            Tổng số người dùng: {total.total}
+          </div>
+        </div>
+      ) : (
+        <div className="text-center">
+          <CircularProgress />
+        </div>
+      )}
 
-      <div className="text-center mt-6">
-        Lưu ý đây là dữ liệu thống kê người dùng trong 6 tháng gần nhất
+      {/* Ghi chú */}
+      <div className="w-full mt-6">
+        {activeTab === 'monthly' ? (
+          <Tip
+            label={
+              'Lưu ý đây là dữ liệu thống kê người dùng trong 6 tháng gần nhất'
+            }
+            className={'justify-center'}
+          />
+        ) : (
+          <Tip
+            label={'Lưu ý đây là tổng quan số lượng người dùng'}
+            className={'justify-center'}
+          />
+        )}
       </div>
     </div>
   )

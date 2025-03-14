@@ -182,7 +182,7 @@ const manageNav = [
 const chartNav = [
   {
     name: 'Người dùng',
-    path: '/chart/' + CHART_USER + '/',
+    path: '/chart/',
     active: true,
     id: 0
   },

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
 
-const Dropdown = ({ options, label, setSelectedOption, selectedOption }) => {
+const Dropdown = ({ options, label, setSelectedOption, selectedOption, className = null }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const toggleDropdown = () => setIsOpen(!isOpen)
@@ -14,7 +14,7 @@ const Dropdown = ({ options, label, setSelectedOption, selectedOption }) => {
   return (
     <div
       onClick={toggleDropdown}
-      className="relative w-full border-2 p-2 rounded flex flex-row items-center justify-between select-none bg-white"
+      className={`relative w-full border-2 p-2 rounded flex flex-row items-center justify-between select-none bg-white ${className}`}
     >
       <div className="w-full">{selectedOption?.name || label}</div>
       <IoIosArrowDown />

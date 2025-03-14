@@ -121,7 +121,7 @@ function App() {
             <Route path={RECENTPOSTS} element={<RecentPosts />} />
           </Route>
           <Route path={CHART} element={<ChartData />} > 
-            <Route path={CHART_USER} element={<ChartUser />} />
+            <Route path={''} element={<ChartUser />} />
             <Route path={CHART_POST} element={<ChartPost />} />
             <Route path={CHART_APPLICATION} element={<ChartApplication />} />
           </Route>
