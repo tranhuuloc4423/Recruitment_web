@@ -14,9 +14,13 @@ const BasicPagination = ({ length, currentPage, onPageChange }) => {
         page={currentPage}
         onChange={handleChange}
         sx={{
-          '& .Mui-selected': {
+          '.css-16mmgyz-MuiButtonBase-root-MuiPaginationItem-root' : {
+            fontFamily: 'Lexend',
+          },
+          '.css-16mmgyz-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected': {
             backgroundColor: '#fbc73b',
             color: '#000',
+            
           },
         }}
         size="large"

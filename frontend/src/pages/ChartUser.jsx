@@ -66,43 +66,49 @@ const ChartUser = () => {
       ]
     : []
 
-  // Màu sắc cho PieChart
   const COLORS = ['#8884d8', '#82ca9d', '#ffc107']
 
-  // Xuất Excel cho BarChart
-  const exportToExcel = () => {
-    let dataExport = null
-    const totalFormat = [
-      {
-        'Vai trò': 'Quản trị',
-        'Số lượng': total.admin,
-        'Tỷ lệ': total.rate.admin
-      },
-      {
-        'Vai trò': 'Ứng viên',
-        'Số lượng': total.candidate,
-        'Tỷ lệ': total.rate.candidate
-      },
-      {
-        'Vai trò': 'Nhà tuyển dụng',
-        'Số lượng': total.recruiter,
-        'Tỷ lệ': total.rate.recruiter
-      }
-    ]
-    if (activeTab === 'monthly') {
-      dataExport = filteredData
-    } else {
-      dataExport = totalFormat
-    }
-    if (dataExport === null) {
-      toast.error('Không có dữ liệu để xuất.')
-      return
-    }
-    const worksheet = XLSX.utils.json_to_sheet(dataExport)
-    const workbook = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'UserStatistics')
-    XLSX.writeFile(workbook, `${selectedTime.name}.xlsx`)
+const exportToExcel = () => {
+  if (!time || !total) {
+    toast.error('Không có dữ liệu để xuất.')
+    return
   }
+
+  const monthlyData = time.map(item => ({
+    'Thời gian': item.time,
+    'Admin': item.admin,
+    'Ứng viên': item.candidate,
+    'Nhà tuyển dụng': item.recruiter,
+    'Tổng': item.total
+  }))
+
+  const totalData = [
+    {
+      'Vai trò': 'Quản trị',
+      'Số lượng': total.admin,
+      'Tỷ lệ': total.rate.admin
+    },
+    {
+      'Vai trò': 'Ứng viên',
+      'Số lượng': total.candidate,
+      'Tỷ lệ': total.rate.candidate
+    },
+    {
+      'Vai trò': 'Nhà tuyển dụng',
+      'Số lượng': total.recruiter,
+      'Tỷ lệ': total.rate.recruiter
+    }
+  ]
+
+  const workbook = XLSX.utils.book_new()
+
+  const monthlyWorksheet = XLSX.utils.json_to_sheet(monthlyData)
+  XLSX.utils.book_append_sheet(workbook, monthlyWorksheet, 'MonthlyData')
+
+  const totalWorksheet = XLSX.utils.json_to_sheet(totalData)
+  XLSX.utils.book_append_sheet(workbook, totalWorksheet, 'TotalUsers')
+  XLSX.writeFile(workbook, 'UserData.xlsx');
+}
 
   return (
     <div className="w-full p-4 flex flex-col justify-center">
@@ -137,18 +143,14 @@ const ChartUser = () => {
 
         {/* Dropdown và nút xuất Excel */}
         <div className="flex items-center gap-2">
-          {activeTab === 'monthly' && (
-            <>
-              <span className="min-w-fit">Lọc theo tháng</span>
-              <Dropdown
-                options={timeOptions}
-                label="Lọc theo tháng"
-                setSelectedOption={setSelectedTime}
-                selectedOption={selectedTime}
-                className={'min-w-[120px]'}
-              />
-            </>
-          )}
+          <span className="min-w-fit">Lọc theo tháng</span>
+          <Dropdown
+            options={timeOptions}
+            label="Lọc theo tháng"
+            setSelectedOption={setSelectedTime}
+            selectedOption={selectedTime}
+            className={'min-w-[120px]'}
+          />
           <button
             onClick={exportToExcel}
             className="bg-green-500 min-w-fit text-white px-4 py-2 rounded hover:bg-green-600"
@@ -253,7 +255,7 @@ const ChartUser = () => {
           />
         ) : (
           <Tip
-            label={'Lưu ý đây là tổng quan số lượng người dùng'}
+            label={'Lưu ý đây là tổng quan toàn bộ số lượng người dùng trên hệ thống'}
             className={'justify-center'}
           />
         )}

@@ -72,51 +72,58 @@ const ChartPost = () => {
 
   // Xuất Excel cho BarChart
   const exportToExcel = () => {
-    let dataExport = null
-    const totalFormat = [
+    if (!time || !total) {
+      toast.error('Không có dữ liệu để xuất.')
+      return
+    }
+  
+    const monthlyData = time.map(item => ({
+      'Thời gian': item.time,
+      'Đã đăng': item.posted,
+      'Đã duyệt': item.confirmed,
+      'Hết hạn': item.expired,
+      'Bị từ chối': item.cancelled,
+      'Tổng': item.total
+    }))
+  
+    const totalData = [
       {
-        'Trạng thái': 'Đã đăng',
+        'Loại': 'Quản trị',
         'Số lượng': total.posted,
         'Tỷ lệ': total.rate.posted
       },
       {
-        'Trạng thái': 'Đã duyệt',
+        'Loại': 'Đã duyệt',
         'Số lượng': total.confirmed,
         'Tỷ lệ': total.rate.confirmed
       },
       {
-        'Trạng thái': 'Hết hạn',
+        'Loại': 'Hết hạn',
         'Số lượng': total.expired,
         'Tỷ lệ': total.rate.expired
       },
       {
-        'Trạng thái': 'Bị từ chối',
+        'Loại': 'Bị từ chối',
         'Số lượng': total.cancelled,
         'Tỷ lệ': total.rate.cancelled
       },
-    ];
-    if (activeTab === 'monthly') {
-      dataExport = filteredData
-    } else {
-      dataExport = totalFormat
-    }
-
-    
-    if (dataExport === null) {
-      toast.error('Không có dữ liệu để xuất.')
-      return
-    }
-    const worksheet = XLSX.utils.json_to_sheet(dataExport)
+    ]
+  
     const workbook = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'UserStatistics')
-    XLSX.writeFile(workbook, `${selectedTime.name}.xlsx`)
+  
+    const monthlyWorksheet = XLSX.utils.json_to_sheet(monthlyData)
+    XLSX.utils.book_append_sheet(workbook, monthlyWorksheet, 'Thống kê theo tháng')
+  
+    const totalWorksheet = XLSX.utils.json_to_sheet(totalData)
+    XLSX.utils.book_append_sheet(workbook, totalWorksheet, 'Tổng quan các bài tuyển dụng')
+    XLSX.writeFile(workbook, 'PostData.xlsx');
   }
 
   return (
     <div className="w-full p-4 flex flex-col justify-center">
       {/* Tiêu đề và tab */}
       <div className="text-2xl font-semibold text-center">
-        Thống kê Bài tuyển dụng
+        Thống kê bài tuyển dụng
       </div>
       <div className="flex justify-between items-center mb-4">
         <div className="flex">
@@ -145,9 +152,7 @@ const ChartPost = () => {
 
         {/* Dropdown và nút xuất Excel */}
         <div className="flex items-center gap-2">
-          {activeTab === 'monthly' && (
-            <>
-              <span className="min-w-fit">Lọc theo tháng</span>
+        <span className="min-w-fit">Lọc theo tháng</span>
               <Dropdown
                 options={timeOptions}
                 label="Lọc theo tháng"
@@ -155,8 +160,6 @@ const ChartPost = () => {
                 selectedOption={selectedTime}
                 className={'min-w-[120px]'}
               />
-            </>
-          )}
           <button
             onClick={exportToExcel}
             className="bg-green-500 min-w-fit text-white px-4 py-2 rounded hover:bg-green-600"
@@ -267,7 +270,7 @@ const ChartPost = () => {
           />
         ) : (
           <Tip
-            label={'Lưu ý đây là tổng quan số lượng bài tuyển dụng'}
+            label={'Lưu ý đây là tổng quan toàn bộ số lượng bài tuyển dụng trên hệ thống'}
             className={'justify-center'}
           />
         )}
