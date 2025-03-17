@@ -127,7 +127,7 @@ const ManagePostApplied = () => {
               </p>
               <p className="text-gray-700 flex justify-between items-center">
                 <span className="text-gray-700 font-semibold">Kỹ năng</span>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap justify-end gap-2">
                   {post?.skills?.map((skill) => (
                     <Tag
                       key={skill._id}
