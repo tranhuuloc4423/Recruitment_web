@@ -4,6 +4,7 @@ const Admin = require('../models/adminModel')
 const Recruiter = require('../models/recruiterModel')
 const Candidate = require('../models/candidateModel')
 const { formatDate, parseDate } = require('../utils/funcs')
+const { rankCandidates } = require('../service/candidateRanking')
 
 const postController = {
   createPost: async (req, res) => {
@@ -640,6 +641,25 @@ const postController = {
       })
 
       res.json({ message: 'Bài viết đã bị từ chối thành công', post })
+    } catch (error) {
+      res.status(500).json({ message: error.message })
+    }
+  },
+  getRankedCandidates: async (req, res) => {
+    const { postId } = req.params
+    try {
+      const post = await Post.findById(postId)
+      if (!post) {
+        return res.status(404).json({ message: 'Không tìm thấy bài đăng' })
+      }
+
+      const candidates = await Candidate.find({ _id: { $in: post.applied } })
+      if (!candidates || candidates.length === 0) {
+        return res.status(404).json({ message: 'Không có ứng viên ứng tuyển' })
+      }
+
+      const topCandidates = await rankCandidates(post, candidates)
+      res.status(200).json({ topCandidates })
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
