@@ -24,6 +24,34 @@ const getSkills = async (dispatch) => {
   try {
     const res = await axios.get(`/skill`)
     dispatch(setSkillsDB(res.data))
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const createSkill = async (name) => {
+  try {
+    const res = await axios.put(`/skill/`)
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const updateSkill = async (id) => {
+  try {
+    const res = await axios.put(`/skill/${id}`)
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const deleteSkill = async (id) => {
+  try {
+    const res = await axios.delete(`/skill/${id}`)
+    return res.data
   } catch (error) {
     console.log(error)
   }
@@ -144,5 +172,7 @@ export {
   GetNotification,
   deleteNotification,
   getTarget,
-  updateTheme
+  updateTheme,
+  updateSkill,
+  deleteSkill
 }

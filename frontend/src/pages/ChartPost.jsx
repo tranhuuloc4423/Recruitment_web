@@ -129,9 +129,9 @@ const ChartPost = () => {
         <div className="flex">
           <button
             onClick={() => setActiveTab('monthly')}
-            className={`px-4 py-2 rounded ${
+            className={`px-4 py-2 ${
               activeTab === 'monthly'
-                ? 'border-b border-primary text-primary'
+                ? 'border-b-2 border-primary text-primary'
                 : 'text-gray-500'
             }`}
           >
@@ -140,9 +140,9 @@ const ChartPost = () => {
           <button
             label="Tổng quan"
             onClick={() => setActiveTab('total')}
-            className={`px-4 py-2 rounded ${
+            className={`px-4 py-2 ${
               activeTab === 'total'
-                ? 'border-b border-primary text-primary'
+                ? 'border-b-2 border-primary text-primary'
                 : 'text-gray-500'
             }`}
           >

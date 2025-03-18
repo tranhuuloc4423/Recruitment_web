@@ -16,7 +16,7 @@ const ProgressBar = ({ progress }) => {
           return prev
         }
       })
-    }, 15)
+    }, 5)
 
     return () => clearInterval(interval)
   }, [progress, currentRole.basic_info])

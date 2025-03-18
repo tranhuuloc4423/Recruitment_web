@@ -23,7 +23,8 @@ import {
   ChartData,
   ChartUser,
   ChartPost,
-  ChartApplication
+  ChartApplication,
+  SkillManage
 } from './pages'
 import { useEffect } from 'react'
 import { Bounce, ToastContainer } from 'react-toastify'
@@ -58,7 +59,8 @@ const {
   MANAGEAPPLIED,
   CHART_USER,
   CHART_POST,
-  CHART_APPLICATION
+  CHART_APPLICATION,
+  SKILLS
 } = paths
 
 function App() {
@@ -119,6 +121,7 @@ function App() {
             <Route path={CREATEPOST} element={<CreatePost />} />
             <Route path={APPLIEDPOSTS} element={<AppliedPosts />} />
             <Route path={RECENTPOSTS} element={<RecentPosts />} />
+            <Route path={SKILLS} element={<SkillManage />} />
           </Route>
           <Route path={CHART} element={<ChartData />} > 
             <Route path={''} element={<ChartUser />} />
