@@ -1,5 +1,14 @@
 const Skill = require('../models/skillModel')
 
+const slugify = (str) => {
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+}
+
 const skillControllers = {
   fetchAndSaveSkills: async (req, res) => {
     try {
@@ -60,11 +69,14 @@ const skillControllers = {
   },
 
   createSkill: async (req, res) => {
-    const { value, name } = req.body
+    const { name } = req.body
     try {
-      if (!value || !name) {
-        return res.status(400).json({ message: 'Giá trị và nhãn là bắt buộc' })
+      if (!name) {
+        return res.status(400).json({ message: 'Tên kỹ năng là bắt buộc' })
       }
+
+      const value = slugify(name)
+
       const existingSkill = await Skill.findOne({ value })
       if (existingSkill) {
         return res.status(400).json({ message: 'Kỹ năng đã tồn tại' })
@@ -77,6 +89,40 @@ const skillControllers = {
       res
         .status(500)
         .json({ message: 'Lỗi khi tạo kỹ năng', error: error.message })
+    }
+  },
+
+  updateSkill: async (req, res) => {
+    try {
+      const { id } = req.params
+      const { name } = req.body
+
+      if (!name) {
+        return res.status(400).json({ message: 'Tên kỹ năng là bắt buộc' })
+      }
+
+      const value = slugify(name)
+
+      const existingSkill = await Skill.findOne({ value, _id: { $ne: id } })
+      if (existingSkill) {
+        return res.status(400).json({ message: 'Kỹ năng đã tồn tại' })
+      }
+
+      const updatedSkill = await Skill.findByIdAndUpdate(
+        id,
+        { name, value },
+        { new: true, runValidators: true }
+      )
+
+      if (!updatedSkill) {
+        return res.status(404).json({ message: 'Kỹ năng không tồn tại' })
+      }
+
+      res.status(200).json(updatedSkill)
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: 'Lỗi khi cập nhật kỹ năng', error: error.message })
     }
   },
 
