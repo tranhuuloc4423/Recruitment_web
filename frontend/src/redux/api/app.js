@@ -32,16 +32,16 @@ const getSkills = async (dispatch) => {
 
 const createSkill = async (name) => {
   try {
-    const res = await axios.put(`/skill/`)
+    const res = await axios.post(`/skill/`, {name})
     return res.data
   } catch (error) {
     console.log(error)
   }
 }
 
-const updateSkill = async (id) => {
+const updateSkill = async (name, id) => {
   try {
-    const res = await axios.put(`/skill/${id}`)
+    const res = await axios.put(`/skill/${id}`, {name})
     return res.data
   } catch (error) {
     console.log(error)
@@ -174,5 +174,6 @@ export {
   getTarget,
   updateTheme,
   updateSkill,
-  deleteSkill
+  deleteSkill,
+  createSkill
 }

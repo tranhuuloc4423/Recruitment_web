@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { getSkills } from '../redux/api/app';
+import { createSkill, updateSkill, deleteSkill, getSkills } from '../redux/api/app';
 import { useDispatch } from 'react-redux';
-import { MdEdit } from "react-icons/md";
-import { TiDelete } from "react-icons/ti";
+import { MdEdit } from 'react-icons/md';
+import { TiDelete } from 'react-icons/ti';
+import Swal from 'sweetalert2';
 
 const SkillManage = () => {
   const [skills, setSkills] = useState([]);
   const [search, setSearch] = useState('');
-  const [filter, setFilter] = useState('all'); // Giả định có bộ lọc
   const dispatch = useDispatch();
 
   // Lấy dữ liệu từ API
   const getData = async () => {
     const data = await getSkills(dispatch);
-    setSkills(data || []); // Đảm bảo data là mảng
+    setSkills(data); // Đảm bảo data là mảng
     console.log(data);
   };
 
@@ -22,34 +22,81 @@ const SkillManage = () => {
   }, []);
 
   // Xử lý tìm kiếm
-  const filteredSkills = skills.filter((skill) =>
+  const filteredSkills = skills?.filter((skill) =>
     skill.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Giả lập các hàm CRUD
-  const handleAdd = () => {
-    const newSkill = { id: Date.now(), name: 'New Skill', value: 0 }; // Giả lập
-    setSkills([...skills, newSkill]);
-  };
+  // Thêm kỹ năng mới
+  const handleAdd = async () => {
+    const { value: formValues } = await Swal.fire({
+      title: 'Thêm kỹ năng mới',
+      html:
+        '<input id="swal-input1" class="swal2-input" placeholder="Tên kỹ năng">',
+      focusConfirm: false,
+      preConfirm: () => {
+        return {
+          name: document.getElementById('swal-input1').value,
+        };
+      },
+    });
 
-  const handleEdit = (id) => {
-    const updatedName = prompt('Nhập tên mới:');
-    const updatedValue = prompt('Nhập giá trị mới:');
-    if (updatedName && updatedValue) {
-      setSkills(
-        skills.map((skill) =>
-          skill.id === id ? { ...skill, name: updatedName, value: updatedValue } : skill
-        )
-      );
+    if (formValues && formValues.name) {
+      const createdSkill = await createSkill(formValues.name);
+      if (createdSkill) {
+        setSkills([...skills, createdSkill]);
+        Swal.fire('Thành công!', 'Kỹ năng đã được thêm.', 'success');
+      }
     }
   };
 
-  const handleDelete = (id) => {
-    setSkills(skills.filter((skill) => skill.id !== id));
+  // Sửa kỹ năng
+  const handleEdit = async (skill) => {
+    const { value: formValues } = await Swal.fire({
+      title: 'Sửa kỹ năng',
+      html: `
+        <input id="swal-input1" class="swal2-input" value="${skill.name}" placeholder="Tên kỹ năng">
+      `,
+      focusConfirm: false,
+      preConfirm: () => {
+        return {
+          name: document.getElementById('swal-input1').value,
+        };
+      },
+    });
+
+    if (formValues && formValues.name) {
+      const result = await updateSkill(formValues.name, skill._id); // Gọi API sửa với name và _id
+      if (result) {
+        setSkills(skills.map((s) => (s._id === skill._id ? { ...s, name: result.name, value: result.value } : s)));
+        Swal.fire('Thành công!', 'Kỹ năng đã được cập nhật.', 'success');
+      }
+    }
+  };
+
+  // Xóa kỹ năng
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: 'Bạn có chắc không?',
+      text: 'Bạn muốn xóa kỹ năng này?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Có, xóa nó!',
+      cancelButtonText: 'Hủy',
+    });
+
+    if (result.isConfirmed) {
+      const deleted = await deleteSkill(id, dispatch); // Gọi API xóa
+      if (deleted) {
+        setSkills(skills.filter((skill) => skill._id !== id));
+        Swal.fire('Đã xóa!', 'Kỹ năng đã được xóa thành công.', 'success');
+      }
+    }
   };
 
   return (
-    <div className="">
+    <div className="min-h-screen bg-gray-100 p-6">
       {/* Header */}
       <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-lg shadow-md">
         <div className="flex items-center gap-4">
@@ -87,18 +134,18 @@ const SkillManage = () => {
                 <tr key={item.id} className="border-t hover:bg-gray-50">
                   <td className="px-6 py-4 text-gray-800">{item.name}</td>
                   <td className="px-6 py-4 text-gray-800">{item.value}</td>
-                  <td className="px-6 py-4 text-right">
+                  <td className="px-6 py-4 text-right flex justify-end gap-2">
                     <button
-                      onClick={() => handleEdit(item.id)}
-                      className="px-3 py-1 text-blue-600 hover:text-blue-800 mr-2"
+                      onClick={() => handleEdit(item)}
+                      className="text-blue-600 hover:text-blue-800"
                     >
-                      <MdEdit size={24}/>
+                      <MdEdit size={24} />
                     </button>
                     <button
-                      onClick={() => handleDelete(item.id)}
-                      className="px-3 py-1 text-red-600 hover:text-red-800"
+                      onClick={() => handleDelete(item._id)}
+                      className="text-red-600 hover:text-red-800"
                     >
-                      <TiDelete size={24}/>
+                      <TiDelete size={24} />
                     </button>
                   </td>
                 </tr>
