@@ -15,7 +15,8 @@ const {
   APPLIEDPOSTS,
   CHART_USER,
   CHART_POST,
-  CHART_APPLICATION
+  CHART_APPLICATION,
+  SKILLS
 } = paths
 
 const nav = [
@@ -122,12 +123,19 @@ const manageNav = [
         active: false,
         id: 2
       },
+      
       {
         name: 'Đăng bài',
         path: '/manage/' + CREATEPOST,
         active: false,
         id: 3
-      }
+      },
+      {
+        name: 'Kỹ năng',
+        path: '/manage/' + SKILLS,
+        active: false,
+        id: 4
+      },
     ]
   },
   {

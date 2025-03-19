@@ -180,8 +180,9 @@ const PostDetails = ({ id }) => {
               <IoLocationOutline size={24} />
               <span>{`${basicInfo?.address?.province?.name}, ${basicInfo?.address?.district?.name}`}</span>
             </span>
-            <span>
+            <span className="flex flex-row items-center gap-2">
               <PiBagBold size={24} />
+              <span>{otherInfo?.wforms?.map((item) => (<Tag key={item?.value} label={item?.name} />))}</span>
             </span>
           </div>
           <div className="flex-row-center gap-2">

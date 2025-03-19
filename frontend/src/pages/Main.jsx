@@ -288,7 +288,7 @@ const Main = () => {
         <div className="flex flex-row justify-between items-center">
           <span className="heading-3">
             <span className="text-primary font-semibold text-3xl">
-              {filteredPosts.length}
+              {filteredPosts?.length}
             </span>{' '}
             công việc đã được tìm thấy
           </span>

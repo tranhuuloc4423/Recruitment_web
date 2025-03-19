@@ -21,7 +21,8 @@ const paths = {
   MANAGEAPPLIED: 'manage-applied',
   CHART_USER: 'user',
   CHART_POST: 'post',
-  CHART_APPLICATION: 'application'
+  CHART_APPLICATION: 'application',
+  SKILLS: 'skills'
 }
 
 export default paths

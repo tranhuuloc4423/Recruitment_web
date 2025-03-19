@@ -182,7 +182,9 @@ const Post = ({ post, select, manage }) => {
 
         <span className="flex flex-row items-center gap-2">
           <PiBagBold size={24} />
-          {/* <span>{`${otherInfo.?.}`}</span> */}
+          <span>{otherInfo?.wforms?.map((item) => (
+            <Tag key={item._id} label={item.name} />
+          ))}</span>
         </span>
       </div>
 

@@ -5,7 +5,8 @@ import {
   getCandidatesApprovedByPost,
   getOwnerById,
   getPost,
-  updateApproved
+  updateApproved,
+  getRankedCandidates
 } from '../redux/api/post'
 import { useSelector } from 'react-redux'
 import { Button, Tag } from '../components'
@@ -16,8 +17,8 @@ import { addClassToElements, formatSalary } from '../utils/functions'
 import CandidateApplied from '../components/CandidateApplied'
 
 const ManagePostApplied = () => {
-  const { skillsDB } = useSelector((state) => state.app)
-  const { currentUser } = useSelector((state) => state.auth)
+  // const { skillsDB } = useSelector((state) => state.app)
+  // const { currentUser } = useSelector((state) => state.auth)
   const location = useLocation()
   const navigate = useNavigate()
   const [post, setPost] = useState(null)
@@ -39,17 +40,37 @@ const ManagePostApplied = () => {
 
   const hanleViewCV = (id) => {
     if (!id) {
-      console.error("Candidate ID is invalid");
-      return;
+      console.error('Candidate ID is invalid')
+      return
     }
-    
-    navigate(`/candidate-cv/${id}`);
+
+    navigate(`/candidate-cv/${id}`)
   }
 
   const handleApproved = async (candidate) => {
     Swal.fire({
-      title: 'Tôi nhắc bạn?',
+      title: 'Duyệt ứng viên?',
       text: `Bạn có chắc muốn duyệt ứng viên ${candidate.basic_info.name}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Quay lại',
+      confirmButtonText: 'Chắc chắn'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const postId = location.state.id
+        await updateApproved(postId, candidate._id)
+        // Sau khi duyệt, refresh lại dữ liệu
+        handleGetData()
+      }
+    })
+  }
+
+  const handleRankedCandidates = async () => {
+    Swal.fire({
+      title: 'Lọc danh sách ứng viên?',
+      text: `Lọc danh sách ứng viên theo gợi ý của AI (Huggingface)`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -59,9 +80,9 @@ const ManagePostApplied = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const postId = location.state.id
-        await updateApproved(postId, candidate._id)
-        // Sau khi duyệt, refresh lại dữ liệu
-        handleGetData()
+        const data = await getRankedCandidates(postId)
+        setApprovedCandidates(data)
+        console.log(data)
       }
     })
   }
@@ -180,7 +201,7 @@ const ManagePostApplied = () => {
 
       {/* Tabs */}
       <div className="flex justify-between items-center w-full pb-2">
-        <div className='tabs border-b-2 border-gray-100 flex items-center gap-4'>
+        <div className="tabs border-b-2 border-gray-100 flex items-center gap-4">
           <button
             className={`px-4 py-1 text-lg ${
               activeTab === 'applied'
@@ -202,8 +223,12 @@ const ManagePostApplied = () => {
             Đã duyệt
           </button>
         </div>
-
+        <div className='flex items-center gap-2'>
+        {activeTab !== 'applied' && (
+          <Button label={'Lọc CV'} onClick={handleRankedCandidates} />
+        )}
         <Button label={'Quay lại'} onClick={() => navigate(-1)} />
+        </div>
       </div>
 
       {/* Container */}
@@ -232,7 +257,11 @@ const ManagePostApplied = () => {
               </span>
             </h2>
             <div>
-              <CandidateApproved candidates={approvedCandidates} hanleViewCV={hanleViewCV} owner={owner} />
+              <CandidateApproved
+                candidates={approvedCandidates}
+                hanleViewCV={hanleViewCV}
+                owner={owner}
+              />
             </div>
           </>
         )}

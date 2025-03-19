@@ -18,12 +18,6 @@ const RichText = ({
   const handleChange = (newValue) => {
     const plainText = newValue.replace(/<[^>]+>/g, '') // Loại bỏ các thẻ HTML để đếm ký tự thực
 
-    // Kiểm tra nếu vượt quá giới hạn max
-    if (plainText.length > max) {
-      toast.error(`Vui lòng nhập ít hơn ${max} ký tự`)
-      return // Không cho phép cập nhật nếu vượt quá giới hạn
-    }
-
     // Nếu hợp lệ, cập nhật state và gọi onChange
     setCharCount(plainText.length)
     onChange({ target: { name, value: newValue } })
@@ -35,12 +29,6 @@ const RichText = ({
     const templateText = template // Nội dung mẫu
     const currentPlainText = value ? value.replace(/<[^>]+>/g, '') : ''
     const newPlainText = currentPlainText + templateText.replace(/<[^>]+>/g, '')
-
-    // Kiểm tra nếu chèn mẫu vượt quá giới hạn
-    if (newPlainText.length > max) {
-      toast.error(`Nội dung mẫu vượt quá giới hạn ${max} ký tự`)
-      return
-    }
 
     // Nếu hợp lệ, chèn mẫu
     const newValue = value ? value + templateText : templateText

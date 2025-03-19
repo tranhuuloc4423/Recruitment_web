@@ -180,6 +180,16 @@ const getListPostByCandidateId = async (id, name) => {
   }
 }
 
+const getRankedCandidates = async (id) => {
+  try {
+    const res = await axios.get(`post/candidate/${id}/ranked`)
+    return res.data
+  } catch (error) {
+    console.log(error)
+    toast.error(error.response.data.message)
+  }
+}
+
 const savePost = async (id, candidateId) => {
   try {
     console.log("save")
@@ -216,5 +226,6 @@ export {
   getOwnerById,
   getListPostByCandidateId,
   savePost,
-  updateApproved
+  updateApproved,
+  getRankedCandidates
 }
