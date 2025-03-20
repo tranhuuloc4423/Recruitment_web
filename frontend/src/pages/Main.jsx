@@ -17,6 +17,7 @@ const Main = () => {
   const [filteredSuggestions, setFilteredSuggestions] = useState([])
   const [isFocused, setIsFocused] = useState(false)
   const searchRef = useRef(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const { currentRole } = useSelector((state) => state.app)
 
   const [currentPage, setCurrentPage] = useState(1) // Thêm state cho trang hiện tại
@@ -173,6 +174,16 @@ const Main = () => {
     if (e.key === 'Enter') handleSearch()
   }
 
+  const handlePostClick = (postId) => {
+    setSelectedPost(postId)
+    setIsModalOpen(true) // Mở modal trên mobile
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    setSelectedPost(null)
+  }
+
   // Xóa gợi ý lịch sử
   const handleRemoveSuggestion = (index) => {
     const updatedSuggestions = history.filter((_, i) => i !== index)
@@ -240,7 +251,8 @@ const Main = () => {
 
   return (
     <div className="flex flex-col gap-4 justify-center items-center mx-auto">
-      <div className="w-2/3 flex flex-col gap-2">
+      {/* tìm kiếm */}
+      <div className="w-full md:w-2/3 flex flex-col gap-2">
         <div className="flex flex-row gap-4 w-full items-center">
           <div className="w-full relative">
             <input
@@ -295,28 +307,48 @@ const Main = () => {
         </div>
         {posts ? (
           <div className="flex flex-col">
-            <div className="flex flex-row gap-4">
-              <div className="w-1/3 flex flex-col gap-2 h-[1000px] overflow-y-auto">
+            <div className="flex flex-col md:flex-row gap-4">
+              {/* Danh sách bài viết */}
+              <div className="w-full md:w-1/3 flex flex-col gap-2 max-h-[calc(100vh-100px)] overflow-y-auto">
                 {paginatedPosts.map((post) => (
                   <div
                     key={post._id}
-                    onClick={() => setSelectedPost(post._id)}
+                    onClick={() => handlePostClick(post._id)}
                     className="cursor-pointer"
                   >
                     <Post post={post} select={selectedPost} />
                   </div>
                 ))}
               </div>
-              <div className="w-2/3">
-                <PostDetails id={selectedPost} />
+
+              {/* Phần chi tiết bài viết - chỉ hiển thị trên desktop */}
+              <div className="hidden md:block md:w-2/3 max-h-[calc(100vh-100px)] overflow-y-auto">
+                {selectedPost && <PostDetails id={selectedPost} />}
               </div>
             </div>
+
+            {/* Phân trang */}
             {totalPages > 1 && (
               <BasicPagination
                 length={totalPages}
                 currentPage={currentPage}
                 onPageChange={handlePageChange}
               />
+            )}
+
+            {/* Modal cho mobile */}
+            {isModalOpen && (
+              <div className="fixed inset-0 bg-black overscroll-auto bg-opacity-50 flex justify-center items-center md:hidden">
+                <div className="bg-white rounded-lg relative w-full max-w-lg max-h-[90vh] overflow-y-auto">
+                  <div onClick={closeModal}
+                    className="absolute top-2 right-2 text-xl font-bold">
+                    <IoClose size={32}/>
+                  </div>
+                  <div className='mt-4'>
+                  <PostDetails id={selectedPost} />
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         ) : (

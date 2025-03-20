@@ -187,7 +187,7 @@ const PostDetails = ({ id }) => {
           </div>
           <div className="flex-row-center gap-2">
             <span className="para-1">Yêu cầu kỹ năng : </span>
-            <div className="flex-row-center gap-2">
+            <div className="flex-row-center flex-wrap justify-end gap-2">
               {post?.skills?.map((skill) => (
                 <Tag key={skill?.value} label={skill?.name} />
               ))}
@@ -204,7 +204,7 @@ const PostDetails = ({ id }) => {
             <div dangerouslySetInnerHTML={{ __html: post?.request }}></div>
           </div>
           <Line />
-          <div className="grid grid-cols-3 grid-flow-row gap-2">
+          <div className="grid grid-cols-2 md:grid-cols-3 grid-flow-row gap-2">
             <div className="flex flex-col gap-2">
               <span className="font-semibold">Lĩnh vực</span>
               <span className="">{basicInfo?.field}</span>

@@ -50,7 +50,7 @@ const Noti = () => {
   return (
     <div className="relative" ref={notiRef}>
       <div className="cursor-pointer relative" onClick={() => setActive(!active)}>
-        <GoBell size={32} color="white" />
+        <GoBell size={24} color="white" />
         {notifications?.length > 0 && (
           <span className="absolute top-[-6px] right-[-6px] bg-second text-sm font-bold px-2 py-0.5 rounded-full">
             {notifications?.length}

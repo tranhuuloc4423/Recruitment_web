@@ -24,9 +24,7 @@ const Header = () => {
         {/* Logo: luôn hiển thị */}
         <div className="flex items-center h-full">
           <img src={logo} alt="Logo Lac Hong" className="w-[100px]" />
-        </div>
-        {/* Navigation links: chỉ hiển thị trên desktop */}
-        <div className="hidden md:flex text-white h-full">
+          <div className="hidden md:flex text-white h-full">
           {currentUser?._id && currentRole ? (
             nav
               .find((nav) => nav.name === currentUser?.role)
@@ -43,6 +41,10 @@ const Header = () => {
             <></>
           )}
         </div>
+        </div>
+
+        {/* Navigation links: chỉ hiển thị trên desktop */}
+        
         {/* Account section: chỉ hiển thị trên desktop */}
         <div className="hidden md:flex gap-4 items-center">
           {currentUser?._id ? (
@@ -66,9 +68,10 @@ const Header = () => {
           )}
         </div>
         {/* Burger menu: chỉ hiển thị trên mobile */}
-        <div className="md:hidden flex items-center">
+        <div className="md:hidden flex gap-4 items-center">
+          <Noti />
           <button onClick={() => setIsMenuOpen(true)} className="text-white">
-            <LuMenu />
+            <LuMenu size={24} />
           </button>
         </div>
       </div>
@@ -83,39 +86,19 @@ const Header = () => {
 
       {/* Menu di động: trượt từ trái */}
       <div
-        className={`fixed top-0 left-0 w-2/3 h-full bg-primary z-50 flex flex-col transition-transform duration-300 ${
+        className={`fixed top-0 left-0 w-1/2 h-full bg-primary z-50 flex flex-col transition-transform duration-300 ${
           isMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="flex justify-end p-4">
           <button onClick={() => setIsMenuOpen(false)} className="text-white">
-            <IoClose />
+            <IoClose size={24}/>
           </button>
         </div>
         <div className="flex flex-col gap-4 p-4 text-white">
-          {/* Navigation links trong menu di động */}
-          {currentUser?._id && currentRole ? (
-            nav
-              .find((nav) => nav.name === currentUser?.role)
-              ?.nav?.map((item, index) => (
-                <Link
-                  key={index}
-                  to={item.path}
-                  className="py-2"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))
-          ) : (
-            <></>
-          )}
           {/* Account section trong menu di động */}
           {currentUser?._id ? (
             <>
-              <div className="py-2">
-                <Noti />
-              </div>
               <div className="py-2">
                 <Account />
               </div>
@@ -139,6 +122,23 @@ const Header = () => {
                 }}
               />
             </>
+          )}
+          {/* Navigation links trong menu di động */}
+          {currentUser?._id && currentRole ? (
+            nav
+              .find((nav) => nav.name === currentUser?.role)
+              ?.nav?.map((item, index) => (
+                <Link
+                  key={index}
+                  to={item.path}
+                  className="py-2 text-xl"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              ))
+          ) : (
+            <></>
           )}
         </div>
       </div>
