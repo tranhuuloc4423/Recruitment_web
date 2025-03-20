@@ -6,25 +6,36 @@ const Candidate = require('../models/candidateModel')
 const { formatDate, parseDate } = require('../utils/funcs')
 const { rankCandidatesForPost } = require('../service/candidateRanking')
 
+const formatDate = (date) => {
+  const day = ('0' + date.getDate()).slice(-2)
+  const month = ('0' + (date.getMonth() + 1)).slice(-2)
+  const year = date.getFullYear()
+  return `${day}/${month}/${year}`
+}
+
 const postController = {
   createPost: async (req, res) => {
     const { postData } = req.body
 
     try {
-      postData.date_upload = formatDate(new Date())
+      let dateUpload
+      if (postData.date_upload) {
+        dateUpload = new Date(postData.date_upload)
+      } else {
+        dateUpload = new Date()
+      }
+      postData.date_upload = formatDate(dateUpload)
 
       let user
       if (postData.authorType === 'admin') {
         user = await Admin.findById(postData.author)
         if (user) {
-          // console.log(user.basic_info.address)
           postData.location = { address: user.basic_info.address }
           postData.status = 'confirmed'
         }
       } else if (postData.authorType === 'recruiter') {
         user = await Recruiter.findById(postData.author)
         if (user) {
-          // console.log(user.basic_info.address)
           postData.location = { address: user.basic_info.address }
           postData.status = 'posted'
         }
@@ -85,11 +96,21 @@ const postController = {
             new Date(updatedPost.date_upload)
           )
         }
-        // if (updatedPost.date_expiration) {
-        //   updatedPost.date_expiration = formatDate(
-        //     new Date(updatedPost.date_expiration)
-        //   )
-        // }
+        if (updatedPost.date_expiration) {
+          updatedPost.date_expiration = formatDate(
+            new Date(updatedPost.date_expiration)
+          )
+
+          const expirationDate = new Date(updatedPost.date_expiration)
+          const currentDate = new Date()
+
+          if (expirationDate < currentDate) {
+            updatedPost.status = 'expired'
+          } else {
+            updatedPost.status = post.status
+          }
+        }
+
         if (user && user.basic_info && user.basic_info.address) {
           updatedPost.location = { address: user.basic_info.address }
         }
