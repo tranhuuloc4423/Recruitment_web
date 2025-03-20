@@ -72,7 +72,10 @@ const CVprofile = () => {
   //   }))
   // }
 
-  const handleThemeAndColorChange = async (themeIndex = themeState.activeTheme, colorIndex = themeState.activeColor) => {
+  const handleThemeAndColorChange = async (
+    themeIndex = themeState.activeTheme,
+    colorIndex = themeState.activeColor
+  ) => {
     setThemeState((prevState) => ({
       ...prevState,
       activeTheme: themeIndex,
@@ -91,30 +94,33 @@ const CVprofile = () => {
   const activeColor = activeTheme.color[themeState.activeColor]
 
   return (
-    <div className="flex flex-row items-start">
-      <div className="flex flex-row items-center w-1/3 gap-4">
-        {themeState?.themes.map((theme, index) => (
-          <div
-            key={index}
-            className={`w-1/2 cursor-pointer relative ${
-              themeState.activeTheme === index ? 'border-second border-4' : ''
-            }`}
-            onClick={() => handleThemeAndColorChange(index, 0)}
-          >
-            <img
-              src={index === 0 ? cv_t_0 : cv_t_1}
-              alt=""
-              className="w-full"
-            />
-            {themeState.activeTheme === index && (
-              <span className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] p-3 bg-second rounded-full">
-                <FaCheck size={48} color="white" />
-              </span>
-            )}
-          </div>
-        ))}
+    <div className="flex flex-col xl:flex-row items-start">
+      <div className="flex flex-col w-full xl:w-1/3">
+        <div>Chọn theme mẫu</div>
+        <div className="flex flex-row items-center w-full px-8 justify-center xl:p-0 gap-4">
+          {themeState?.themes.map((theme, index) => (
+            <div
+              key={index}
+              className={`w-1/2 cursor-pointer relative ${
+                themeState.activeTheme === index ? 'border-second border-4' : ''
+              }`}
+              onClick={() => handleThemeAndColorChange(index, 0)}
+            >
+              <img
+                src={index === 0 ? cv_t_0 : cv_t_1}
+                alt=""
+                className="w-full"
+              />
+              {themeState.activeTheme === index && (
+                <span className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] p-3 bg-second rounded-full">
+                  <FaCheck size={48} color="white" />
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="w-2/3 flex flex-col items-center justify-space-between gap-8">
+      <div className="w-full xl:w-2/3 flex flex-col items-center justify-space-between gap-8">
         {/* Theme zone */}
         {/* overflow-y-auto h-[600px] */}
         <div ref={cvRef} className="">
@@ -145,7 +151,9 @@ const CVprofile = () => {
                     index === themeState.activeColor ? 'border-2' : ''
                   }`}
                   style={{ backgroundColor: color }}
-                  onClick={() => handleThemeAndColorChange(themeState.activeTheme, index)}
+                  onClick={() =>
+                    handleThemeAndColorChange(themeState.activeTheme, index)
+                  }
                 >
                   {index === themeState.activeColor && <FaCheck size={16} />}
                 </span>

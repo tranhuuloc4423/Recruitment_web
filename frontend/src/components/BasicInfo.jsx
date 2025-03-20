@@ -32,7 +32,7 @@ const BasicInfo = () => {
   }, [currentRole.basic_info, currentRole.profileStatus])
 
   return (
-    <div className="flex flex-col w-[30%] gap-4">
+    <div className="flex flex-col w-full lg:w-[30%] gap-4">
       <div className="w-full flex flex-col bg-white rounded p-4 gap-2 h-fit">
         <div className="flex flex-col gap-2 items-center">
           <img

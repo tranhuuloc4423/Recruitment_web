@@ -23,7 +23,7 @@ const Tag = ({ label, remove, plus, onRemove, checked, setChecked, size = "base"
   return (
     <div
       onClick={setChecked ? () => setChecked(!checked) : () => null}
-      className="px-3 py-1 border border-gray-100 rounded-full flex flex-row gap-2 items-center cursor-pointer"
+      className="px-3 py-1 border border-gray-100 rounded-md flex flex-row gap-2 items-center cursor-pointer"
     >
       <span className={`para-1 font-medium text-black-100 text-${size}`}>{label}</span>
       {plus && (

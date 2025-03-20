@@ -24,7 +24,7 @@ const ProgressBar = ({ progress }) => {
   return (
     <div className="flex items-center gap-4">
       {/* Half Circle Progress Bar */}
-      <div className="relative w-56 h-28">
+      <div className="relative w-56 h-32 lg:h-28 ">
         <svg viewBox="0 0 200 100" className="w-full h-full">
           {/* Background Circle */}
           <path

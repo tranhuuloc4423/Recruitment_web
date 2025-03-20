@@ -95,7 +95,7 @@ const Target = () => {
 
   return (
     <div className="w-full flex justify-center">
-      <div className="flex flex-col p-4 rounded gap-4 w-2/3">
+      <div className="flex flex-col p-4 rounded gap-4 w-full lg:w-2/3">
         {/* Header */}
         <div className="flex flex-col gap-2">
           <span className="heading-2">Công việc mong muốn</span>

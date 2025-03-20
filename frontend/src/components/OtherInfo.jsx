@@ -98,7 +98,7 @@ const OtherInfo = () => {
   }
 
   return (
-    <div className="gap-4 w-[70%] flex flex-col">
+    <div className="gap-4 w-full lg:w-[70%] flex flex-col">
       {info
         .find((item) => item?.name === currentUser?.role)
         ?.otherInfo?.map((item) => (
