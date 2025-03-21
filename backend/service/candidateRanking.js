@@ -52,10 +52,15 @@ async function calculateSuitability(post, candidate) {
       ? candidate.other_info.skills.map((s) => s.name || '').join(' ')
       : ''
 
+  const postAddress = post.address || ''
+  const candidateAddress = candidate.address || ''
+
   const similarityDesc = textCosineSimilarity(postDesc, candidateDesc)
   const similaritySkills = textCosineSimilarity(postSkills, candidateSkills)
+  const similarityAddress = textCosineSimilarity(postAddress, candidateAddress)
 
-  const totalScore = similarityDesc * 0.6 + similaritySkills * 0.4
+  const totalScore =
+    similarityDesc * 0.5 + similaritySkills * 0.3 + similarityAddress * 0.2
   return totalScore
 }
 
