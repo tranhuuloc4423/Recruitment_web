@@ -3,7 +3,7 @@ const Notification = require('../models/notificationModel')
 const Admin = require('../models/adminModel')
 const Recruiter = require('../models/recruiterModel')
 const Candidate = require('../models/candidateModel')
-const { formatDate, parseDate } = require('../utils/funcs')
+const { parseDate } = require('../utils/funcs')
 const { rankCandidatesForPost } = require('../service/candidateRanking')
 
 const formatDate = (date) => {
