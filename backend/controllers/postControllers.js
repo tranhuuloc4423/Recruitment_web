@@ -3,7 +3,7 @@ const Notification = require('../models/notificationModel')
 const Admin = require('../models/adminModel')
 const Recruiter = require('../models/recruiterModel')
 const Candidate = require('../models/candidateModel')
-const { formatDate, parseDate } = require('../utils/funcs')
+const { parseDate } = require('../utils/funcs')
 const { rankCandidatesForPost } = require('../service/candidateRanking')
 
 // const formatDate = (date) => {
@@ -667,13 +667,16 @@ const postController = {
     }
   },
   getRankedCandidates: async (req, res) => {
-    const { postId } = req.params
     try {
-      const rankedCandidates = await rankCandidatesForPost(postId)
-      return res.status(200).json({ success: true, data: rankedCandidates })
-    } catch (error) {
-      console.error(error)
-      return res.status(500).json({ success: false, error: error.message })
+      const { postId } = req.params
+      const post = await Post.findById(postId)
+      if (!post) {
+        return res.status(404).json({ message: 'Post không tồn tại' })
+      }
+      const rankedCandidates = await rankCandidatesForPost(post)
+      res.json({ rankedCandidates })
+    } catch (err) {
+      res.status(500).json({ error: err.message })
     }
   }
 }
