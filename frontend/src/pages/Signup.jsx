@@ -129,9 +129,12 @@ const Signup = () => {
     <div className="w-full flex flex-col justify-center items-center gap-8">
       <Header />
       <div className="w-full flex gap-4 justify-center">
-        <div className="w-1/3 flex flex-col gap-4 items-center justify-center">
+        <div className="w-[70%] lg:w-1/3 flex flex-col gap-2 lg:gap-4 items-center justify-center">
           <div className="heading-1 text-primary text-center">
             Chào mừng bạn đến với Tuyển dụng Lạc Hồng
+          </div>
+          <div className="lg:hidden flex justify-center">
+            <img src={bg} alt="background images" />
           </div>
           <form onSubmit={handleSubmit} className="w-full gap-4 flex flex-col">
             {inputs.map((input) => (
@@ -167,7 +170,7 @@ const Signup = () => {
             </span>
           </div>
         </div>
-        <div className="w-1/2 flex justify-center">
+        <div className="hidden lg:flex w-1/2 justify-center">
           <img src={bg} alt="background images" />
         </div>
       </div>

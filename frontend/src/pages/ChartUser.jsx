@@ -111,12 +111,12 @@ const exportToExcel = () => {
 }
 
   return (
-    <div className="w-full p-4 flex flex-col justify-center">
+    <div className="w-full flex flex-col justify-center">
       {/* Tiêu đề và tab */}
       <div className="text-2xl font-semibold text-center">
         Thống kê người dùng
       </div>
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col gap-4 lg:flex-row justify-between items-center my-4">
         <div className="flex">
           <button
             onClick={() => setActiveTab('monthly')}

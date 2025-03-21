@@ -24,7 +24,7 @@ const Header = () => {
         {/* Logo: luôn hiển thị */}
         <div className="flex items-center h-full">
           <img src={logo} alt="Logo Lac Hong" className="w-[100px]" />
-          <div className="hidden md:flex text-white h-full">
+          <div className="hidden lg:flex text-white h-full">
           {currentUser?._id && currentRole ? (
             nav
               .find((nav) => nav.name === currentUser?.role)
@@ -46,7 +46,7 @@ const Header = () => {
         {/* Navigation links: chỉ hiển thị trên desktop */}
         
         {/* Account section: chỉ hiển thị trên desktop */}
-        <div className="hidden md:flex gap-4 items-center">
+        <div className="hidden lg:flex gap-4 items-center">
           {currentUser?._id ? (
             <>
               <Noti />
@@ -68,10 +68,10 @@ const Header = () => {
           )}
         </div>
         {/* Burger menu: chỉ hiển thị trên mobile */}
-        <div className="md:hidden flex gap-4 items-center">
+        <div className="lg:hidden flex gap-4 items-center">
           <Noti />
           <button onClick={() => setIsMenuOpen(true)} className="text-white">
-            <LuMenu size={24} />
+            <LuMenu size={32} />
           </button>
         </div>
       </div>

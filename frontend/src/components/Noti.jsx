@@ -50,7 +50,12 @@ const Noti = () => {
   return (
     <div className="relative" ref={notiRef}>
       <div className="cursor-pointer relative" onClick={() => setActive(!active)}>
-        <GoBell size={24} color="white" />
+        <span className='hidden lg:block'>
+          <GoBell size={24} color="white" />
+        </span>
+        <span className='lg:hidden block'>
+          <GoBell size={32} color="white" />
+        </span>
         {notifications?.length > 0 && (
           <span className="absolute top-[-6px] right-[-6px] bg-second text-sm font-bold px-2 py-0.5 rounded-full">
             {notifications?.length}
@@ -58,7 +63,7 @@ const Noti = () => {
         )}
       </div>
       <div
-        className={`w-[400px] z-[9999] bg-white shadow-lg rounded-lg overflow-hidden absolute top-[100%] right-0 transition-all ${
+        className={`w-[300px] lg:w-[400px] z-[9999] bg-white shadow-lg rounded-lg overflow-hidden absolute top-[100%] right-0 transition-all ${
           active ? 'translate-y-0 opacity-100 visible' : 'translate-y-5 opacity-0 invisible'
         }`}
       >
@@ -75,7 +80,7 @@ const Noti = () => {
                   <p className="text-xs text-gray-500">{formatDateIso(item.createdAt)}</p>
                 </div>
                 <span className="text-gray-400 hover:text-gray-600 cursor-pointer" onClick={() => handleDelete(item._id)}>
-                  <IoClose size={20} />
+                  <IoClose size={24} />
                 </span>
               </li>
             ))

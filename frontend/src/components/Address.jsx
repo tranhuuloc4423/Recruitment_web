@@ -27,7 +27,7 @@ const Address = ({
   }, [selectedProvince, selectedCity])
 
   return (
-    <div className="flex flex-row justify-between w-full gap-4">
+    <div className="flex flex-col lg:flex-row justify-between w-full gap-4">
       <DropdownSearch
         items={provinces}
         selectedItem={selectedProvince}

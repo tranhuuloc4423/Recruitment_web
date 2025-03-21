@@ -96,7 +96,7 @@ const SkillManage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="">
       {/* Header */}
       <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-lg shadow-md">
         <div className="flex items-center gap-4">

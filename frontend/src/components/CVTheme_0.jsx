@@ -19,10 +19,10 @@ const CVTheme_0 = ({ color, data = null }) => {
   }, [currentRole.basic_info, currentRole.other_info, basicInfo, otherInfo])
 
   return (
-    <div className="w-[794px] flex flex-col mx-8 my-2">
+    <div className="w-full lg:w-2/3 flex flex-col mx-8 my-2">
       {/* header */}
       <div
-        className={`p-4 flex flex-row gap-4 items-center w-full h-[192px]`}
+        className={`p-4 flex flex-row gap-4 items-center w-full `}
         style={{ backgroundColor: color, color: '#a6a6a6' }}
       >
         <div className="bg-cover w-[150px] h-[150px] ">
@@ -39,7 +39,7 @@ const CVTheme_0 = ({ color, data = null }) => {
             </div>
             <div className="para-1">UX/UI Design</div>
           </div>
-          <div className="grid grid-cols-2 grid-flow-row gap-2 px-4 auto-cols-fr">
+          <div className="grid lg:grid-cols-2 grid-flow-row gap-2 px-4 auto-cols-fr">
             {renderBasicCV(basicInfo?.slice(1, 7), candidate)}
           </div>
         </div>

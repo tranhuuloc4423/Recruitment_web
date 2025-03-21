@@ -64,7 +64,7 @@ const InfoCard = (props) => {
           // onClick={() => setOpen(false)}
         >
           <div
-            className="w-1/2 bg-white rounded flex flex-col gap-2 p-4"
+            className="w-[90%] lg:w-1/2 bg-white rounded flex flex-col gap-2 p-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center">
