@@ -122,7 +122,7 @@ const CreatePost = () => {
   }, [location])
 
   return (
-    <div className="w-1/2 mx-auto bg-white rounded shadow-md flex flex-col gap-2 p-4">
+    <div className="w-full lg:w-1/2 mx-auto bg-white rounded shadow-md flex flex-col gap-2 p-4">
       <div className="text-center heading-2">Đăng Tin</div>
       <Input
         placeholder={'Tiêu đề'}
@@ -175,7 +175,7 @@ const CreatePost = () => {
 
       <div className="flex flex-row items-center gap-4 py-4">
         <span>Kỹ năng đã chọn : </span>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center flex-wrap gap-2">
           {skills.map((item) => (
             <Tag
               label={item.name}

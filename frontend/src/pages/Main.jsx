@@ -307,9 +307,9 @@ const Main = () => {
         </div>
         {posts ? (
           <div className="flex flex-col">
-            <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex flex-col lg:flex-row gap-4">
               {/* Danh sách bài viết */}
-              <div className="w-full md:w-1/3 flex flex-col gap-2 max-h-[calc(100vh-100px)] overflow-y-auto">
+              <div className="w-full lg:w-1/3 flex flex-col gap-2 max-h-[calc(100vh-100px)] overflow-y-auto">
                 {paginatedPosts.map((post) => (
                   <div
                     key={post._id}
@@ -322,7 +322,7 @@ const Main = () => {
               </div>
 
               {/* Phần chi tiết bài viết - chỉ hiển thị trên desktop */}
-              <div className="hidden md:block md:w-2/3 max-h-[calc(100vh-100px)] overflow-y-auto">
+              <div className="hidden lg:block lg:w-2/3 max-h-[calc(100vh-100px)] overflow-y-auto">
                 {selectedPost && <PostDetails id={selectedPost} />}
               </div>
             </div>

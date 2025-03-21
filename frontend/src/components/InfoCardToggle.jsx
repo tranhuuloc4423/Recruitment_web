@@ -42,7 +42,7 @@ const InfoCardToggle = ({ title, children }) => {
                 <img
                   src={item?.url}
                   alt={`Image ${index}`}
-                  className="w-[200px] h-[200px] object-cover rounded"
+                  className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] object-cover rounded"
                 />
               </div>
             ))}

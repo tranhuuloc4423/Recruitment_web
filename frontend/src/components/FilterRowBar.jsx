@@ -7,7 +7,7 @@ const FilterRowBar = ({ title, filter, onChange }) => {
     console.log(filter)
   }, [filter])
   return (
-    <div className="flex flex-row gap-4 py-2 w-full items-center">
+    <div className="flex flex-row flex-wrap gap-4 py-2 w-full items-center">
       <div className="text-xl font-semibold">{title}</div>
       <div className="flex flex-row items-center gap-2">
         {filter?.map((item, index) => (

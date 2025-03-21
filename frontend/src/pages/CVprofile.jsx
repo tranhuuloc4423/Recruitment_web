@@ -120,11 +120,10 @@ const CVprofile = () => {
           ))}
         </div>
       </div>
-      <div className="w-full xl:w-2/3 flex flex-col items-center justify-space-between gap-8">
+      <div ref={cvRef} className="w-full xl:w-2/3 flex flex-col items-center gap-8">
         {/* Theme zone */}
         {/* overflow-y-auto h-[600px] */}
-        <div ref={cvRef} className="">
-          {themeState.activeTheme === 0 ? (
+        {themeState.activeTheme === 0 ? (
             currentRole.profileStatus === 100 ? (
               <>
                 <CVTheme_0 color={activeColor} />
@@ -139,7 +138,6 @@ const CVprofile = () => {
           ) : (
             <img src={cv_t_1} />
           )}
-        </div>
         <div className="flex flex-row items-center justify-between w-full bg-black-100 text-white p-4 rounded">
           <div className="flex flex-row gap-4 items-center">
             <span>Màu sắc : </span>

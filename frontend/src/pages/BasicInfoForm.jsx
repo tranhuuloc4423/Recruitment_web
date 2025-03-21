@@ -122,9 +122,9 @@ const BasicInfoForm = ({ open, setOpen, data }) => {
   }
 
   return (
-    <div className="fixed bg-overlay inset-0 flex justify-center items-center w-full">
+    <div className="fixed bg-overlay inset-0 flex justify-center items-center w-full z-50">
       <div
-        className="bg-white rounded p-4 flex flex-col gap-4 w-1/2"
+        className="bg-white rounded p-4 flex flex-col gap-4 w-[90%] lg:w-1/2"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-row items-center justify-between">
@@ -143,7 +143,7 @@ const BasicInfoForm = ({ open, setOpen, data }) => {
           {basicInfo.map((item, index) => {
             if (index % 2 === 0) {
               return (
-                <div key={index} className="flex gap-4">
+                <div key={index} className="flex flex-col lg:flex-row gap-4">
                   {basicInfo.slice(index, index + 2).map((subItem, subIndex) => {
                     if (subItem.name === 'gender') {
                       return (

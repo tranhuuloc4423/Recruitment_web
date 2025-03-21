@@ -58,9 +58,9 @@ const Recruiter = () => {
         </div>
       </div>
       {/* container */}
-      <div className="flex flex-row gap-8">
+      <div className="flex flex-wrap md:flex-row gap-8">
         {/* info company */}
-        <div className="w-[70%] flex flex-col gap-2">
+        <div className="w-full md:w-[70%] flex flex-col gap-2">
           {/* <InfoCardToggle title={'Thông tin chung'} children={<>Hello</>} />
           <InfoCardToggle title={'Giới thiệu công ty'} children={other?.desc} />
           <InfoCardToggle
@@ -88,7 +88,7 @@ const Recruiter = () => {
         </div>
 
         {/* company's posst */}
-        <div className="w-[30%] flex flex-col gap-4 max-h-[800px]">
+        <div className="w-full md:w-[30%] flex flex-col gap-4 max-h-[800px]">
           <span className="heading-3">
             {posts?.length} công việc đang tuyển
           </span>
