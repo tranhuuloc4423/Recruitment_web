@@ -669,14 +669,28 @@ const postController = {
   getRankedCandidates: async (req, res) => {
     try {
       const { postId } = req.params
+
+      if (!postId) {
+        return res.status(400).json({ message: 'Thiếu postId' })
+      }
+
       const post = await Post.findById(postId)
       if (!post) {
         return res.status(404).json({ message: 'Post không tồn tại' })
       }
+
+      if (!post.applied || post.applied.length === 0) {
+        return res.json({
+          message: 'Chưa có ứng viên nào ứng tuyển',
+          rankedCandidates: { candidates: [], scores: [] }
+        })
+      }
+
       const rankedCandidates = await rankCandidatesForPost(post)
       res.json({ rankedCandidates })
     } catch (err) {
-      res.status(500).json({ error: err.message })
+      console.error('Lỗi khi lấy danh sách ứng viên:', err)
+      res.status(500).json({ error: 'Lỗi server, vui lòng thử lại sau' })
     }
   }
 }
