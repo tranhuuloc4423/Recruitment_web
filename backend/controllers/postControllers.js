@@ -525,6 +525,36 @@ const postController = {
       res.status(500).json({ message: error.message })
     }
   },
+  deleteSavedJob: async (req, res) => {
+    const { postId } = req.params
+    const { candidateId } = req.body
+
+    try {
+      const [candidate, post] = await Promise.all([
+        Candidate.findByIdAndUpdate(
+          candidateId,
+          { $pull: { 'jobs.saved': postId } },
+          { new: true }
+        ),
+        Post.findByIdAndUpdate(
+          postId,
+          { $pull: { saved: candidateId } },
+          { new: true }
+        )
+      ])
+
+      if (!candidate) {
+        return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
+      }
+      if (!post) {
+        return res.status(404).json({ message: 'Không tìm thấy bài viết' })
+      }
+
+      res.json({ message: 'Xóa lưu công việc thành công', post })
+    } catch (error) {
+      res.status(500).json({ message: error.message })
+    }
+  },
   updateStatus: async (req, res) => {
     const { postId } = req.params
     const { userId, authorId } = req.body
