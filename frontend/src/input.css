@@ -72,6 +72,55 @@
   .slider .thumb {
     @apply w-6 h-6 rounded-full bg-primary cursor-pointer;
   }
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  .filter-bar > div {
+    display: flex;
+    flex-direction: column;
+    margin-right: 1rem;
+  }
+  
+  .filter-bar label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  
+  .filter-bar select {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+  }
+  
+  .filter-bar select:hover {
+    border-color: #007bff;
+  }
+  
+  .filter-bar select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+  
+  .filter-bar button {
+    padding: 0.5rem;
+    color: #007bff;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .filter-bar button:hover {
+    color: #0056b3;
+  }
 
 
   #candidate_desc > * {

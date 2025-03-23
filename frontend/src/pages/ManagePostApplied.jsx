@@ -81,7 +81,7 @@ const ManagePostApplied = () => {
       if (result.isConfirmed) {
         const postId = location.state.id
         const data = await getRankedCandidates(postId)
-        setApprovedCandidates(data)
+        // setAppliedCandidates(data)
         console.log(data)
       }
     })
@@ -152,7 +152,7 @@ const ManagePostApplied = () => {
                   {post?.skills?.map((skill) => (
                     <Tag
                       key={skill._id}
-                      label={`${skill.name} (${skill.value})`}
+                      label={skill.name}
                       size={'sm'}
                     />
                   ))}
@@ -224,7 +224,7 @@ const ManagePostApplied = () => {
           </button>
         </div>
         <div className='flex items-center gap-2'>
-        {activeTab !== 'applied' && (
+        {activeTab === 'applied' && (
           <Button label={'Lọc CV'} onClick={handleRankedCandidates} />
         )}
         <Button label={'Quay lại'} onClick={() => navigate(-1)} />

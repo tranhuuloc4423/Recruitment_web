@@ -6,12 +6,12 @@ const Candidate = require('../models/candidateModel')
 const { parseDate } = require('../utils/funcs')
 const { rankCandidatesForPost } = require('../service/candidateRanking')
 
-// const formatDate = (date) => {
-//   const day = ('0' + date.getDate()).slice(-2)
-//   const month = ('0' + (date.getMonth() + 1)).slice(-2)
-//   const year = date.getFullYear()
-//   return `${day}/${month}/${year}`
-// }
+const formatDate = (date) => {
+  const day = ('0' + date.getDate()).slice(-2)
+  const month = ('0' + (date.getMonth() + 1)).slice(-2)
+  const year = date.getFullYear()
+  return `${day}/${month}/${year}`
+}
 
 const postController = {
   createPost: async (req, res) => {
