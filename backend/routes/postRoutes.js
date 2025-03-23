@@ -13,6 +13,7 @@ const {
   updateApplied,
   updateSavedJob,
   updateStatus,
+  deleteSavedJob,
   cancelPost,
   updateApproved,
   getAppliedCandidatesByPostId,
@@ -39,5 +40,6 @@ router.put('/:postId/status', updateStatus)
 router.put('/:postId/cancel', cancelPost)
 router.get('/candidate/:candidateId', getCandidateById)
 router.get('/candidate/:postId/ranked', getRankedCandidates)
+router.delete('/:postId/saved', deleteSavedJob)
 
 module.exports = router

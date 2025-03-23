@@ -66,13 +66,24 @@ async function calculateSuitability(post, candidate) {
 
 async function rankCandidatesForPost(post) {
   const candidates = await Candidate.find({ _id: { $in: post.applied } })
+
   const scores = []
+  const rankedCandidates = {
+    candidates: [],
+    scores: []
+  }
+
   for (const candidate of candidates) {
     const score = await calculateSuitability(post, candidate)
-    scores.push({ candidate, score })
+    scores.push({ candidateId: candidate._id.toString(), score })
   }
+
   scores.sort((a, b) => b.score - a.score)
-  return scores
+
+  rankedCandidates.candidates = candidates
+  rankedCandidates.scores = scores
+
+  return rankedCandidates
 }
 
 module.exports = { rankCandidatesForPost }

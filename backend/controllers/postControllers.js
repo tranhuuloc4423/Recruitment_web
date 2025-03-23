@@ -525,6 +525,36 @@ const postController = {
       res.status(500).json({ message: error.message })
     }
   },
+  deleteSavedJob: async (req, res) => {
+    const { postId } = req.params
+    const { candidateId } = req.body
+
+    try {
+      const [candidate, post] = await Promise.all([
+        Candidate.findByIdAndUpdate(
+          candidateId,
+          { $pull: { 'jobs.saved': postId } },
+          { new: true }
+        ),
+        Post.findByIdAndUpdate(
+          postId,
+          { $pull: { saved: candidateId } },
+          { new: true }
+        )
+      ])
+
+      if (!candidate) {
+        return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
+      }
+      if (!post) {
+        return res.status(404).json({ message: 'Không tìm thấy bài viết' })
+      }
+
+      res.json({ message: 'Xóa lưu công việc thành công', post })
+    } catch (error) {
+      res.status(500).json({ message: error.message })
+    }
+  },
   updateStatus: async (req, res) => {
     const { postId } = req.params
     const { userId, authorId } = req.body
@@ -669,14 +699,28 @@ const postController = {
   getRankedCandidates: async (req, res) => {
     try {
       const { postId } = req.params
+
+      if (!postId) {
+        return res.status(400).json({ message: 'Thiếu postId' })
+      }
+
       const post = await Post.findById(postId)
       if (!post) {
         return res.status(404).json({ message: 'Post không tồn tại' })
       }
+
+      if (!post.applied || post.applied.length === 0) {
+        return res.json({
+          message: 'Chưa có ứng viên nào ứng tuyển',
+          rankedCandidates: { candidates: [], scores: [] }
+        })
+      }
+
       const rankedCandidates = await rankCandidatesForPost(post)
       res.json({ rankedCandidates })
     } catch (err) {
-      res.status(500).json({ error: err.message })
+      console.error('Lỗi khi lấy danh sách ứng viên:', err)
+      res.status(500).json({ error: 'Lỗi server, vui lòng thử lại sau' })
     }
   }
 }
