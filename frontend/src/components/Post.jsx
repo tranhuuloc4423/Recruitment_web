@@ -212,6 +212,7 @@ const Post = ({ post, select, manage }) => {
         </div>
       </div>
 
+      <Line />
       {/* applied button */}
       <div className="flex flex-row justify-end">
         {locationRouter.pathname.includes('manage') ? (
@@ -220,7 +221,6 @@ const Post = ({ post, select, manage }) => {
           <></>
         ) : (
           <>
-            <Line />
             <Button label="Ứng tuyển" onClick={handleApply} />
           </>
         )}

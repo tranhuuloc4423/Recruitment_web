@@ -47,13 +47,35 @@ const convertFileToURL = (file) => {
 }
 
 const formatDate = (date, format = 'dd/mm/yyyy') => {
-  const [day, month, year] = date?.split('/')
-  if (format === 'dd/mm/yyyy') {
-    return `${day}/${month}/${year}`
-  } else {
-    return `${year}/${month}/${day}`
+  if (!date) return '';
+
+  // Kiểm tra định dạng input
+  let parts;
+  if (date.includes('-')) {
+    // yyyy-mm-dd
+    parts = date.split('-');
+    if (parts.length !== 3) return date;
+    const [year, month, day] = parts;
+    return format === 'dd/mm/yyyy' ? `${day}/${month}/${year}` : `${year}/${month}/${day}`;
+  } else if (date.includes('/')) {
+    // dd/mm/yyyy
+    parts = date.split('/');
+    if (parts.length !== 3) return date;
+    const [day, month, year] = parts;
+    return format === 'dd/mm/yyyy' ? `${day}/${month}/${year}` : `${year}/${month}/${day}`;
   }
-}
+  return date;
+};
+
+
+
+const formatPhone = (phoneStr) => {
+  if (!phoneStr) return '';
+  const digits = phoneStr.replace(/[\s\.\-]/g, '');
+  const formattedDigits = digits.length === 11 ? digits.slice(1) : digits;
+  if (formattedDigits.length !== 10) return phoneStr;
+  return `${formattedDigits.slice(0, 4)}.${formattedDigits.slice(4, 7)}.${formattedDigits.slice(7)}`;
+};
 
 const formatDateIso = (isoString) => {
   console.log(typeof isoString)
@@ -155,6 +177,7 @@ export {
   convertFileToURL,
   convertFiles,
   formatDate,
+  formatPhone,
   convertStringtoDate,
   convertDatetoString,
   renderBasicCV,
