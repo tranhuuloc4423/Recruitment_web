@@ -1,5 +1,5 @@
 // Posteds.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   getAllPosted,
   getAllPostedByOwner,
@@ -24,6 +24,7 @@ const Posteds = () => {
     { label: 'Theo lượt xem', increase: true, active: false },
     { label: 'Theo lượt ứng tuyển', increase: true, active: false },
   ]);
+  const [searchQuery, setSearchQuery] = useState(''); // New search query state
 
   const getPosteds = async () => {
     const res = await getAllPostedByOwner(currentRole._id);
@@ -83,11 +84,34 @@ const Posteds = () => {
       setFilterPosts(sortedPosts);
     }
   }, [filter, posts]);
+  useEffect(() => {
+      setCurrentPage(1);
+    }, [searchQuery]);
+  
+    const searchedPosts = useMemo(() => {
+      if (!searchQuery) return filterPosts;
+      const lowerQuery = searchQuery.toLowerCase();
+    
+      return filterPosts.filter((post) => {
+        const titleMatch = post.title.toLowerCase().includes(lowerQuery);
+    
+        const skillsMatch = post.skills.some((skill) =>
+          skill.name.toLowerCase().includes(lowerQuery)
+        );
+    
+        const locationMatch = post.location.address.some((addr) =>
+          addr.province.name.toLowerCase().includes(lowerQuery) ||
+          addr.district.name.toLowerCase().includes(lowerQuery)
+        );
+    
+        return titleMatch || skillsMatch || locationMatch;
+      });
+    }, [filterPosts, searchQuery]);
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = filterPosts.slice(indexOfFirstPost, indexOfLastPost);
-  const totalPages = Math.ceil(filterPosts.length / postsPerPage);
+  const currentPosts = searchedPosts.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPages = Math.ceil(searchedPosts.length / postsPerPage);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -95,11 +119,20 @@ const Posteds = () => {
 
   return (
     <div className="w-full">
+      <div className='flex flex-col flex-start lg:flex-row items-center'>
       <FilterRowBar
         title={'Tin đã đăng'}
         filter={filter}
         onChange={handleFilterClick}
       />
+      <input
+          type="text"
+          placeholder="Tìm kiếm"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="p-2 border outline-second border-gray-300 rounded"
+        />
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {currentPosts?.map((post) => (
           <Post key={post._id} post={post} manage={manage} />

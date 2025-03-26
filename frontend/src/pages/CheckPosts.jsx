@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { getAllPosted } from '../redux/api/post'
 import { Post } from '../components'
 import { useSelector } from 'react-redux'
@@ -10,6 +10,7 @@ const CheckPosts = () => {
   const [posts, setPosts] = useState([])
   const [filterPosts, setFilterPosts] = useState()
   const [manage, setManage] = useState({})
+  const [searchQuery, setSearchQuery] = useState('') // New search query state
 
   const [currentPage, setCurrentPage] = useState(1) // Thêm state cho trang hiện tại
   const [postsPerPage] = useState(5) // Số bài post mỗi trang
@@ -68,8 +69,7 @@ const CheckPosts = () => {
     getPosteds()
   }, [])
 
-  useEffect(() => {
-  }, [filterPosts])
+  useEffect(() => {}, [filterPosts])
 
   useEffect(() => {
     const activeFilter = filter.find((f) => f.active)
@@ -94,21 +94,51 @@ const CheckPosts = () => {
       setFilterPosts(sortedPosts)
     }
   }, [filter, posts])
+
+  const searchedPosts = useMemo(() => {
+    if (!searchQuery) return filterPosts
+    const lowerQuery = searchQuery.toLowerCase()
+
+    return filterPosts.filter((post) => {
+      const titleMatch = post.title.toLowerCase().includes(lowerQuery)
+
+      const skillsMatch = post.skills.some((skill) =>
+        skill.name.toLowerCase().includes(lowerQuery)
+      )
+
+      const locationMatch = post.location.address.some(
+        (addr) =>
+          addr.province.name.toLowerCase().includes(lowerQuery) ||
+          addr.district.name.toLowerCase().includes(lowerQuery)
+      )
+
+      return titleMatch || skillsMatch || locationMatch
+    })
+  }, [filterPosts, searchQuery])
   const indexOfLastPost = currentPage * postsPerPage
   const indexOfFirstPost = indexOfLastPost - postsPerPage
-  const currentPosts = filterPosts?.slice(indexOfFirstPost, indexOfLastPost)
-  const totalPages = Math.ceil(filterPosts?.length / postsPerPage)
+  const currentPosts = searchedPosts?.slice(indexOfFirstPost, indexOfLastPost)
+  const totalPages = Math.ceil(searchedPosts?.length / postsPerPage)
   const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+    setCurrentPage(page)
+  }
 
   return (
     <div className="w-full">
-      <FilterRowBar
-        title={'Tin chờ duyệt'}
-        filter={filter}
-        onChange={handleFilterClick}
-      />
+      <div className="flex flex-col flex-start lg:flex-row items-center">
+        <FilterRowBar
+          title={'Tin chờ duyệt'}
+          filter={filter}
+          onChange={handleFilterClick}
+        />
+        <input
+          type="text"
+          placeholder="Tìm kiếm"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="p-2 border outline-second border-gray-300 rounded"
+        />
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {currentPosts?.map((post) => (
           <Post key={post._id} post={post} manage={manage} />

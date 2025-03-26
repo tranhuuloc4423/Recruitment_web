@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { createSkill, updateSkill, deleteSkill, getSkills } from '../redux/api/app';
 import { useDispatch } from 'react-redux';
 import { MdEdit } from 'react-icons/md';
-import { TiDelete } from 'react-icons/ti';
+import { IoClose } from 'react-icons/io5'
 import Swal from 'sweetalert2';
+import { Button } from '../components';
 
 const SkillManage = () => {
   const [skills, setSkills] = useState([]);
@@ -106,16 +107,10 @@ const SkillManage = () => {
             placeholder="Tìm kiếm kỹ năng..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border outline-second"
           />
         </div>
-        {/* Nút Thêm */}
-        <button
-          onClick={handleAdd}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-        >
-          + Thêm kỹ năng
-        </button>
+        <Button label={"Thêm kỹ năng"} onClick={handleAdd} />
       </div>
 
       {/* Bảng danh sách kỹ năng */}
@@ -137,7 +132,7 @@ const SkillManage = () => {
                   <td className="px-6 py-4 text-right flex justify-end gap-2">
                     <button
                       onClick={() => handleEdit(item)}
-                      className="text-blue-600 hover:text-blue-800"
+                      className="text-primary"
                     >
                       <MdEdit size={24} />
                     </button>
@@ -145,7 +140,7 @@ const SkillManage = () => {
                       onClick={() => handleDelete(item._id)}
                       className="text-red-600 hover:text-red-800"
                     >
-                      <TiDelete size={24} />
+                      <IoClose size={24} />
                     </button>
                   </td>
                 </tr>

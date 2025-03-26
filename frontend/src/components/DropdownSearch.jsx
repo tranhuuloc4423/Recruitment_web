@@ -72,7 +72,7 @@ const DropdownSearch = ({
       </div>
 
       {focus && (
-        <div className="absolute left-0 w-full max-h-40 bg-white rounded shadow-lg overflow-y-auto z-100">
+        <div className="absolute left-0 w-full max-h-40 bg-white rounded shadow-lg overflow-y-auto z-10">
           {filteredItems?.map((item, index) => (
             <div
               key={index}

@@ -22,6 +22,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import CustomSwal from './CustomSwal'
+import avatar from '../assets/imgs/blank-profile-picture-973460_960_720.png'
 
 const Post = ({ post, select, manage }) => {
   const { currentUser } = useSelector((state) => state.auth)
@@ -154,7 +155,7 @@ const Post = ({ post, select, manage }) => {
       <div className="flex-row-center gap-2">
         <div className="w-[60px] h-[60px] border border-gray-100">
           <img
-            src={basicInfo?.image?.url || 'https://via.placeholder.com/300'}
+            src={basicInfo?.image?.url || avatar}
             alt="avatar"
             className="w-full h-full"
           />
@@ -189,7 +190,7 @@ const Post = ({ post, select, manage }) => {
       </div>
 
       {/* skills */}
-      <div className="flex-col gap-2">
+      <div className="flex flex-row flex-wrap gap-2">
         <span>Kỹ năng : </span>
         <div className="flex-row-center flex-wrap gap-2 mt-1">
           {skills.map((skill, index) => (
@@ -211,6 +212,7 @@ const Post = ({ post, select, manage }) => {
         </div>
       </div>
 
+      <Line />
       {/* applied button */}
       <div className="flex flex-row justify-end">
         {locationRouter.pathname.includes('manage') ? (
@@ -219,7 +221,6 @@ const Post = ({ post, select, manage }) => {
           <></>
         ) : (
           <>
-            <Line />
             <Button label="Ứng tuyển" onClick={handleApply} />
           </>
         )}

@@ -8,7 +8,7 @@ import defaultAvatar from '../assets/imgs/blank-profile-picture-973460_960_720.p
 import { IoLocationOutline } from 'react-icons/io5'
 import CircleProgress from './CircleProgress'
 import ProgressBar from './ProgressBar'
-
+import { formatPhone, formatDate } from '../utils/functions'
 const BasicInfo = () => {
   const [open, setOpen] = useState(false)
   const [avatar, setAvatar] = useState(defaultAvatar)
@@ -52,6 +52,10 @@ const BasicInfo = () => {
                     <span>{icon}</span>
                     {name === 'gender' ? (
                       <span>{currentRole?.basic_info.gender?.name}</span>
+                    ) : name === 'dob' ? (
+                      <span>{formatDate(currentRole?.basic_info.dob)}</span>
+                    ) : name === 'phone' ? (
+                      <span>{formatPhone(currentRole?.basic_info.phone)}</span>
                     ) : (
                       <span>{currentRole?.basic_info[name]}</span>
                     )}
@@ -74,7 +78,13 @@ const BasicInfo = () => {
             className="w-fit"
             onClick={() => setOpen(true)}
           />
-          {open && <BasicInfoForm open={open} setOpen={setOpen} data={currentRole?.basic_info} />}
+          {open && (
+            <BasicInfoForm
+              open={open}
+              setOpen={setOpen}
+              data={currentRole?.basic_info}
+            />
+          )}
         </div>
       </div>
       <div className="bg-white rounded shadow-md w-full flex justify-center items-center">

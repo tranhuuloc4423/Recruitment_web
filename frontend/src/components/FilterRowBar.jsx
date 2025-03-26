@@ -9,7 +9,7 @@ const FilterRowBar = ({ title, filter, onChange }) => {
   return (
     <div className="flex flex-row flex-wrap gap-4 py-2 w-full items-center">
       <div className="text-xl font-semibold">{title}</div>
-      <div className="flex flex-row items-center gap-2">
+      <div className="grid lg:grid-cols-4 grid-cols-2  gap-2">
         {filter?.map((item, index) => (
           <div
             key={index}
