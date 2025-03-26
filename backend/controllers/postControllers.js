@@ -6,12 +6,12 @@ const Candidate = require('../models/candidateModel')
 const { parseDate } = require('../utils/funcs')
 const { rankCandidatesForPost } = require('../service/candidateRanking')
 
-// const formatDate = (date) => {
-//   const day = ('0' + date.getDate()).slice(-2)
-//   const month = ('0' + (date.getMonth() + 1)).slice(-2)
-//   const year = date.getFullYear()
-//   return `${day}/${month}/${year}`
-// }
+const formatDate = (date) => {
+  const day = ('0' + date.getDate()).slice(-2)
+  const month = ('0' + (date.getMonth() + 1)).slice(-2)
+  const year = date.getFullYear()
+  return `${day}/${month}/${year}`
+}
 
 const postController = {
   createPost: async (req, res) => {
@@ -184,24 +184,34 @@ const postController = {
   },
   getAllPosts: async (req, res) => {
     try {
-      const posts = await Post.find()
-
+      const posts = await Post.find().lean()
       const currentDate = new Date()
 
       const updatedPosts = await Promise.all(
         posts.map(async (post) => {
           if (post.date_expiration) {
-            const expirationDate = parseDate(post.date_expiration)
-
+            const expirationDate = new Date(post.date_expiration)
             if (expirationDate < currentDate && post.status !== 'expired') {
+              await Post.findByIdAndUpdate(post._id, { status: 'expired' })
               post.status = 'expired'
-              await post.save()
             }
           }
 
-          return post
+          let authorInfo = null
+          if (post.authorType === 'admin') {
+            authorInfo = await Admin.findById(post.author)
+              .select('basic_info other_info')
+              .lean()
+          } else if (post.authorType === 'recruiter') {
+            authorInfo = await Recruiter.findById(post.author)
+              .select('basic_info other_info')
+              .lean()
+          }
+
+          return { ...post, authorInfo }
         })
       )
+
       res.status(200).json(updatedPosts)
     } catch (error) {
       console.error('Có lỗi xảy ra khi lấy các bài Post:', error)
@@ -210,9 +220,35 @@ const postController = {
   },
   getAllPostedPosts: async (req, res) => {
     try {
-      const posts = await Post.find({ status: 'posted' })
+      const posts = await Post.find({ status: 'posted' }).lean()
+      const currentDate = new Date()
 
-      res.status(200).json(posts)
+      const updatedPosts = await Promise.all(
+        posts.map(async (post) => {
+          if (post.date_expiration) {
+            const expirationDate = new Date(post.date_expiration)
+            if (expirationDate < currentDate && post.status !== 'expired') {
+              await Post.findByIdAndUpdate(post._id, { status: 'expired' })
+              post.status = 'expired'
+            }
+          }
+
+          let authorInfo = null
+          if (post.authorType === 'admin') {
+            authorInfo = await Admin.findById(post.author)
+              .select('basic_info other_info')
+              .lean()
+          } else if (post.authorType === 'recruiter') {
+            authorInfo = await Recruiter.findById(post.author)
+              .select('basic_info other_info')
+              .lean()
+          }
+
+          return { ...post, authorInfo }
+        })
+      )
+
+      res.status(200).json(updatedPosts)
     } catch (error) {
       console.error('Có lỗi xảy ra khi lấy các bài Post:', error)
       res.status(500).json({ message: 'Không thể lấy các bài Post.' })
@@ -220,35 +256,37 @@ const postController = {
   },
   getAllConfirmedPosts: async (req, res) => {
     try {
-      const posts = await Post.find({ status: 'confirmed' })
-
+      const posts = await Post.find({ status: 'confirmed' }).lean()
       const currentDate = new Date()
 
       const updatedPosts = await Promise.all(
         posts.map(async (post) => {
           if (post.date_expiration) {
-            const expirationDate = parseDate(post.date_expiration)
-
+            const expirationDate = new Date(post.date_expiration)
             if (expirationDate < currentDate && post.status !== 'expired') {
+              await Post.findByIdAndUpdate(post._id, { status: 'expired' })
               post.status = 'expired'
-              await post.save()
             }
           }
 
-          let author = await Recruiter.findById(post.author)
-          if (!author) {
-            author = await Admin.findById(post.author)
+          let authorInfo = null
+          if (post.authorType === 'admin') {
+            authorInfo = await Admin.findById(post.author)
+              .select('basic_info other_info')
+              .lean()
+          } else if (post.authorType === 'recruiter') {
+            authorInfo = await Recruiter.findById(post.author)
+              .select('basic_info other_info')
+              .lean()
           }
 
           return {
-            ...post.toObject(),
-            // authorId: post.author,
-            wforms: author?.other_info?.wforms || null,
-            types: author?.other_info?.types || null
+            ...post,
+            wforms: authorInfo?.other_info?.wforms || null,
+            types: authorInfo?.other_info?.types || null
           }
         })
       )
-
       const confirmedPosts = updatedPosts.filter(
         (post) => post.status === 'confirmed'
       )
@@ -262,52 +300,85 @@ const postController = {
 
   getAllExpiredPosts: async (req, res) => {
     try {
-      const posts = await Post.find({ status: 'expired' })
+      const posts = await Post.find({ status: 'expired' }).lean()
+      const currentDate = new Date()
 
-      res.status(200).json(posts)
+      const updatedPosts = await Promise.all(
+        posts.map(async (post) => {
+          if (post.date_expiration) {
+            const expirationDate = new Date(post.date_expiration)
+            if (expirationDate < currentDate && post.status !== 'expired') {
+              await Post.findByIdAndUpdate(post._id, { status: 'expired' })
+              post.status = 'expired'
+            }
+          }
+
+          let authorInfo = null
+          if (post.authorType === 'admin') {
+            authorInfo = await Admin.findById(post.author)
+              .select('basic_info other_info')
+              .lean()
+          } else if (post.authorType === 'recruiter') {
+            authorInfo = await Recruiter.findById(post.author)
+              .select('basic_info other_info')
+              .lean()
+          }
+
+          return { ...post, authorInfo }
+        })
+      )
+
+      res.status(200).json(updatedPosts)
     } catch (error) {
       console.error('Có lỗi xảy ra khi lấy các bài Post:', error)
       res.status(500).json({ message: 'Không thể lấy các bài Post.' })
     }
   },
+
   getPostByUserId: async (req, res) => {
     const { userId } = req.params
 
     try {
-      const posts = await Post.find({ author: userId })
-
+      const posts = await Post.find({ author: userId }).lean()
       if (!posts || posts.length === 0) {
         return res
           .status(404)
           .json({ message: 'Không tìm thấy bài viết cho chủ sở hữu này.' })
       }
 
-      res.json(posts)
+      const currentDate = new Date()
+
+      const updatedPosts = await Promise.all(
+        posts.map(async (post) => {
+          if (post.date_expiration) {
+            const expirationDate = new Date(post.date_expiration)
+            if (expirationDate < currentDate && post.status !== 'expired') {
+              await Post.findByIdAndUpdate(post._id, { status: 'expired' })
+              post.status = 'expired'
+            }
+          }
+
+          let authorInfo = null
+          if (post.authorType === 'admin') {
+            authorInfo = await Admin.findById(post.author)
+              .select('basic_info other_info')
+              .lean()
+          } else if (post.authorType === 'recruiter') {
+            authorInfo = await Recruiter.findById(post.author)
+              .select('basic_info other_info')
+              .lean()
+          }
+
+          return { ...post, authorInfo }
+        })
+      )
+
+      res.json(updatedPosts)
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
   },
-  // getPostById: async (req, res) => {
-  //   const { postId } = req.params
 
-  //   try {
-  //     const post = await Post.findOne({
-  //       _id: postId,
-  //       author: userId,
-  //       authorType
-  //     })
-
-  //     if (!post) {
-  //       return res
-  //         .status(404)
-  //         .json({ message: 'Bài viết không tìm thấy hoặc bạn không có quyền' })
-  //     }
-
-  //     res.json(post)
-  //   } catch (error) {
-  //     res.status(500).json({ message: error.message })
-  //   }
-  // },
   getPostById: async (req, res) => {
     const { postId } = req.params
 
@@ -322,6 +393,19 @@ const postController = {
         return res.status(404).json({ message: 'Bài viết không tìm thấy' })
       }
 
+      const currentDate = new Date()
+
+      if (post.date_expiration) {
+        const expirationDate = new Date(post.date_expiration)
+        if (expirationDate < currentDate && post.status !== 'expired') {
+          post = await Post.findByIdAndUpdate(
+            postId,
+            { status: 'expired' },
+            { new: true }
+          )
+        }
+      }
+
       let updateType = null
       if (post.views >= 200) {
         updateType = 'superhot'
@@ -329,7 +413,7 @@ const postController = {
         updateType = 'hot'
       }
 
-      if (updateType) {
+      if (updateType && post.type !== updateType) {
         post = await Post.findByIdAndUpdate(
           postId,
           { type: updateType },
@@ -337,11 +421,26 @@ const postController = {
         )
       }
 
-      res.json({ message: 'Lượt xem cập nhật thành công', post })
+      let authorInfo = null
+      if (post.authorType === 'admin') {
+        authorInfo = await Admin.findById(post.author)
+          .select('basic_info other_info')
+          .lean()
+      } else if (post.authorType === 'recruiter') {
+        authorInfo = await Recruiter.findById(post.author)
+          .select('basic_info other_info')
+          .lean()
+      }
+
+      const postObj = post.toObject()
+      postObj.authorInfo = authorInfo
+
+      res.json({ message: 'Lượt xem cập nhật thành công', post: postObj })
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
   },
+
   updateApplied: async (req, res) => {
     const { postId } = req.params
     const { candidateId } = req.body
