@@ -200,11 +200,11 @@ const postController = {
           let authorInfo = null
           if (post.authorType === 'admin') {
             authorInfo = await Admin.findById(post.author)
-              .select('basic_info other_info')
+              // .select('basic_info other_info')
               .lean()
           } else if (post.authorType === 'recruiter') {
             authorInfo = await Recruiter.findById(post.author)
-              .select('basic_info other_info')
+              // .select('basic_info other_info')
               .lean()
           }
 
@@ -236,11 +236,11 @@ const postController = {
           let authorInfo = null
           if (post.authorType === 'admin') {
             authorInfo = await Admin.findById(post.author)
-              .select('basic_info other_info')
+              // .select('basic_info other_info')
               .lean()
           } else if (post.authorType === 'recruiter') {
             authorInfo = await Recruiter.findById(post.author)
-              .select('basic_info other_info')
+              // .select('basic_info other_info')
               .lean()
           }
 
@@ -272,11 +272,11 @@ const postController = {
           let authorInfo = null
           if (post.authorType === 'admin') {
             authorInfo = await Admin.findById(post.author)
-              .select('basic_info other_info')
+              // .select('basic_info other_info')
               .lean()
           } else if (post.authorType === 'recruiter') {
             authorInfo = await Recruiter.findById(post.author)
-              .select('basic_info other_info')
+              // .select('basic_info other_info')
               .lean()
           }
 
@@ -316,11 +316,11 @@ const postController = {
           let authorInfo = null
           if (post.authorType === 'admin') {
             authorInfo = await Admin.findById(post.author)
-              .select('basic_info other_info')
+              // .select('basic_info other_info')
               .lean()
           } else if (post.authorType === 'recruiter') {
             authorInfo = await Recruiter.findById(post.author)
-              .select('basic_info other_info')
+              // .select('basic_info other_info')
               .lean()
           }
 
@@ -361,11 +361,11 @@ const postController = {
           let authorInfo = null
           if (post.authorType === 'admin') {
             authorInfo = await Admin.findById(post.author)
-              .select('basic_info other_info')
+              // .select('basic_info other_info')
               .lean()
           } else if (post.authorType === 'recruiter') {
             authorInfo = await Recruiter.findById(post.author)
-              .select('basic_info other_info')
+              // .select('basic_info other_info')
               .lean()
           }
 
@@ -424,11 +424,11 @@ const postController = {
       let authorInfo = null
       if (post.authorType === 'admin') {
         authorInfo = await Admin.findById(post.author)
-          .select('basic_info other_info')
+          // .select('basic_info other_info')
           .lean()
       } else if (post.authorType === 'recruiter') {
         authorInfo = await Recruiter.findById(post.author)
-          .select('basic_info other_info')
+          // .select('basic_info other_info')
           .lean()
       }
 
