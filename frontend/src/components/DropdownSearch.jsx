@@ -13,7 +13,16 @@ const DropdownSearch = ({
   const [focus, setFocus] = useState(false)
   const [filteredItems, setFilteredItems] = useState(items)
 
-  const dropdownRef = useRef(null) // Dùng ref để tham chiếu đến dropdown
+  const dropdownRef = useRef(null)
+
+  // Sync search state with selectedItem prop when it changes
+  useEffect(() => {
+    if (selectedItem === null || selectedItem === '') {
+      setSearch('')
+    } else if (selectedItem?.name) {
+      setSearch(selectedItem.name)
+    }
+  }, [selectedItem])
 
   const handleSearchChange = (e) => {
     const value = e.target.value
@@ -27,28 +36,24 @@ const DropdownSearch = ({
     setFilteredItems(filtered)
   }
 
-  // Handle when an item is selected from dropdown
   const handleSelectItem = (item) => {
     setSearch(item.name)
     setSelectedItem(item)
     setFocus(false)
   }
 
-  // Đóng dropdown khi nhấp ra ngoài
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setFocus(false)
       }
     }
-
     document.addEventListener('mousedown', handleClickOutside)
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [dropdownRef])
 
-  // Cập nhật danh sách khi items thay đổi
   useEffect(() => {
     setFilteredItems(items)
   }, [items])
@@ -62,7 +67,7 @@ const DropdownSearch = ({
         </div>
         <input
           type="text"
-          value={search || selectedItem?.name || selectedItem?.province?.name}
+          value={search} // Use search directly as the controlled value
           onChange={handleSearchChange}
           onFocus={() => setFocus(true)}
           placeholder={placeholder}

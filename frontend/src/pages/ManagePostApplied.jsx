@@ -29,9 +29,9 @@ const ManagePostApplied = () => {
 
   const handleGetData = async () => {
     const res = await getPost(location.state.id)
+    console.log(res)
     setPost(res)
-    const res2 = await getOwnerById(res.author, res.authorType)
-    setOwner(res2)
+    setOwner(res.authorInfo)
     const res3 = await getCandidatesByPost(location.state.id)
     setAppliedCandidates(res3.applied)
     const res4 = await getCandidatesApprovedByPost(location.state.id)
@@ -124,8 +124,8 @@ const ManagePostApplied = () => {
               <p className="text-gray-700 flex justify-between items-center border-b border-gray-100 border-dashed py-1">
                 <span className="font-semibold">Địa chỉ:</span>{' '}
                 <span>
-                  {post?.location.address[0].province.name},{' '}
-                  {post?.location.address[0].district.name}
+                  {/* {post?.location.address[0].province.name},{' '}
+                  {post?.location.address[0].district.name} */}
                 </span>
               </p>
               <p className="text-gray-700 flex justify-between items-center border-b border-gray-100 border-dashed py-1">
@@ -224,7 +224,7 @@ const ManagePostApplied = () => {
           </button>
         </div>
         <div className='flex items-center gap-2'>
-        {activeTab === 'applied' && currentRole._id === post._id && (
+        {activeTab === 'applied' && currentRole._id === post?._id && (
           <Button label={'Lọc CV'} onClick={handleRankedCandidates} />
         )}
         <Button label={'Quay lại'} onClick={() => navigate(-1)} />

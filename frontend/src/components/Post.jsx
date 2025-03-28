@@ -8,13 +8,12 @@ import { LuCircleDollarSign } from 'react-icons/lu'
 import { MdInfoOutline, MdOutlineFactCheck } from 'react-icons/md'
 import { BsThreeDots } from 'react-icons/bs'
 import { IoMdPeople } from 'react-icons/io'
-import { IoLocationOutline } from 'react-icons/io5'
+import { GrMapLocation } from "react-icons/gr";
 import { PiBagBold } from 'react-icons/pi'
 import { FiClock } from 'react-icons/fi'
 import { HiOutlineEye } from 'react-icons/hi'
 import { useSelector } from 'react-redux'
 import {
-  getRoleData,
   removePost,
   updateCandidateApplied,
   updateConfirmed
@@ -35,6 +34,7 @@ const Post = ({ post, select, manage }) => {
     date_expiration,
     author,
     authorType,
+    authorInfo,
     type,
     views,
     desc,
@@ -42,23 +42,8 @@ const Post = ({ post, select, manage }) => {
     applied,
     location
   } = post
-  // const { view, confirm, remove, update, extend } = manage
-  const [basicInfo, setBasicInfo] = useState()
-  const [otherInfo, setOtherInfo] = useState()
   const navigate = useNavigate()
   const locationRouter = useLocation()
-
-  const getBasicData = async () => {
-    // console.log(post)
-    const res = await getRoleData(authorType, author)
-    // console.log(res)
-    setBasicInfo(res?.basic_info)
-    setOtherInfo(res?.other_info)
-  }
-
-  useEffect(() => {
-    getBasicData()
-  }, [])
 
   const handleConfirm = () => {
     CustomSwal({
@@ -155,12 +140,12 @@ const Post = ({ post, select, manage }) => {
       <div className="flex-row-center gap-2">
         <div className="w-[60px] h-[60px] border border-gray-100">
           <img
-            src={basicInfo?.image?.url || avatar}
+            src={authorInfo?.basic_info?.image?.url || avatar}
             alt="avatar"
             className="w-full h-full"
           />
         </div>
-        <span className="para-1">{basicInfo?.name}</span>
+        <span className="para-1">{authorInfo?.basic_info?.name}</span>
       </div>
 
       <Line />
@@ -177,13 +162,20 @@ const Post = ({ post, select, manage }) => {
         </span>
 
         <span className="flex flex-row items-center gap-2">
-          <IoLocationOutline size={24} />
+          <GrMapLocation size={24} />
           <span>{`${location?.address[0]?.province?.name}`}</span>
         </span>
 
         <span className="flex flex-row items-center gap-2">
           <PiBagBold size={24} />
-          <span>{otherInfo?.wforms?.map((item) => (
+          <span>{authorInfo?.other_info?.wforms?.map((item) => (
+            <Tag key={item._id} label={item.name} />
+          ))}</span>
+        </span>
+
+        <span className="flex flex-row items-center gap-2">
+          <FiClock size={24} />
+          <span>{authorInfo?.other_info?.types?.map((item) => (
             <Tag key={item._id} label={item.name} />
           ))}</span>
         </span>

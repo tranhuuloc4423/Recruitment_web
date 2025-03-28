@@ -33,7 +33,7 @@ const getAllPostConfirmed = async () => {
 const getPost = async (id) => {
   try {
     const res = await axios.get(`/post/${id}`)
-    return res.data.post
+    return res.data
   } catch (error) {
     console.log(error)
   }

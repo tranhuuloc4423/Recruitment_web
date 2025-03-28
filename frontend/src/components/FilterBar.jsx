@@ -6,12 +6,13 @@ import { useSelector } from 'react-redux'
 import DropdownSearch from './DropdownSearch'
 import Dropdown from './Dropdown'
 import Button from './Button'
+import MultiDropdownSearch from './MultiDropdownSearch'
 
 const FilterBar = ({ onApplyFilter }) => {
   const { currentRole, skillsDB } = useSelector((state) => state.app)
   const { address } = useSelector((state) => state.address)
 
-  const [skillSelected, setSkillSelected] = useState(null)
+  const [skillSelected, setSkillSelected] = useState([])
   const [addressSelected, setAddressSelected] = useState(null)
   const [salarys, setSalarys] = useState([0, 100])
   const [typeSelected, setTypeSelected] = useState(null)
@@ -31,10 +32,13 @@ const FilterBar = ({ onApplyFilter }) => {
       // Giả sử addressSelected chứa đối tượng có thuộc tính code
       address: addressSelected ? { code: addressSelected.code || addressSelected.value || addressSelected } : null,
       // Nếu có kỹ năng được chọn, ta sẽ đưa vào mảng (có thể chỉnh lại nếu cho phép chọn nhiều kỹ năng)
-      skills: skillSelected ? [skillSelected] : [],
+      skills: skillSelected && skillSelected.length > 0 ? skillSelected : [],
       // Range slider trả về mảng 2 giá trị [min, max]
       target_money: salarys ? { min_money: salarys[0], max_money: salarys[1] } : null,
       // type và wform sẽ được bổ sung sau
+
+      types: typeSelected ? [typeSelected] : [],
+      wforms: wformSelected ? [wformSelected] : []
     }
 
     localStorage.setItem('filterFrame', JSON.stringify(filter))
@@ -44,8 +48,8 @@ const FilterBar = ({ onApplyFilter }) => {
   }
 
   const handleReset = () => {
-    setSkillSelected(null)
-    setAddressSelected(null)
+    setSkillSelected('')
+    setAddressSelected('')
     setSalarys([0, 100])
     setTypeSelected(null)
     setWformSelected(null)
@@ -56,7 +60,7 @@ const FilterBar = ({ onApplyFilter }) => {
   }
 
   return (
-    <div className="bg-white shadow rounded p-4 mb-4">
+    <div className="bg-white shadow rounded p-4">
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         <DropdownSearch
           items={skillsDB}
