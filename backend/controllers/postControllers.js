@@ -280,11 +280,7 @@ const postController = {
               .lean()
           }
 
-          return {
-            ...post,
-            wforms: authorInfo?.other_info?.wforms || null,
-            types: authorInfo?.other_info?.types || null
-          }
+          return { ...post, authorInfo }
         })
       )
       const confirmedPosts = updatedPosts.filter(
@@ -433,9 +429,7 @@ const postController = {
       }
 
       const postObj = post.toObject()
-      postObj.authorInfo = authorInfo
-
-      res.json({ message: 'Lượt xem cập nhật thành công', post: postObj })
+      res.json({ ...postObj, authorInfo })
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
