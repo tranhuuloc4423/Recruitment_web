@@ -3,20 +3,22 @@ import { GoBell } from 'react-icons/go'
 import { deleteNotification, GetNotification } from '../redux/api/app'
 import { useSelector } from 'react-redux'
 import { formatDateIso } from '../utils/functions'
-import { IoClose } from "react-icons/io5"
+import { IoClose } from 'react-icons/io5'
 import { useLocation } from 'react-router-dom'
 
 const Noti = () => {
   const [active, setActive] = useState(false)
   const [notifications, setNotifications] = useState([])
-    const { currentRole } = useSelector((state) => state.app)
-  
+  const { currentRole } = useSelector((state) => state.app)
+
   const location = useLocation()
   const notiRef = useRef(null)
 
   const getNotifications = async () => {
-    const res = await GetNotification(currentRole?._id)
-    setNotifications(res)
+    if (currentRole?._id) {
+      const res = await GetNotification(currentRole?._id)
+      setNotifications(res)
+    }
   }
 
   const handleDelete = async (id) => {
@@ -25,7 +27,7 @@ const Noti = () => {
   }
 
   useEffect(() => {
-    if(currentRole) {
+    if (currentRole) {
       getNotifications()
     }
   }, [currentRole])
@@ -43,17 +45,20 @@ const Noti = () => {
         setActive(false)
       }
     }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
   return (
     <div className="relative" ref={notiRef}>
-      <div className="cursor-pointer relative" onClick={() => setActive(!active)}>
-        <span className='hidden lg:block'>
+      <div
+        className="cursor-pointer relative"
+        onClick={() => setActive(!active)}
+      >
+        <span className="hidden lg:block">
           <GoBell size={24} color="white" />
         </span>
-        <span className='lg:hidden block'>
+        <span className="lg:hidden block">
           <GoBell size={32} color="white" />
         </span>
         {notifications?.length > 0 && (
@@ -64,7 +69,9 @@ const Noti = () => {
       </div>
       <div
         className={`w-[300px] lg:w-[400px] z-[9999] bg-white shadow-lg rounded-lg overflow-hidden absolute top-[100%] right-0 transition-all ${
-          active ? 'translate-y-0 opacity-100 visible' : 'translate-y-5 opacity-0 invisible'
+          active
+            ? 'translate-y-0 opacity-100 visible'
+            : 'translate-y-5 opacity-0 invisible'
         }`}
       >
         <div className="bg-second w-full heading-3 px-4 py-3 flex justify-between items-center">
@@ -73,19 +80,31 @@ const Noti = () => {
         <ul className="divide-y divide-gray-200 max-h-[300px] overflow-auto">
           {notifications?.length > 0 ? (
             notifications?.map((item) => (
-              <li className="p-4 flex items-center justify-between hover:bg-gray-100 transition" key={item._id}>
+              <li
+                className="p-4 flex items-center justify-between hover:bg-gray-100 transition"
+                key={item._id}
+              >
                 <div className="ml-3">
                   <p className="font-medium text-gray-800">{item.title}</p>
-                  <p className="text-sm text-gray-600 line-clamp-2 overflow-hidden text-ellipsis">{item.desc}</p>
-                  <p className="text-xs text-gray-500">{formatDateIso(item.createdAt)}</p>
+                  <p className="text-sm text-gray-600 line-clamp-2 overflow-hidden text-ellipsis">
+                    {item.desc}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {formatDateIso(item.createdAt)}
+                  </p>
                 </div>
-                <span className="text-gray-400 hover:text-gray-600 cursor-pointer" onClick={() => handleDelete(item._id)}>
+                <span
+                  className="text-gray-400 hover:text-gray-600 cursor-pointer"
+                  onClick={() => handleDelete(item._id)}
+                >
                   <IoClose size={24} />
                 </span>
               </li>
             ))
           ) : (
-            <li className="p-4 text-center text-gray-500">Không có thông báo</li>
+            <li className="p-4 text-center text-gray-500">
+              Không có thông báo
+            </li>
           )}
         </ul>
       </div>

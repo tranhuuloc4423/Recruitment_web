@@ -31,17 +31,13 @@ const PostDetails = ({ id }) => {
   const navigate = useNavigate()
   const [save, setSave] = useState(false)
 
-  const getBasicData = async (post) => {
-    const res = await getRoleData(post?.authorType, post?.author)
-    setBasicInfo(res?.basic_info)
-    setOtherInfo(res?.other_info)
-  }
-
   const getPostById = async (id) => {
     setLoading(true)
     try {
       const res = await getPost(id)
       setPost(res)
+      setBasicInfo(res.authorInfo.basic_info)
+      setOtherInfo(res.authorInfo.other_info)
     } catch (error) {
       console.error('Lỗi khi lấy bài đăng:', error)
       setPost(null) // Nếu lỗi, set post về null nhưng không hiển thị emptybox trừ khi id == null
@@ -63,7 +59,7 @@ const PostDetails = ({ id }) => {
   }
 
   const handleSavePost = async (id) => {
-    const res = await savePost(id, currentRole._id)
+    await savePost(id, currentRole._id)
     setSave(true)
   }
 
@@ -74,12 +70,6 @@ const PostDetails = ({ id }) => {
       setLoading(false) // Nếu id == null, không gọi API và set loading = false ngay
     }
   }, [id])
-
-  useEffect(() => {
-    if (post) {
-      getBasicData(post)
-    }
-  }, [post])
 
   return (
     <>

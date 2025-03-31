@@ -23,6 +23,7 @@ const Main = () => {
     const fetchPosts = async () => {
       try {
         const data = await getAllPostConfirmed()
+        console.log(data)
         setPosts(data)
       } catch (error) {
         console.error('Error fetching posts:', error)
@@ -64,7 +65,7 @@ const Main = () => {
     }
 
     if (types?.length > 0) {
-      const postTypes = post.types.map((s) => s.value)
+      const postTypes = post?.authorInfo.other_info.types.map((s) => s.value)
       const matchedTypes = postTypes.filter((s) =>
         types.some((type) => type.value === s)
       )
@@ -72,7 +73,7 @@ const Main = () => {
     }
 
     if (wforms?.length > 0) {
-      const postWforms = post.wforms.map((s) => s.value)
+      const postWforms = post?.authorInfo.other_info.wforms.map((s) => s.value)
       const matchedWforms = postWforms.filter((s) =>
         wforms.some((wform) => wform.value === s)
       )
@@ -109,7 +110,7 @@ const Main = () => {
 
   const filterPostsByFrame = () => {
     const filter = JSON.parse(localStorage.getItem('filterFrame')) || {}
-    const { skills, target_money, address, types, wform } = filter
+    const { skills, target_money, address, types, wforms } = filter
 
     const filtered = posts.filter((post) => {
       const addressMatch = address?.code
@@ -126,13 +127,20 @@ const Main = () => {
           post.salary / 1000000 <= target_money.max_money
         : true
 
-        // const typesMatch =
-        // types?.length > 0
-        //   ? types.every((type) =>
-        //       post.type.some((s) => s.value === type.value)
-        //     )
-        //   : true
-      return addressMatch && skillsMatch && targetMoneyMatch
+      const typesMatch =
+        types?.length > 0
+          ? types.every((type) =>
+              post?.authorInfo.other_info.types.some((s) => s.value === type.value)
+            )
+          : true
+
+      const wformsMatch =
+      wforms?.length > 0
+          ? wforms.every((wform) =>
+              post?.authorInfo.other_info.wforms.some((s) => s.value === wform.value)
+            )
+          : true
+      return addressMatch && skillsMatch && targetMoneyMatch && typesMatch && wformsMatch
     })
     return sortPosts(filtered)
   }
