@@ -96,8 +96,8 @@ const CVprofile = () => {
   return (
     <div className="flex flex-col xl:flex-row items-start">
       <div className="flex flex-col w-full xl:w-1/3">
-        <div>Chọn theme mẫu</div>
-        <div className="flex flex-row items-center w-full px-8 justify-center xl:p-0 gap-4">
+        <div className='font-medium text-lg'>Chọn theme mẫu</div>
+        <div className="flex flex-row items-center w-full justify-center xl:p-0 gap-4">
           {themeState?.themes.map((theme, index) => (
             <div
               key={index}
@@ -138,7 +138,7 @@ const CVprofile = () => {
           ) : (
             <img src={cv_t_1} />
           )}
-        <div className="flex flex-row items-center justify-between w-full bg-black-100 text-white p-4 rounded">
+        <div className="flex flex-col md:flex-row items-center justify-between w-full bg-black-100 text-white p-4 rounded">
           <div className="flex flex-row gap-4 items-center">
             <span>Màu sắc : </span>
             <div className="flex items-center gap-2">

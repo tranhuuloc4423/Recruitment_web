@@ -42,6 +42,7 @@ const SavedPosts = () => {
   const getPosteds = async () => {
     const res = await getListPostByCandidateId(currentRole._id, "saved_jobs")
     setPosts(res)
+    console.log(res)
   }
 
   const handleFilterClick = (index) => {
@@ -133,7 +134,7 @@ const SavedPosts = () => {
     <div className="w-full">
       <div className="flex flex-col flex-start lg:flex-row items-center">
         <FilterRowBar
-          title={'Tin đã ứng tuyển'}
+          title={'Tin đã lưu'}
           filter={filter}
           onChange={handleFilterClick}
         />
@@ -145,7 +146,7 @@ const SavedPosts = () => {
           className="p-2 border outline-second border-gray-300 rounded"
         />
       </div>
-      <div className="grid grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {currentPosts?.map((post) => (
           <Post key={post._id} post={post} manage={manage} />
         ))}

@@ -22,7 +22,7 @@ const ProgressBar = ({ progress }) => {
   }, [progress, currentRole.basic_info])
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex flex-col md:flex-row p-4 items-center gap-4">
       {/* Half Circle Progress Bar */}
       <div className="relative w-56 h-32 lg:h-28 ">
         <svg viewBox="0 0 200 100" className="w-full h-full">
@@ -47,7 +47,7 @@ const ProgressBar = ({ progress }) => {
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-2xl font-bold">{currentProgress}%</span>
+          <span className="text-lg md:text-2xl font-bold">{currentProgress}%</span>
         </div>
       </div>
       {/* Text */}
