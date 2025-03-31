@@ -251,7 +251,10 @@ const candidateControllers = {
   getSavedJobs: async (req, res) => {
     try {
       const id = req.params.id
-      const candidate = await Candidate.findById(id).populate('jobs.saved')
+      const candidate = await Candidate.findById(id).populate({
+        path: 'jobs.saved',
+        populate: { path: 'author' } // Lấy toàn bộ đối tượng author
+      })
       if (!candidate) {
         return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
       }
@@ -265,7 +268,10 @@ const candidateControllers = {
   getRecentJobs: async (req, res) => {
     try {
       const id = req.params.id
-      const candidate = await Candidate.findById(id).populate('jobs.recent')
+      const candidate = await Candidate.findById(id).populate({
+        path: 'jobs.recent',
+        populate: { path: 'author' }
+      })
       if (!candidate) {
         return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
       }
@@ -279,7 +285,10 @@ const candidateControllers = {
   getAppliedJobs: async (req, res) => {
     try {
       const id = req.params.id
-      const candidate = await Candidate.findById(id).populate('jobs.applied')
+      const candidate = await Candidate.findById(id).populate({
+        path: 'jobs.applied',
+        populate: { path: 'author' }
+      })
       if (!candidate) {
         return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
       }
@@ -290,14 +299,17 @@ const candidateControllers = {
     }
   },
 
-  getAppovedJobs: async (req, res) => {
+  getApprovedJobs: async (req, res) => {
     try {
       const id = req.params.id
-      const candidate = await Candidate.findById(id).populate('jobs.appoved')
+      const candidate = await Candidate.findById(id).populate({
+        path: 'jobs.approved',
+        populate: { path: 'author' }
+      })
       if (!candidate) {
         return res.status(404).json({ message: 'Không tìm thấy ứng viên' })
       }
-      res.status(200).json(candidate.jobs.appoved)
+      res.status(200).json(candidate.jobs.approved)
     } catch (error) {
       console.error(error)
       res.status(500).json({ message: 'Lỗi khi lấy công việc đã được duyệt' })

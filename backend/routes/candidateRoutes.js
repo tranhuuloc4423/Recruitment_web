@@ -7,7 +7,7 @@ const {
   getSavedJobs,
   getRecentJobs,
   getAppliedJobs,
-  getAppovedJobs,
+  getApprovedJobs,
   getFollowedJobs,
   followUser,
   updateRecent,
@@ -30,9 +30,9 @@ router.get('/list/', getDatasByIdRole)
 router.get('/', getAllData)
 router.get('/saved_jobs/:id', getSavedJobs)
 router.get('/applied_jobs/:id', getAppliedJobs)
-router.get('/approved_jobs/:id', getAppovedJobs)
-router.get('/followed_jobs/:id', getFollowedJobs)
+router.get('/approved_jobs/:id', getApprovedJobs)
 router.get('/recent_jobs/:id', getRecentJobs)
+router.get('/followed_jobs/:id', getFollowedJobs)
 router.get('/notification/:id', getNotification)
 router.put('/theme/:id', updateTheme)
 

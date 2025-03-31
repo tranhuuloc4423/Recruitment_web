@@ -215,9 +215,10 @@ const recruiterControllers = {
 
   getPosts: async (req, res) => {
     try {
-      const recruiter = await Recruiter.findById(req.params.id).populate(
-        'posts'
-      )
+      const recruiter = await Recruiter.findById(req.params.id).populate({
+        path: 'posts',
+        populate: { path: 'author' } // Lấy toàn bộ thông tin của author (Admin hoặc Recruiter)
+      })
       if (!recruiter) {
         return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })
       }
@@ -229,9 +230,10 @@ const recruiterControllers = {
 
   getConfirmedPosts: async (req, res) => {
     try {
-      const recruiter = await Recruiter.findById(req.params.id).populate(
-        'manage_post.confirmed'
-      )
+      const recruiter = await Recruiter.findById(req.params.id).populate({
+        path: 'manage_post.confirmed',
+        populate: { path: 'author' }
+      })
       if (!recruiter) {
         return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })
       }
@@ -243,9 +245,10 @@ const recruiterControllers = {
 
   getPostedPosts: async (req, res) => {
     try {
-      const recruiter = await Recruiter.findById(req.params.id).populate(
-        'manage_post.posted'
-      )
+      const recruiter = await Recruiter.findById(req.params.id).populate({
+        path: 'manage_post.posted',
+        populate: { path: 'author' }
+      })
       if (!recruiter) {
         return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })
       }
@@ -254,19 +257,22 @@ const recruiterControllers = {
       res.status(500).json({ message: 'Lỗi máy chủ', error })
     }
   },
+
   getExpiredPosts: async (req, res) => {
     try {
-      const recruiter = await Recruiter.findById(req.params.id).populate(
-        'manage_post.expired'
-      )
+      const recruiter = await Recruiter.findById(req.params.id).populate({
+        path: 'manage_post.expired',
+        populate: { path: 'author' }
+      })
       if (!recruiter) {
         return res.status(404).json({ message: 'Nhà tuyển dụng không tồn tại' })
       }
-      res.status(200).json(recruiter.manage_post.posted)
+      res.status(200).json(recruiter.manage_post.expired)
     } catch (error) {
       res.status(500).json({ message: 'Lỗi máy chủ', error })
     }
   },
+
   getNotification: async (req, res) => {
     try {
       const { id } = req.params

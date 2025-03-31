@@ -207,7 +207,10 @@ const adminControllers = {
 
   getPosts: async (req, res) => {
     try {
-      const admin = await Admin.findById(req.params.id).populate('posts')
+      const admin = await Admin.findById(req.params.id).populate({
+        path: 'posts',
+        populate: { path: 'author' } // Lấy thông tin đầy đủ của author
+      })
       if (!admin) {
         return res.status(404).json({ message: 'Admin không tồn tại' })
       }
@@ -219,9 +222,10 @@ const adminControllers = {
 
   getConfirmedPosts: async (req, res) => {
     try {
-      const admin = await Admin.findById(req.params.id).populate(
-        'manage_post.confirmed'
-      )
+      const admin = await Admin.findById(req.params.id).populate({
+        path: 'manage_post.confirmed',
+        populate: { path: 'author' }
+      })
       if (!admin) {
         return res.status(404).json({ message: 'Admin không tồn tại' })
       }
@@ -233,9 +237,10 @@ const adminControllers = {
 
   getPostedPosts: async (req, res) => {
     try {
-      const admin = await Admin.findById(req.params.id).populate(
-        'manage_post.posted'
-      )
+      const admin = await Admin.findById(req.params.id).populate({
+        path: 'manage_post.posted',
+        populate: { path: 'author' }
+      })
       if (!admin) {
         return res.status(404).json({ message: 'Admin không tồn tại' })
       }
@@ -244,19 +249,22 @@ const adminControllers = {
       res.status(500).json({ message: 'Lỗi máy chủ', error })
     }
   },
+
   getExpiredPosts: async (req, res) => {
     try {
-      const admin = await Admin.findById(req.params.id).populate(
-        'manage_post.expired'
-      )
+      const admin = await Admin.findById(req.params.id).populate({
+        path: 'manage_post.expired',
+        populate: { path: 'author' }
+      })
       if (!admin) {
         return res.status(404).json({ message: 'Admin không tồn tại' })
       }
-      res.status(200).json(admin.manage_post.posted)
+      res.status(200).json(admin.manage_post.expired)
     } catch (error) {
       res.status(500).json({ message: 'Lỗi máy chủ', error })
     }
   },
+
   getNotification: async (req, res) => {
     try {
       const { id } = req.params
