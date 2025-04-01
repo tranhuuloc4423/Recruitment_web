@@ -7,11 +7,12 @@ const postSchema = new mongoose.Schema(
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true
+      required: true,
+      refPath: 'authorType'
     },
     authorType: {
       type: String,
-      enum: ['recruiter', 'admin'],
+      enum: ['Recruiter', 'Admin'],
       required: true
     },
     salary: {

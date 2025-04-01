@@ -27,13 +27,13 @@ const postController = {
       postData.date_upload = formatDate(dateUpload)
 
       let user
-      if (postData.authorType === 'admin') {
+      if (postData.authorType === 'Admin') {
         user = await Admin.findById(postData.author)
         if (user) {
           postData.location = { address: user.basic_info.address }
           postData.status = 'confirmed'
         }
-      } else if (postData.authorType === 'recruiter') {
+      } else if (postData.authorType === 'Recruiter') {
         user = await Recruiter.findById(postData.author)
         if (user) {
           postData.location = { address: user.basic_info.address }
@@ -47,7 +47,7 @@ const postController = {
 
       const newPost = await Post.create(postData)
 
-      if (postData.authorType === 'admin') {
+      if (postData.authorType === 'Admin') {
         await Admin.findByIdAndUpdate(
           postData.author,
           {
@@ -55,7 +55,7 @@ const postController = {
           },
           { new: true }
         )
-      } else if (postData.authorType === 'recruiter') {
+      } else if (postData.authorType === 'Recruiter') {
         await Recruiter.findByIdAndUpdate(
           postData.author,
           {
