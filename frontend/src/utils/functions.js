@@ -97,9 +97,9 @@ const renderBasicCV = (items, currentRole) => {
   return items?.map((item, index) => (
     <div key={index}>
       {item?.icon && (
-        <div className="flex items-center gap-2 py-2 flex-1">
+        <div className="flex flex-wrap items-center gap-2 py-2 flex-1">
           <span>{item?.icon}</span>
-          <span>
+          <span className='break-all'>
             {item?.name === 'gender'
               ? currentRole?.basic_info[item?.name]?.name
               : currentRole?.basic_info[item?.name]}

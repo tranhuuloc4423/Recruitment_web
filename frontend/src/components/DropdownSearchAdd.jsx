@@ -46,7 +46,7 @@ const DropdownSearchAdd = ({ tags, setTags, items }) => {
 
   return (
     <div className="w-full gap-4 relative">
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-wrap items-end flex-row gap-4">
         <input
           type="text"
           value={search}

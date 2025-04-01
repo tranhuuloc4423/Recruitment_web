@@ -95,7 +95,7 @@ const Target = () => {
 
   return (
     <div className="w-full flex justify-center">
-      <div className="flex flex-col p-4 rounded gap-4 w-full lg:w-2/3">
+      <div className="flex flex-col md:p-4 rounded gap-4 w-full lg:w-2/3">
         {/* Header */}
         <div className="flex flex-col gap-2">
           <span className="heading-2">Công việc mong muốn</span>
@@ -109,7 +109,7 @@ const Target = () => {
         <div className="flex flex-col rounded p-4 gap-4 w-full border border-black-100 bg-white">
           {/* Skills */}
           <div className="flex flex-col">
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-col my-2 md:my-0 md:flex-row justify-between">
               <span className="flex-1 heading-3">Kỹ năng</span>
               <div className="flex-1 flex flex-row gap-4">
                 <Dropdown
@@ -143,7 +143,7 @@ const Target = () => {
           <Line />
           
           {/* Salary */}
-          <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-col items-start md:flex-row justify-between md:items-center">
             <span className="flex-1 heading-3">Mức lương</span>
             <div className="flex-1">
               <RangeSlider values={salarys} setValues={setSalarys} />
@@ -153,9 +153,9 @@ const Target = () => {
           <Line />
           
           {/* Work Types */}
-          <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-col items-start md:flex-row justify-between md:items-center">
             <span className="heading-3">Hình thức</span>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4">
               {tags.slice(0, 2).map(tag => (
                 <Tag
                   key={tag.value}
@@ -171,9 +171,9 @@ const Target = () => {
           <Line />
           
           {/* Work Forms */}
-          <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-col items-start md:flex-row justify-between md:items-center">
             <span className="heading-3">Loại hình</span>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4">
               {tags.slice(2).map(tag => (
                 <Tag
                   key={tag.value}
@@ -189,7 +189,7 @@ const Target = () => {
           <Line />
           
           {/* Location */}
-          <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-col items-start md:flex-row justify-between md:items-center">
             <span className="flex-1 heading-3">Địa điểm</span>
             <div className="flex-1">
               <DropdownSearch

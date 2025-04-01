@@ -738,6 +738,10 @@ video {
   top: 100%;
 }
 
+.top-\[100px\] {
+  top: 100px;
+}
+
 .-z-10 {
   z-index: -10;
 }
@@ -766,11 +770,6 @@ video {
   grid-column: span 2 / span 2;
 }
 
-.mx-8 {
-  margin-left: 2rem;
-  margin-right: 2rem;
-}
-
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -786,12 +785,41 @@ video {
   margin-bottom: 1rem;
 }
 
+.my-\[100\%\] {
+  margin-top: 100%;
+  margin-bottom: 100%;
+}
+
+.my-0 {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.my-\[100px\] {
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+.my-\[200px\] {
+  margin-top: 200px;
+  margin-bottom: 200px;
+}
+
+.my-\[500px\] {
+  margin-top: 500px;
+  margin-bottom: 500px;
+}
+
 .mb-4 {
   margin-bottom: 1rem;
 }
 
 .mb-6 {
   margin-bottom: 1.5rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
 }
 
 .ml-3 {
@@ -822,8 +850,12 @@ video {
   margin-top: 1.5rem;
 }
 
-.ml-2 {
-  margin-left: 0.5rem;
+.mt-\[500px\] {
+  margin-top: 500px;
+}
+
+.mt-\[100px\] {
+  margin-top: 100px;
 }
 
 .line-clamp-2 {
@@ -1285,6 +1317,10 @@ video {
   white-space: pre-line;
 }
 
+.break-all {
+  word-break: break-all;
+}
+
 .rounded {
   border-radius: 0.25rem;
 }
@@ -1552,6 +1588,11 @@ video {
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem;
+}
+
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 .pb-2 {
@@ -1867,6 +1908,15 @@ video {
     top: 100%;
   }
 
+  .md\:top-10 {
+    top: 2.5rem;
+  }
+
+  .md\:my-0 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
   .md\:hidden {
     display: none;
   }
@@ -1907,6 +1957,10 @@ video {
     flex-direction: row;
   }
 
+  .md\:items-center {
+    align-items: center;
+  }
+
   .md\:border {
     border-width: 1px;
   }
@@ -1921,9 +1975,22 @@ video {
     background-color: rgb(255 255 255 / var(--tw-bg-opacity));
   }
 
-  .md\:px-40 {
-    padding-left: 10rem;
-    padding-right: 10rem;
+  .md\:p-4 {
+    padding: 1rem;
+  }
+
+  .md\:p-0 {
+    padding: 0px;
+  }
+
+  .md\:px-20 {
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+
+  .md\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
   }
 
   .md\:text-base {
@@ -1979,6 +2046,10 @@ video {
     width: 70%;
   }
 
+  .lg\:w-\[798px\] {
+    width: 798px;
+  }
+
   .lg\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1997,6 +2068,11 @@ video {
 
   .lg\:gap-4 {
     gap: 1rem;
+  }
+
+  .lg\:px-40 {
+    padding-left: 10rem;
+    padding-right: 10rem;
   }
 }
 

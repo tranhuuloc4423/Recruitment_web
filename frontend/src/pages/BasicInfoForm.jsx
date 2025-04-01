@@ -122,9 +122,9 @@ const BasicInfoForm = ({ open, setOpen, data }) => {
   }
 
   return (
-    <div className="fixed bg-overlay inset-0 flex justify-center items-center w-full z-50">
+    <div className="fixed bg-overlay inset-0 flex justify-center items-center w-full z-50 overflow-y-auto">
       <div
-        className="bg-white rounded p-4 flex flex-col gap-4 w-[90%] lg:w-1/2"
+        className="bg-white rounded p-4 flex md:top-10 flex-col gap-4 w-[90%] lg:w-1/2"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-row items-center justify-between">

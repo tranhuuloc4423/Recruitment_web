@@ -18,7 +18,7 @@ const CVTheme_1 = ({ color, data = null }) => {
     setOtherInfo(renderInfo?.otherInfo)
   }, [currentRole.basic_info, currentRole.other_info])
   return (
-    <div className="flex flex-col px-8 py-2 w-full lg:w-2/3">
+    <div className="flex flex-col w-full lg:w-[798px] mt-6">
       {/* header */}
       <div
         className={`py-4 px-10 flex flex-row gap-4 items-end w-full h-[192px] relative z-10 overflow-hidden bg-white`}
