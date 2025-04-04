@@ -65,19 +65,19 @@ const Main = () => {
     }
 
     if (types?.length > 0) {
-      const postTypes = post?.authorInfo.other_info.types.map((s) => s.value)
-      const matchedTypes = postTypes.filter((s) =>
+      const postTypes = post?.authorInfo?.other_info.types.map((s) => s.value)
+      const matchedTypes = postTypes?.filter((s) =>
         types.some((type) => type.value === s)
       )
-      score += (matchedTypes.length / types.length) * 10
+      score += (matchedTypes?.length / types?.length) * 10
     }
 
     if (wforms?.length > 0) {
-      const postWforms = post?.authorInfo.other_info.wforms.map((s) => s.value)
-      const matchedWforms = postWforms.filter((s) =>
+      const postWforms = post?.authorInfo?.other_info.wforms.map((s) => s.value)
+      const matchedWforms = postWforms?.filter((s) =>
         wforms.some((wform) => wform.value === s)
       )
-      score += (matchedWforms.length / wforms.length) * 10
+      score += (matchedWforms?.length / wforms?.length) * 10
     }
 
     return score
@@ -211,12 +211,12 @@ const Main = () => {
     <div className="flex flex-col gap-4 justify-center items-center mx-auto">
       {/* SearchBar và FilterPanel */}
       <div className="w-full md:w-2/3 flex flex-col gap-4">
-        <SearchBar
+        {/* <SearchBar
           onSearch={handleSearch}
           history={history}
           onRemoveSuggestion={handleRemoveSuggestion}
         />
-        <FilterBar onApplyFilter={handleApplyFilter} />
+        <FilterBar onApplyFilter={handleApplyFilter} /> */}
       </div>
 
       <div className="w-full flex flex-col gap-4">
