@@ -12,7 +12,7 @@ const postSchema = new mongoose.Schema(
     },
     authorType: {
       type: String,
-      enum: ['Recruiter', 'Admin'],
+      enum: ['recruiter', 'admin'],
       required: true
     },
     salary: {
