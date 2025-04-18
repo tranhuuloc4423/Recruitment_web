@@ -10,6 +10,8 @@ const notiRoute = require('./notificationRoutes')
 const addressRoute = require('./addressRoutes')
 const skillRoute = require('./skillRoutes')
 const chartRoute = require('./chartRoutes')
+const conversationRoute = require('./conversationRoutes')
+const messageRoute = require('./messageRoutes')
 
 router.use('/user', userRoute)
 router.use('/candidate', candidateRoute)
@@ -20,5 +22,7 @@ router.use('/notification', notiRoute)
 router.use('/address', addressRoute)
 router.use('/skill', skillRoute)
 router.use('/chart', chartRoute)
+router.use('/conversation', conversationRoute)
+router.use('/message', messageRoute)
 
 module.exports = router
